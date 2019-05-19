@@ -3,8 +3,8 @@ package com.mbyte.easy.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mbyte.easy.admin.entity.Baidu;
-import com.mbyte.easy.admin.service.IBaiduService;
+import com.mbyte.easy.admin.entity.BdOldrecords;
+import com.mbyte.easy.admin.service.IBdOldrecordsService;
 import com.mbyte.easy.common.controller.BaseController;
 import com.mbyte.easy.common.web.AjaxResult;
 import com.mbyte.easy.util.PageInfo;
@@ -25,13 +25,13 @@ import java.time.LocalDateTime;
 * @since 2019-03-11
 */
 @Controller
-@RequestMapping("/admin/baidu")
-public class BaiduController extends BaseController  {
+@RequestMapping("/admin/bdOldrecords")
+public class BdOldrecordsController extends BaseController  {
 
-    private String prefix = "admin/baidu/";
+    private String prefix = "admin/bdOldrecords/";
 
     @Autowired
-    private IBaiduService baiduService;
+    private IBdOldrecordsService bdOldrecordsService;
 
     /**
     * 查询列表
@@ -39,32 +39,27 @@ public class BaiduController extends BaseController  {
     * @param model
     * @param pageNo
     * @param pageSize
-    * @param baidu
+    * @param bdOldrecords
     * @return
     */
     @RequestMapping
-    public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, Baidu baidu) {
-        Page<Baidu> page = new Page<Baidu>(pageNo, pageSize);
-        QueryWrapper<Baidu> queryWrapper = new QueryWrapper<Baidu>();
+    public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, BdOldrecords bdOldrecords) {
+        Page<BdOldrecords> page = new Page<BdOldrecords>(pageNo, pageSize);
+        QueryWrapper<BdOldrecords> queryWrapper = new QueryWrapper<BdOldrecords>();
 
-        if(baidu.getTitle() != null  && !"".equals(baidu.getTitle() + "")) {
-            queryWrapper = queryWrapper.like("title",baidu.getTitle());
+        if(bdOldrecords.getCreatetime() != null  && !"".equals(bdOldrecords.getCreatetime() + "")) {
+            queryWrapper = queryWrapper.like("createtime",bdOldrecords.getCreatetime());
          }
 
 
-        if(baidu.getCreattime() != null  && !"".equals(baidu.getCreattime() + "")) {
-            queryWrapper = queryWrapper.like("creattime",baidu.getCreattime());
+        if(bdOldrecords.getKeyword() != null  && !"".equals(bdOldrecords.getKeyword() + "")) {
+            queryWrapper = queryWrapper.like("keyword",bdOldrecords.getKeyword());
          }
 
-
-        if(baidu.getKeyword() != null  && !"".equals(baidu.getKeyword() + "")) {
-            queryWrapper = queryWrapper.like("keyword",baidu.getKeyword());
-         }
-
-        IPage<Baidu> pageInfo = baiduService.page(page, queryWrapper);
-        model.addAttribute("searchInfo", baidu);
+        IPage<BdOldrecords> pageInfo = bdOldrecordsService.page(page, queryWrapper);
+        model.addAttribute("searchInfo", bdOldrecords);
         model.addAttribute("pageInfo", new PageInfo(pageInfo));
-        return prefix+"baidu-list";
+        return prefix+"bdOldrecords-list";
     }
 
     /**
@@ -77,13 +72,13 @@ public class BaiduController extends BaseController  {
     }
     /**
     * 添加
-    * @param baidu
+    * @param bdOldrecords
     * @return
     */
     @PostMapping("add")
     @ResponseBody
-    public AjaxResult add(Baidu baidu){
-        return toAjax(baiduService.save(baidu));
+    public AjaxResult add(BdOldrecords bdOldrecords){
+        return toAjax(bdOldrecordsService.save(bdOldrecords));
     }
     /**
     * 添加跳转页面
@@ -91,18 +86,18 @@ public class BaiduController extends BaseController  {
     */
     @GetMapping("editBefore/{id}")
     public String editBefore(Model model,@PathVariable("id")Long id){
-        model.addAttribute("baidu",baiduService.getById(id));
+        model.addAttribute("bdOldrecords",bdOldrecordsService.getById(id));
         return prefix+"edit";
     }
     /**
     * 添加
-    * @param baidu
+    * @param bdOldrecords
     * @return
     */
     @PostMapping("edit")
     @ResponseBody
-    public AjaxResult edit(Baidu baidu){
-        return toAjax(baiduService.updateById(baidu));
+    public AjaxResult edit(BdOldrecords bdOldrecords){
+        return toAjax(bdOldrecordsService.updateById(bdOldrecords));
     }
     /**
     * 删除
@@ -112,7 +107,7 @@ public class BaiduController extends BaseController  {
     @GetMapping("delete/{id}")
     @ResponseBody
     public AjaxResult delete(@PathVariable("id") Long id){
-        return toAjax(baiduService.removeById(id));
+        return toAjax(bdOldrecordsService.removeById(id));
     }
     /**
     * 批量删除
@@ -122,15 +117,8 @@ public class BaiduController extends BaseController  {
     @PostMapping("deleteAll")
     @ResponseBody
     public AjaxResult deleteAll(@RequestBody List<Long> ids){
-        return toAjax(baiduService.removeByIds(ids));
+        return toAjax(bdOldrecordsService.removeByIds(ids));
     }
-    /**
-     * 添加跳转页面
-     * @return
-     */
-    @GetMapping("detail")
-    public String detail(){
-        return "admin/baidu/function";
-    }
+
 }
 

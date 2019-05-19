@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 19/05/2019 00:40:55
+ Date: 19/05/2019 22:08:23
 */
 
 SET NAMES utf8mb4;
@@ -42,7 +42,40 @@ CREATE TABLE `baidu`  (
   `creattime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '搜索的关键词',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1594 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2651 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for bd_oldrecords
+-- ----------------------------
+DROP TABLE IF EXISTS `bd_oldrecords`;
+CREATE TABLE `bd_oldrecords`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of bd_oldrecords
+-- ----------------------------
+INSERT INTO `bd_oldrecords` VALUES (1, '2019-05-19 21:35:59', '教师');
+
+-- ----------------------------
+-- Table structure for bd_records
+-- ----------------------------
+DROP TABLE IF EXISTS `bd_records`;
+CREATE TABLE `bd_records`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id序号',
+  `createtime` datetime(0) DEFAULT NULL COMMENT '创建时间',
+  `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of bd_records
+-- ----------------------------
+INSERT INTO `bd_records` VALUES (1, '2019-05-19 20:26:23', '小说');
+INSERT INTO `bd_records` VALUES (2, '2019-05-19 21:35:59', '教师');
 
 -- ----------------------------
 -- Table structure for blacklist
@@ -155,7 +188,7 @@ CREATE TABLE `sys_resource`  (
   `parent_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FK3fekum3ead5klp7y4lckn5ohi`(`parent_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 196 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 200 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_resource
@@ -181,8 +214,9 @@ INSERT INTO `sys_resource` VALUES (180, NULL, '添加管理员', 100, '/user/add
 INSERT INTO `sys_resource` VALUES (181, NULL, '删除用户', 100, '/user/delete-user', 1, '/user/delete-user', 5);
 INSERT INTO `sys_resource` VALUES (187, NULL, '个人信息', 2, 'admin/tUser/myself', 0, 'admin/tUser/myself', 168);
 INSERT INTO `sys_resource` VALUES (192, NULL, '配置管理栏', 2, '', 0, '', 1);
-INSERT INTO `sys_resource` VALUES (193, NULL, '百度知道配置管理', 2, '/admin/baidu', 0, '/admin/baidu', 192);
-INSERT INTO `sys_resource` VALUES (195, NULL, '知乎配置管理', 2, '/admin/zhihu', 0, '/admin/zhihu', 192);
+INSERT INTO `sys_resource` VALUES (193, NULL, '百度知道配置管理', 2, '/admin/bdRecords', 0, '/admin/bdRecords', 192);
+INSERT INTO `sys_resource` VALUES (195, NULL, '知乎配置管理', 2, '/admin/zhihuRecords', 0, '/admin/zhihuRecords', 192);
+INSERT INTO `sys_resource` VALUES (196, NULL, '百度数据管理', 2, '/admin/baidu', 0, '/admin/baidu', 192);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -287,6 +321,40 @@ CREATE TABLE `zhihu`  (
   `createtime` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 718 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1495 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for zhihu_oldrecords
+-- ----------------------------
+DROP TABLE IF EXISTS `zhihu_oldrecords`;
+CREATE TABLE `zhihu_oldrecords`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `createtime` datetime(0) DEFAULT NULL COMMENT '创建时间',
+  `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '知乎关键词',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of zhihu_oldrecords
+-- ----------------------------
+INSERT INTO `zhihu_oldrecords` VALUES (3, '2019-05-19 21:56:42', '家庭');
+
+-- ----------------------------
+-- Table structure for zhihu_records
+-- ----------------------------
+DROP TABLE IF EXISTS `zhihu_records`;
+CREATE TABLE `zhihu_records`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '序号',
+  `createtime` datetime(0) DEFAULT NULL COMMENT '创建时间',
+  `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of zhihu_records
+-- ----------------------------
+INSERT INTO `zhihu_records` VALUES (1, '2019-05-19 21:44:26', '小说');
+INSERT INTO `zhihu_records` VALUES (2, '2019-05-19 21:49:28', '教师');
+INSERT INTO `zhihu_records` VALUES (5, '2019-05-19 21:56:42', '家庭');
 
 SET FOREIGN_KEY_CHECKS = 1;

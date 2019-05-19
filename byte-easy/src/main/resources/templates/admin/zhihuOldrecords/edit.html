@@ -5,30 +5,22 @@
 </head>
 <body>
 <article class="page-container">
-    <form class="form form-horizontal" id="form-zhihu-edit" action="#"
-          th:action="@{/admin/zhihu/edit}" th:object="${zhihu}">
-        <input type="hidden" name="id" th:value="${zhihu.id}"/>
-                <div class="row cl">
-                    <label class="form-label col-xs-2 col-sm-2"><span
-                                class="c-red">*</span>标题：</label>
-                            <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${zhihu.title}" name="title"  placeholder="修改标题" id="title"/>
-                            </div>
-                    </div>
-                </div>
+    <form class="form form-horizontal" id="form-zhihuOldrecords-edit" action="#"
+          th:action="@{/admin/zhihuOldrecords/edit}" th:object="${zhihuOldrecords}">
+        <input type="hidden" name="id" th:value="${zhihuOldrecords.id}"/>
                 <div class="row cl">
                     <label class="form-label col-xs-2 col-sm-2"><span
                                 class="c-red">*</span>创建时间：</label>
                             <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${zhihu.createtime}" name="createtime"  placeholder="修改创建时间" id="createtime"/>
+                                <input type="input-text" class="input-text timeSpace" readonly="readonly" autocomplete="off" th:value="${#temporals.format(zhihuOldrecords.createtime, 'yyyy-MM-dd HH:mm:ss')}" name="createtime" placeholder="请选择创建时间"/>
                             </div>
                     </div>
                 </div>
                 <div class="row cl">
                     <label class="form-label col-xs-2 col-sm-2"><span
-                                class="c-red">*</span>关键词：</label>
+                                class="c-red">*</span>知乎关键词：</label>
                             <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${zhihu.keyword}" name="keyword"  placeholder="修改关键词" id="keyword"/>
+                                <input type="input-text" class="input-text" th:value="${zhihuOldrecords.keyword}" name="keyword"  placeholder="修改知乎关键词" id="keyword"/>
                             </div>
                     </div>
                 </div>
@@ -47,12 +39,8 @@
 <!--请在下方写此页面业务相关的脚本-->
 <script>
     $(function () {
-        $("#form-zhihu-edit").validate({
+        $("#form-zhihuOldrecords-edit").validate({
             rules: {
-        title:
-        {
-            required: true,
-        },
         createtime:
         {
             required: true,
@@ -75,7 +63,7 @@
         function (form) {
             $(form).ajaxSubmit({
                 type: 'POST',
-                url: "/admin/zhihu/edit",
+                url: "/admin/zhihuOldrecords/edit",
                 success: function (data) {
                     if (data.code == "0") {
                         layer.designMsg('编辑成功!', 1, function () {

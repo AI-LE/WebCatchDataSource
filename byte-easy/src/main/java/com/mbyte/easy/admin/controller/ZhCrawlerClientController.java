@@ -9,9 +9,8 @@ import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mbyte.easy.admin.Util.ExportWord;
 import com.mbyte.easy.admin.Util.Request;
-import com.mbyte.easy.admin.entity.Baidu;
-import com.mbyte.easy.admin.entity.P;
-import com.mbyte.easy.admin.entity.Zhihu;
+import com.mbyte.easy.admin.entity.*;
+import com.mbyte.easy.admin.service.IZhihuRecordsService;
 import com.mbyte.easy.admin.service.IZhihuService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +31,19 @@ public class ZhCrawlerClientController {
     //    @Test
     @Autowired
     private IZhihuService iZhihuService;
+    @Autowired
+    private IZhihuRecordsService iZhihuRecordsService;
     @RequestMapping(value = "zhihucatch")
     public void crawlerClient_01(Model model, HttpServletResponse response, HttpServletRequest request) {
         response.setContentType("text/html;charset=utf-8");
         int page;
         int currt = 0;
         int jump;
-        String question =  request.getParameter("keyword");
+        String id = request.getParameter("id");
+        QueryWrapper<ZhihuRecords> queryCWrapper = new QueryWrapper<ZhihuRecords>();
+        queryCWrapper = queryCWrapper.eq("id", id);
+        System.out.println("queryCWrapper" + queryCWrapper);
+        String question =iZhihuRecordsService.getOne(queryCWrapper).getKeyword();
         List<String> list = new ArrayList<String>();
         for (int i = 0; i < 20; i++) {
             page = 20 * i;
@@ -114,7 +119,11 @@ public class ZhCrawlerClientController {
     @RequestMapping("/ExportWord")
     public void ExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
         response.setContentType("text/html;charset=utf-8");
-        String keyword = request.getParameter("keyword");
+        String id = request.getParameter("id");
+        QueryWrapper<ZhihuRecords> queryCWrapper1 = new QueryWrapper<ZhihuRecords>();
+        queryCWrapper1 = queryCWrapper1.eq("id", id);
+        System.out.println("queryCWrapper" + queryCWrapper1);
+        String keyword =iZhihuRecordsService.getOne(queryCWrapper1).getKeyword();
         List<Zhihu> list=new ArrayList<Zhihu>();
         List<String> wordPrit=new ArrayList<String>();
         int conut = 0;

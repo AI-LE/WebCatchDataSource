@@ -2,10 +2,12 @@ package com.mbyte.easy.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mbyte.easy.admin.entity.Baidu;
+import com.mbyte.easy.admin.entity.BdRecords;
 import com.mbyte.easy.admin.entity.P;
 import com.mbyte.easy.admin.Util.ExportWord;
 import com.mbyte.easy.admin.mapper.BaiduMapper;
 import com.mbyte.easy.admin.service.IBaiduService;
+import com.mbyte.easy.admin.service.IBdRecordsService;
 import com.mbyte.easy.common.web.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +36,8 @@ public class BaiduCrawlerClient {
 
     @Autowired
     private IBaiduService baiduService;
+    @Autowired
+    private IBdRecordsService iBdRecordsService;
     private int n =0;
     private String  url = "https://zhidao.baidu.com/search?word=知道&ie=gbk&site=-1&sites=0&date=0&pn=";
     /**
@@ -47,7 +51,12 @@ public class BaiduCrawlerClient {
     public void zhidaocrawlerClient(Model model, HttpServletResponse response, HttpServletRequest request) {
 //        response.setCharacterEncoding("utf-8");
        response.setContentType("text/html;charset=utf-8");
-        String word = request.getParameter("keyword");
+        String id = request.getParameter("id");
+        QueryWrapper<BdRecords> queryCWrapper = new QueryWrapper<BdRecords>();
+        queryCWrapper = queryCWrapper.eq("id", id);
+        System.out.println("queryCWrapper" + queryCWrapper);
+        String word =iBdRecordsService.getOne(queryCWrapper).getKeyword();
+        System.out.println("word" + word);
         Document doc = null;
         List<String> list=new ArrayList<String>();
        for(int i = 0;i<19;i++){
@@ -100,7 +109,11 @@ public class BaiduCrawlerClient {
     @RequestMapping("/ExportWord")
     public void ExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
         response.setContentType("text/html;charset=utf-8");
-        String keyword = request.getParameter("keyword");
+        String id = request.getParameter("id");
+        QueryWrapper<BdRecords> queryCWrapper1 = new QueryWrapper<BdRecords>();
+        queryCWrapper1 = queryCWrapper1.eq("id", id);
+        System.out.println("queryCWrapper" + queryCWrapper1);
+        String keyword =iBdRecordsService.getOne(queryCWrapper1).getKeyword();
         List<Baidu> list=new ArrayList<Baidu>();
         List<String> wordPrit=new ArrayList<String>();
         int conut = 0;

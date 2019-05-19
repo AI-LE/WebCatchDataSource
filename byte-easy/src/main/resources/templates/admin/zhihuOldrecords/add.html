@@ -5,23 +5,18 @@
 </head>
 <body>
 <article class="page-container">
-	<form class="form form-horizontal"  id="form-zhihu-add" action="#" th:action="@{/admin/zhihu/add}">
-        <div class="row cl">
-             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>标题：</label>
-            <div class="formControls col-xs-10 col-sm-10">
-                <input type="input-text" class="input-text" name="title" placeholder="请填写标题" id="title"/>
-            </div>
-        </div>
+	<form class="form form-horizontal"  id="form-zhihuOldrecords-add" action="#" th:action="@{/admin/zhihuOldrecords/add}">
         <div class="row cl">
              <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>创建时间：</label>
-            <div class="formControls col-xs-10 col-sm-10">
-                <input type="input-text" class="input-text" name="createtime" placeholder="请填写创建时间" id="createtime"/>
-            </div>
+             <div class="formControls col-xs-10 col-sm-10">
+                 <input type="input-text" class="input-text timeSpace" readonly="readonly"
+                        autocomplete="off" name="createtime" placeholder="请选择创建时间"/>
+             </div>
         </div>
         <div class="row cl">
-             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>关键词：</label>
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>知乎关键词：</label>
             <div class="formControls col-xs-10 col-sm-10">
-                <input type="input-text" class="input-text" name="keyword" placeholder="请填写关键词" id="keyword"/>
+                <input type="input-text" class="input-text" name="keyword" placeholder="请填写知乎关键词" id="keyword"/>
             </div>
         </div>
 	<div class="row cl">
@@ -40,11 +35,8 @@
 <!--请在下方写此页面业务相关的脚本-->
 <script>
  $(function(){
-	$("#form-zhihu-add").validate({
+	$("#form-zhihuOldrecords-add").validate({
 		rules:{
-            title:{
-                required: true,
-			},
             createtime:{
                 required: true,
 			},
@@ -58,7 +50,7 @@
 		submitHandler:function(form){
 				$(form).ajaxSubmit({
 				type: 'POST',
-				url: "/admin/zhihu/add" ,
+				url: "/admin/zhihuOldrecords/add" ,
 				success: function(data){
 					if(data.code == "0"){
 						layer.designMsg('添加成功!',1,function(){
