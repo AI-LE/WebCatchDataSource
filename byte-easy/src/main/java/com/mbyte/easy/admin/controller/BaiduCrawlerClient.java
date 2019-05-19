@@ -1,17 +1,22 @@
 package com.mbyte.easy.admin.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mbyte.easy.admin.entity.Baidu;
 import com.mbyte.easy.admin.entity.P;
 import com.mbyte.easy.admin.Util.ExportWord;
+import com.mbyte.easy.admin.mapper.BaiduMapper;
 import com.mbyte.easy.admin.service.IBaiduService;
+import com.mbyte.easy.common.web.AjaxResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -64,7 +69,7 @@ public class BaiduCrawlerClient {
                    baidu.setKeyword(word);
                  //  baidu.setCreattime((LocalDateTime)punchTime);
                    baiduService.save(baidu);
-                   list.add("问题"+count+":"+ptext.toString()+"？\n");
+          //         list.add("问题"+count+":"+ptext.toString()+"？\n");
 
                    if(count==200){
                        System.out.println("list======"+list);
@@ -84,18 +89,37 @@ public class BaiduCrawlerClient {
        }
     }
 
-    /**
+
+
+        /**
      * 这个是导出word文档，目标是G盘的word文件夹下的zhidao.doc文档
      * @param model
      * @param response
      * @param request
      */
-    @RequestMapping(value = "ExportWord")
+    @RequestMapping("/ExportWord")
     public void ExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
-        String data = request.getParameter("data");
-        String datareplace = data.replace(",","");
-        ExportWord e = new ExportWord();
-        e.creatDoc("G:/word/zhidao.doc", datareplace.toString());
+        response.setContentType("text/html;charset=utf-8");
+        String keyword = request.getParameter("keyword");
+        List<Baidu> list=new ArrayList<Baidu>();
+        List<String> wordPrit=new ArrayList<String>();
+        int conut = 0;
+        Baidu baidu;
+            QueryWrapper<Baidu> queryCWrapper = new QueryWrapper<Baidu>();
+            System.out.println("12333333111111111111");
+            queryCWrapper = queryCWrapper.eq("keyword", keyword);
+            list = baiduService.list(queryCWrapper);
+            System.out.println("百度的数据" +   list);
+            for(Baidu list1:list){
+                conut++;
+              //  System.out.println("title"+list1.getTitle());
+                wordPrit.add("问题"+conut+":"+list1.getTitle().toString()+"？\n");
+            }
+
+            String datareplace = wordPrit.toString().replace(",","");
+            ExportWord e = new ExportWord();
+            e.creatDoc("G:/word/zhidao.doc", datareplace.toString());
     }
+
 }
 

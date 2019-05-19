@@ -9,11 +9,7 @@
 
         <div class="cl pd-5 bg-1 bk-gray ">
             <div class="searchByField">
-                <input type="input-text" class="input-text"  id="keyword" name="keyword" placeholder="搜索百度知道的关键词" sid="keyword"/>
-                <button type="button" onclick="search()"
-                        class="layui-btn  layui-btn-success radius"><i
-                        class="Hui-iconfont">&#xe665;</i> 爬取
-                </button>
+                <input type="input-text" class="input-text"  id="keyword" name="keyword" placeholder="导出文件的关键词" sid="keyword"/>
 
                 <button type="button" onclick="ExportWord()"
                         class="layui-btn  layui-btn-success radius"><i
@@ -85,11 +81,11 @@
      * 这个是导出
      */
     function ExportWord() {
-       var data =  $('#app').html();
-       var s = {
-           "data":data
-       }
-       alert("data"+data);
+        var keyword = $('#keyword').val();
+        var s ={
+            "keyword":keyword
+        }
+       alert("keyword"+keyword);
         $(function () {
             $.ajax({
                 data:s,

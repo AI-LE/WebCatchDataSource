@@ -12,5 +12,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2019-05-18
  */
 public interface BaiduMapper extends BaseMapper<Baidu> {
+    String  selectByAllParam(String keyword);
 
 }

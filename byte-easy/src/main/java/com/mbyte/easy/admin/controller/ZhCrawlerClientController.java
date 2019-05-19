@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mbyte.easy.admin.Util.ExportWord;
 import com.mbyte.easy.admin.Util.Request;
+import com.mbyte.easy.admin.entity.Baidu;
 import com.mbyte.easy.admin.entity.P;
 import com.mbyte.easy.admin.entity.Zhihu;
 import com.mbyte.easy.admin.service.IZhihuService;
@@ -108,11 +110,30 @@ public class ZhCrawlerClientController {
      * @param response
      * @param request
      */
-    @RequestMapping(value = "ExportWord")
+
+    @RequestMapping("/ExportWord")
     public void ExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
-        String data = request.getParameter("data");
+        response.setContentType("text/html;charset=utf-8");
+        String keyword = request.getParameter("keyword");
+        List<Zhihu> list=new ArrayList<Zhihu>();
+        List<String> wordPrit=new ArrayList<String>();
+        int conut = 0;
+        Baidu baidu;
+        QueryWrapper<Zhihu> queryCWrapper = new QueryWrapper<Zhihu>();
+        System.out.println("12333333111111111111");
+        queryCWrapper = queryCWrapper.eq("keyword", keyword);
+        list = iZhihuService.list(queryCWrapper);
+        System.out.println("知乎的数据" +   list);
+        for(Zhihu list1:list){
+            conut++;
+            //  System.out.println("title"+list1.getTitle());
+            wordPrit.add("问题"+conut+":"+list1.getTitle().toString()+"？\n");
+        }
+
+        String datareplace = wordPrit.toString().replace(",","");
         ExportWord e = new ExportWord();
-        e.creatDoc("G:/word/zhihu.doc", data.toString());
+        e.creatDoc("G:/word/zhihu.doc", datareplace.toString());
     }
+
 }
 
