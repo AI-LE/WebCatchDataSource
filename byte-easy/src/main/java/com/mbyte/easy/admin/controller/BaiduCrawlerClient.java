@@ -12,6 +12,7 @@ import com.mbyte.easy.admin.service.IBaiduService;
 import com.mbyte.easy.admin.service.IBdOldrecordsService;
 import com.mbyte.easy.admin.service.IBdRecordsService;
 import com.mbyte.easy.common.web.AjaxResult;
+import com.mbyte.easy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -89,7 +90,25 @@ public class BaiduCrawlerClient {
 
                    if(count==200){
                        System.out.println("list======"+list);
-
+                       /**
+                        * 生成word
+                        */
+                       List<Baidu> listsave=new ArrayList<Baidu>();
+                       List<String> wordPrit=new ArrayList<String>();
+                       int conut = 0;
+                       QueryWrapper<Baidu> queryCWrapper2 = new QueryWrapper<Baidu>();
+                       queryCWrapper = queryCWrapper.eq("keyword", word);
+                       listsave = baiduService.list(queryCWrapper2);
+                       for(Baidu list1:listsave){
+                           conut++;
+                           wordPrit.add("问题"+conut+":"+list1.getTitle().toString()+"？\n");
+                       }
+                       String datareplace = wordPrit.toString().replace(",","");
+                       String datarea = datareplace.replace("[","");
+                       String datareb = datarea.replace("]","");
+                       ExportWord e = new ExportWord();
+                       e.creatDoc(FileUtil.uploadLocalPath +word+"_baidu.doc", datareb.toString());
+                       //返回给前台
                        response.getWriter().write(list.toString());
                        return ;
                    }
@@ -105,6 +124,7 @@ public class BaiduCrawlerClient {
        }
     }
 
+
         /**
      * 这个是导出word文档，目标是G盘的word文件夹下的zhidao.doc文档
      * @param model
@@ -115,27 +135,17 @@ public class BaiduCrawlerClient {
     public void ExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
         response.setContentType("text/html;charset=utf-8");
         String id = request.getParameter("id");
+       // String filename = request.getParameter("filename");
+        try{
+            QueryWrapper<BdRecords> queryCWrapper1 = new QueryWrapper<BdRecords>();
+            queryCWrapper1 = queryCWrapper1.eq("id", id);
+            String keyword =iBdRecordsService.getOne(queryCWrapper1).getKeyword();
+            response.getWriter().write(keyword);
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
 
-        String filename = request.getParameter("filename");
-        QueryWrapper<BdRecords> queryCWrapper1 = new QueryWrapper<BdRecords>();
-        queryCWrapper1 = queryCWrapper1.eq("id", id);
-        String keyword =iBdRecordsService.getOne(queryCWrapper1).getKeyword();
-        List<Baidu> list=new ArrayList<Baidu>();
-        List<String> wordPrit=new ArrayList<String>();
-        int conut = 0;
-        Baidu baidu;
-            QueryWrapper<Baidu> queryCWrapper = new QueryWrapper<Baidu>();
-            queryCWrapper = queryCWrapper.eq("keyword", keyword);
-            list = baiduService.list(queryCWrapper);
-            for(Baidu list1:list){
-                conut++;
-                wordPrit.add("问题"+conut+":"+list1.getTitle().toString()+"？\n");
-            }
-                String datareplace = wordPrit.toString().replace(",","");
-                 String datarea = datareplace.replace("[","");
-                String datareb = datarea.replace("]","");
-                ExportWord e = new ExportWord();
-                e.creatDoc("G:/word/"+filename+".doc", datareb.toString());
     }
 
 

@@ -139,6 +139,11 @@
         })
     }
 
+
+    // function ExportWord(id) {
+    //     window.open("http://localhost:8080/fileSuffix/"+id+".doc","","")
+    // }
+
     /**
      * 这个是导出
      */
@@ -152,7 +157,8 @@
                 type: 'POST',
                 url: "/zhidaotest/ExportWord",
                 success: function (data) {
-                    console.log("==========]" + data);
+                    alert("data:"+data)
+                         window.open("http://localhost:8080/fileSuffix/"+data+"_baidu.doc","","")
                     layer.designMsg('导出成功！',1);
                 },
                 error: function () {
