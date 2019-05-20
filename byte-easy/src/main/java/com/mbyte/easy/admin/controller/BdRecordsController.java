@@ -96,6 +96,17 @@ public class BdRecordsController extends BaseController  {
         model.addAttribute("bdRecords",bdRecordsService.getById(id));
         return prefix+"edit";
     }
+
+    /**
+     * 添加跳转页面
+     * @return
+     */
+    @GetMapping("unloadfileBefore/{id}")
+    public String unloadfileBefore(Model model,@PathVariable("id")Long id){
+        model.addAttribute("bdRecords",bdRecordsService.getById(id));
+        return prefix+"unloadfile";
+    }
+
     /**
     * 添加
     * @param bdRecords

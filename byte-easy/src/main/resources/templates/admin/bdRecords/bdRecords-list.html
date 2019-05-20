@@ -4,8 +4,8 @@
     <title>列表</title>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>XX管理 <span
-            class="c-gray en">&gt;</span>XX模块<a class="btn btn-success radius r"
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>百度知道配置管理 <span
+            class="c-gray en">&gt;</span>百度知道配置管理模块<a class="btn btn-success radius r"
                                                 style="line-height:1.6em;margin-top:3px"
                                                 href="javascript:location.replace(location.href);" title="刷新"><i
                 class="Hui-iconfont">&#xe68f;</i></a></nav>
@@ -14,7 +14,7 @@
         <div class="layui-body">
             <!-- 内容主体区域 -->
             <fieldset class="layui-elem-field">
-                <legend>XXX列表</legend>
+                <legend>百度知道配置管理列表</legend>
                 <div class="layui-field-box">
 
                     <hr style="margin: 0">
@@ -33,8 +33,9 @@
 
                     <div class="cl pd-5 bg-1 bk-gray ">
                         <div class="searchByField">
-                                         <input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>
-                                         <input type="input-text" class="input-text" th:value="${searchInfo.keyword}" name="keyword" placeholder="搜索关键词" sid="keyword"/>
+
+                            <input type="input-text" class="input-text" th:value="${searchInfo.keyword}" name="keyword" placeholder="搜索关键词" sid="keyword"/>
+                            <input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>
                             <button type="submit"
                                     class="layui-btn  layui-btn-success radius"><i
                                         class="Hui-iconfont">&#xe665;</i> 搜索
@@ -50,8 +51,8 @@
                         <tr class="text-c">
                             <th width="25"><input type="checkbox" name="" value=""/></th>
                             <th width="25">序号</th>
+                            <th width="40">关键词</th>
                                 <th width="40">创建时间</th>
-                                <th width="40">关键词</th>
                             <th width="100">操作</th>
                         </tr>
                         </thead>
@@ -63,8 +64,8 @@
                             <td><input type="checkbox" value="1" th:value="${bdRecords.id}"
                                        name="id"/></td>
                             <td th:text="${count.count}"></td>
-                                    <td th:text="${#temporals.format(bdRecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                     <td th:text="${bdRecords.keyword}"></td>
+                            <td th:text="${#temporals.format(bdRecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td class="td-manage">
                                 <a title="编辑" href="javascript:;"
                                    th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'bdRecords'+'/editBefore/'+${bdRecords.id}+'\',900,500)'"
@@ -75,6 +76,9 @@
                                 <a title="爬取" href="javascript:;"
                                    th:onclick="'javascript:searchword('+ ${bdRecords.id} + ')'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe665;</i></a>
+                                <!--<a title="导出word" href="javascript:;"-->
+                                   <!--th:onclick="'javascript:layer_show(\'导出word\',\'/admin/'+'bdRecords'+'/unloadfileBefore/'+${bdRecords.id}+'\',900,500)'"-->
+                                   <!--class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>-->
                                 <a title="导出word" href="javascript:;"
                                    th:onclick="'javascript:ExportWord('+ ${bdRecords.id} + ')'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>

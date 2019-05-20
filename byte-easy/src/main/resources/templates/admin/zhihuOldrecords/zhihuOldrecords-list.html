@@ -33,8 +33,8 @@
 
                     <div class="cl pd-5 bg-1 bk-gray ">
                         <div class="searchByField">
-                                         <input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>
                                          <input type="input-text" class="input-text" th:value="${searchInfo.keyword}" name="keyword" placeholder="搜索知乎关键词" sid="keyword"/>
+                            <input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>
                             <button type="submit"
                                     class="layui-btn  layui-btn-success radius"><i
                                         class="Hui-iconfont">&#xe665;</i> 搜索
@@ -47,8 +47,8 @@
                         <tr class="text-c">
                             <th width="25"><input type="checkbox" name="" value=""/></th>
                             <th width="25">序号</th>
-                                <th width="40">创建时间</th>
                                 <th width="40">知乎关键词</th>
+                            <th width="40">创建时间</th>
                             <th width="100">操作</th>
                         </tr>
                         </thead>
@@ -60,8 +60,8 @@
                             <td><input type="checkbox" value="1" th:value="${zhihuOldrecords.id}"
                                        name="id"/></td>
                             <td th:text="${count.count}"></td>
-                                    <td th:text="${#temporals.format(zhihuOldrecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                     <td th:text="${zhihuOldrecords.keyword}"></td>
+                            <td th:text="${#temporals.format(zhihuOldrecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td class="td-manage">
                                 <a title="编辑" href="javascript:;"
                                    th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'zhihuOldrecords'+'/editBefore/'+${zhihuOldrecords.id}+'\',900,500)'"
@@ -69,6 +69,9 @@
                                 <a title="删除" href="javascript:;"
                                    th:onclick="'javascript:deleteById(\'/admin/'+'zhihuOldrecords'+'/delete/'+${zhihuOldrecords.id}+'\')'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
+                                <a title="导出word" href="javascript:;"
+                                   th:onclick="'javascript:ExportWord('+ ${zhihuOldrecords.id} + ')'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -96,6 +99,28 @@
         });
     });
 
+    /**
+     * 这个是导出
+     */
+    function ExportWord(id) {
+        var s ={
+            "id":id
+        }
+        $(function () {
+            $.ajax({
+                data:s,
+                type: 'POST',
+                url: "/zhihu/ZhOldExportWord",
+                success: function (data) {
+                    console.log("==========]" + data);
+                    layer.designMsg('导出成功！',1);
+                },
+                error: function () {
+                    layer.designMsg('导出异常!', 5);
+                }
+            });
+        })
+    }
 </script>
 </body>
 </html>

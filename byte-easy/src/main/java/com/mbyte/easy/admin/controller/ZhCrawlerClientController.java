@@ -1,19 +1,19 @@
 package com.mbyte.easy.admin.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mbyte.easy.admin.Util.ExportWord;
 import com.mbyte.easy.admin.Util.Request;
 import com.mbyte.easy.admin.entity.*;
+import com.mbyte.easy.admin.service.IZhihuOldrecordsService;
 import com.mbyte.easy.admin.service.IZhihuRecordsService;
 import com.mbyte.easy.admin.service.IZhihuService;
+import com.mbyte.easy.util.FileUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +31,8 @@ public class ZhCrawlerClientController {
     //    @Test
     @Autowired
     private IZhihuService iZhihuService;
+    @Autowired
+    private IZhihuOldrecordsService iZhihuOldrecordsService;
     @Autowired
     private IZhihuRecordsService iZhihuRecordsService;
     @RequestMapping(value = "zhihucatch")
@@ -106,9 +108,6 @@ public class ZhCrawlerClientController {
         }
     }
 
-
-
-
     /**
      * 这个是导出word文档，目标是G盘的word文件夹下的zhihu.doc文档
      * @param model
@@ -120,6 +119,7 @@ public class ZhCrawlerClientController {
     public void ExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
         response.setContentType("text/html;charset=utf-8");
         String id = request.getParameter("id");
+
         QueryWrapper<ZhihuRecords> queryCWrapper1 = new QueryWrapper<ZhihuRecords>();
         queryCWrapper1 = queryCWrapper1.eq("id", id);
         System.out.println("queryCWrapper" + queryCWrapper1);
@@ -127,7 +127,6 @@ public class ZhCrawlerClientController {
         List<Zhihu> list=new ArrayList<Zhihu>();
         List<String> wordPrit=new ArrayList<String>();
         int conut = 0;
-        Baidu baidu;
         QueryWrapper<Zhihu> queryCWrapper = new QueryWrapper<Zhihu>();
         System.out.println("12333333111111111111");
         queryCWrapper = queryCWrapper.eq("keyword", keyword);
@@ -136,13 +135,63 @@ public class ZhCrawlerClientController {
         for(Zhihu list1:list){
             conut++;
             //  System.out.println("title"+list1.getTitle());
-            wordPrit.add("问题"+conut+":"+list1.getTitle().toString()+"？\n");
+            wordPrit.add("话题"+conut+":"+list1.getTitle().toString()+"？\n");
         }
-
         String datareplace = wordPrit.toString().replace(",","");
+        String datarea = datareplace.replace("[","");
+        String datareb = datarea.replace("]","");
         ExportWord e = new ExportWord();
-        e.creatDoc("G:/word/zhihu.doc", datareplace.toString());
+        Properties properties = new Properties();
+        e.creatDoc("G:/word/zhihu.doc", datareb.toString());
     }
 
+
+    /**
+     * 这个是导出word文档，目标是G盘的word文件夹下的zhihu.doc文档
+     * @param model
+     * @param response
+     * @param request
+     */
+
+    @RequestMapping("/ZhOldExportWord")
+    public void ZhOldExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
+        response.setContentType("text/html;charset=utf-8");
+        String id = request.getParameter("id");
+        QueryWrapper<ZhihuOldrecords> queryCWrapper1 = new QueryWrapper<ZhihuOldrecords>();
+        queryCWrapper1 = queryCWrapper1.eq("id", id);
+        System.out.println("queryCWrapper" + queryCWrapper1);
+        String keyword =iZhihuOldrecordsService.getOne(queryCWrapper1).getKeyword();
+        List<Zhihu> list=new ArrayList<Zhihu>();
+        List<String> wordPrit=new ArrayList<String>();
+        int conut = 0;
+        QueryWrapper<Zhihu> queryCWrapper = new QueryWrapper<Zhihu>();
+        System.out.println("12333333111111111111");
+        queryCWrapper = queryCWrapper.eq("keyword", keyword);
+        list = iZhihuService.list(queryCWrapper);
+        System.out.println("知乎的数据" +   list);
+        for(Zhihu list1:list){
+            conut++;
+            //  System.out.println("title"+list1.getTitle());
+            wordPrit.add("话题"+conut+":"+list1.getTitle().toString()+"？\n");
+        }
+        String datareplace = wordPrit.toString().replace(",","");
+        String datarea = datareplace.replace("[","");
+        String datareb = datarea.replace("]","");
+        ExportWord e = new ExportWord();
+        Properties properties = new Properties();
+        e.creatDoc(FileUtil.uploadLocalPath +"zhihu.doc", datareb.toString());
+    }
+
+
+    /**
+     * 文件上传路径前缀
+     */
+    @Value("${file.upload.suffix.path}")
+    public String uploadSuffixPath;
+    /**
+     * 本地磁盘目录
+     */
+    @Value("${file.upload.local.path}")
+    public String uploadLocalPath;
 }
 

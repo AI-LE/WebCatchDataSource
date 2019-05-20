@@ -88,6 +88,16 @@ public class ZhihuRecordsController extends BaseController  {
         iZhihuOldrecordsService.save(zhihuOldrecords);
         return toAjax(zhihuRecordsService.save(zhihuRecords));
     }
+
+    /**
+     * 添加跳转页面
+     * @return
+     */
+    @GetMapping("unloadfileBefore/{id}")
+    public String unloadfileBefore(Model model,@PathVariable("id")Long id){
+        model.addAttribute("bdRecords",zhihuRecordsService.getById(id));
+        return prefix+"unloadfile";
+    }
     /**
     * 添加跳转页面
     * @return
