@@ -23,9 +23,9 @@
 						<a href="javascript:;"
                            onclick="deleteAll('/admin/zhihuOldrecords/deleteAll')"
                            class="layui-btn  layui-btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-						<a href="javascript:;"
-                           onclick="layer_show('添加','/admin/zhihuOldrecords/addBefore',900,500)"
-                           class="layui-btn  layui-btn-normal radius"><i class="Hui-iconfont">&#xe600;</i> 添加</a>
+						<!--<a href="javascript:;"-->
+                           <!--onclick="layer_show('添加','/admin/zhihuOldrecords/addBefore',900,500)"-->
+                           <!--class="layui-btn  layui-btn-normal radius"><i class="Hui-iconfont">&#xe600;</i> 添加</a>-->
 						</span>
                         <span class="r wei-height">共有数据：<strong th:text="${pageInfo.total}"></strong> 条</span>
                     </div>
@@ -47,31 +47,31 @@
                         <tr class="text-c">
                             <th width="25"><input type="checkbox" name="" value=""/></th>
                             <th width="25">序号</th>
-                                <th width="40">知乎关键词</th>
+                            <th width="40">知乎关键词</th>
                             <th width="40">创建时间</th>
                             <th width="100">操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="text-c" th:if="${pageInfo.list.size() == 0}">
-                            <td colspan="15"><strong>暂无数据</strong></td>
+                            <td colspan="15"><span class="label label-success radius" ><strong>暂无数据</strong></span></td>
                         </tr>
                         <tr class="text-c" th:each="zhihuOldrecords,count:${pageInfo.list}">
                             <td><input type="checkbox" value="1" th:value="${zhihuOldrecords.id}"
                                        name="id"/></td>
                             <td th:text="${count.count}"></td>
-                                    <td th:text="${zhihuOldrecords.keyword}"></td>
+                            <td th:text="${zhihuOldrecords.keyword}"></td>
                             <td th:text="${#temporals.format(zhihuOldrecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td class="td-manage">
                                 <a title="编辑" href="javascript:;"
-                                   th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'zhihuOldrecords'+'/editBefore/'+${zhihuOldrecords.id}+'\',900,500)'"
+                                   th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'bdRecords'+'/editBefore/'+${zhihuOldrecords.id}+'\',900,500)'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
-                                <a title="删除" href="javascript:;"
-                                   th:onclick="'javascript:deleteById(\'/admin/'+'zhihuOldrecords'+'/delete/'+${zhihuOldrecords.id}+'\')'"
-                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
                                 <a title="导出word" href="javascript:;"
                                    th:onclick="'javascript:ExportWord('+ ${zhihuOldrecords.id} + ')'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>
+                                <a title="删除" href="javascript:;"
+                                   th:onclick="'javascript:deleteById(\'/admin/'+'zhihuOldrecords'+'/delete/'+${zhihuOldrecords.id}+'\')'"
+                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -98,7 +98,6 @@
             ,range: true //或 range: '~' 来自定义分割字符
         });
     });
-
     /**
      * 这个是导出
      */
@@ -112,8 +111,13 @@
                 type: 'POST',
                 url: "/zhihu/ZhOldExportWord",
                 success: function (data) {
-                    console.log("==========]" + data);
-                    layer.designMsg('导出成功！',1);
+                    try {
+                        window.open("http://localhost:8080/fileSuffix/"+data+"_知乎.doc","","");
+                    }
+                    catch (e) {
+                        layer.designMsg('下载文件失败!', 5);
+                    }
+                    layer.designMsg('下载成功！',1);
                 },
                 error: function () {
                     layer.designMsg('导出异常!', 5);

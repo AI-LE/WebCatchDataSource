@@ -61,6 +61,11 @@ public class ZhihuController extends BaseController  {
             queryWrapper = queryWrapper.like("keyword",zhihu.getKeyword());
          }
 
+
+        if(zhihu.getUsername() != null  && !"".equals(zhihu.getUsername() + "")) {
+            queryWrapper = queryWrapper.like("username",zhihu.getUsername());
+         }
+
         IPage<Zhihu> pageInfo = zhihuService.page(page, queryWrapper);
         model.addAttribute("searchInfo", zhihu);
         model.addAttribute("pageInfo", new PageInfo(pageInfo));
@@ -125,13 +130,5 @@ public class ZhihuController extends BaseController  {
         return toAjax(zhihuService.removeByIds(ids));
     }
 
-    /**
-     * 添加跳转页面
-     * @return
-     */
-    @GetMapping("detail")
-    public String detail(){
-        return prefix+"function";
-    }
 }
 

@@ -10,14 +10,6 @@
         <input type="hidden" name="id" th:value="${bdOldrecords.id}"/>
                 <div class="row cl">
                     <label class="form-label col-xs-2 col-sm-2"><span
-                                class="c-red">*</span>创建时间：</label>
-                            <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${bdOldrecords.createtime}" name="createtime"  placeholder="修改创建时间" id="createtime"/>
-                            </div>
-                    </div>
-                </div>
-                <div class="row cl">
-                    <label class="form-label col-xs-2 col-sm-2"><span
                                 class="c-red">*</span>关键词：</label>
                             <div class="formControls col-xs-10 col-sm-10">
                                 <input type="input-text" class="input-text" th:value="${bdOldrecords.keyword}" name="keyword"  placeholder="修改关键词" id="keyword"/>
@@ -46,6 +38,10 @@
             required: true,
         },
         keyword:
+        {
+            required: true,
+        },
+        username:
         {
             required: true,
         },

@@ -3,18 +3,21 @@ package com.mbyte.easy.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mbyte.easy.admin.entity.BdOldrecords;
 import com.mbyte.easy.admin.entity.BdRecords;
-import com.mbyte.easy.admin.service.IBdOldrecordsService;
 import com.mbyte.easy.admin.service.IBdRecordsService;
 import com.mbyte.easy.common.controller.BaseController;
 import com.mbyte.easy.common.web.AjaxResult;
 import com.mbyte.easy.util.PageInfo;
+import com.mbyte.easy.util.Utility;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,8 +37,8 @@ public class BdRecordsController extends BaseController  {
 
     @Autowired
     private IBdRecordsService bdRecordsService;
-    @Autowired
-    private IBdOldrecordsService iBdOldrecordsService;
+
+
     /**
     * 查询列表
     *
@@ -49,20 +52,34 @@ public class BdRecordsController extends BaseController  {
     public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, BdRecords bdRecords) {
         Page<BdRecords> page = new Page<BdRecords>(pageNo, pageSize);
         QueryWrapper<BdRecords> queryWrapper = new QueryWrapper<BdRecords>();
+        //获得当前用户,查询当前用户的信息
 
-        if(bdRecords.getCreatetime() != null  && !"".equals(bdRecords.getCreatetime() + "")) {
-            queryWrapper = queryWrapper.like("createtime",bdRecords.getCreatetime());
-         }
+//        if(bdRecords.getCreatetime() != null  && !"".equals(bdRecords.getCreatetime() + "")) {
+//            queryWrapper = queryWrapper.like("createtime",bdRecords.getCreatetime());
+//         }
+//
+//
+//        if(bdRecords.getKeyword() != null  && !"".equals(bdRecords.getKeyword() + "")) {
+//            queryWrapper = queryWrapper.like("keyword",bdRecords.getKeyword());
+//         }
 
 
-        if(bdRecords.getKeyword() != null  && !"".equals(bdRecords.getKeyword() + "")) {
-            queryWrapper = queryWrapper.like("keyword",bdRecords.getKeyword());
+        if(Utility.getCurrentUser().getUsername() != null  ) {
+            queryWrapper = queryWrapper.like("username", Utility.getCurrentUser().getUsername());//传入当前用户
          }
 
         IPage<BdRecords> pageInfo = bdRecordsService.page(page, queryWrapper);
+        List<Object> list = new ArrayList<Object>();
+        PageInfo pageInfo1 = new PageInfo(pageInfo);
+        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
+            list.add(pageInfo1.getList().get(i));
+        }
+        System.out.println("list+++"+list);
+        pageInfo1.setList(list);
+
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", bdRecords);
-        model.addAttribute("pageInfo", new PageInfo(pageInfo));
+        model.addAttribute("pageInfo", pageInfo1);
         return prefix+"bdRecords-list";
     }
 
@@ -75,17 +92,22 @@ public class BdRecordsController extends BaseController  {
         return prefix+"add";
     }
     /**
-    * 添加,同时添加历史记录
+    * 添加
     * @param bdRecords
     * @return
     */
     @PostMapping("add")
     @ResponseBody
-    public AjaxResult add(BdRecords bdRecords, BdOldrecords bdOldrecords){
-        bdOldrecords.setCreatetime(bdRecords.getCreatetime());
-        bdOldrecords.setKeyword(bdRecords.getKeyword());
-        iBdOldrecordsService.save(bdOldrecords);
-    return toAjax(bdRecordsService.save(bdRecords));
+    public AjaxResult add(BdRecords bdRecords){
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+        String localTime = df.format(time);
+        LocalDateTime timechange = LocalDateTime.parse(localTime,df);
+
+        String loginUserName = Utility.getCurrentUsername();
+        bdRecords.setUsername(loginUserName);
+        bdRecords.setCreatetime(timechange);
+        return toAjax(bdRecordsService.save(bdRecords));
     }
     /**
     * 添加跳转页面
@@ -96,17 +118,6 @@ public class BdRecordsController extends BaseController  {
         model.addAttribute("bdRecords",bdRecordsService.getById(id));
         return prefix+"edit";
     }
-
-    /**
-     * 添加跳转页面
-     * @return
-     */
-    @GetMapping("unloadfileBefore/{id}")
-    public String unloadfileBefore(Model model,@PathVariable("id")Long id){
-        model.addAttribute("bdRecords",bdRecordsService.getById(id));
-        return prefix+"unloadfile";
-    }
-
     /**
     * 添加
     * @param bdRecords
@@ -137,15 +148,6 @@ public class BdRecordsController extends BaseController  {
     public AjaxResult deleteAll(@RequestBody List<Long> ids){
         return toAjax(bdRecordsService.removeByIds(ids));
     }
-    /**
-     * 添加跳转页面
-     * @return
-     */
-    @GetMapping("detail")
-    public String detail(){
-        return prefix+"function";
-    }
-
 
 }
 

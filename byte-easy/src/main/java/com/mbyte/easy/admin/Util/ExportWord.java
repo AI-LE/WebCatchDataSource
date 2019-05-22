@@ -40,9 +40,9 @@ public class ExportWord {
             //打开文档
             document.open();
             //创建段落
-            Paragraph p = new Paragraph(text,new Font(Font.NORMAL, 10, Font.BOLD, new Color(0, 0, 0)) );
+            Paragraph p = new Paragraph(text,new Font(Font.NORMAL, 10, Font.NORMAL, new Color(0, 0, 0)) );
             //设置段落为居中对齐
-            p.setAlignment(Paragraph.ALIGN_CENTER);
+            p.setAlignment(Paragraph.ALIGN_LEFT);
             //写入段落
             document.add(p);
             //关流

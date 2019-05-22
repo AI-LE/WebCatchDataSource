@@ -7,13 +7,6 @@
 <article class="page-container">
 	<form class="form form-horizontal"  id="form-zhihuRecords-add" action="#" th:action="@{/admin/zhihuRecords/add}">
         <div class="row cl">
-             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>创建时间：</label>
-             <div class="formControls col-xs-10 col-sm-10">
-                 <input type="input-text" class="input-text timeSpace" readonly="readonly"
-                        autocomplete="off" name="createtime" placeholder="请选择创建时间"/>
-             </div>
-        </div>
-        <div class="row cl">
              <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>关键词：</label>
             <div class="formControls col-xs-10 col-sm-10">
                 <input type="input-text" class="input-text" name="keyword" placeholder="请填写关键词" id="keyword"/>
@@ -37,12 +30,9 @@
  $(function(){
 	$("#form-zhihuRecords-add").validate({
 		rules:{
-            createtime:{
-                required: true,
-			},
             keyword:{
                 required: true,
-			},
+			}
 		},
 		onkeyup:false,
 		debug: true,

@@ -5,30 +5,54 @@
 </head>
 <body>
 <article class="page-container">
-    <form class="form form-horizontal" id="form-zhihu-edit" action="#"
-          th:action="@{/admin/zhihu/edit}" th:object="${zhihu}">
-        <input type="hidden" name="id" th:value="${zhihu.id}"/>
+    <form class="form form-horizontal" id="form-answer-edit" action="#"
+          th:action="@{/admin/answer/edit}" th:object="${answer}">
+        <input type="hidden" name="id" th:value="${answer.id}"/>
                 <div class="row cl">
                     <label class="form-label col-xs-2 col-sm-2"><span
                                 class="c-red">*</span>标题：</label>
                             <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${zhihu.title}" name="title"  placeholder="修改标题" id="title"/>
+                                <input type="input-text" class="input-text" th:value="${answer.title}" name="title"  placeholder="修改标题" id="title"/>
                             </div>
                     </div>
                 </div>
                 <div class="row cl">
                     <label class="form-label col-xs-2 col-sm-2"><span
-                                class="c-red">*</span>创建时间：</label>
+                                class="c-red">*</span>回答一：</label>
                             <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${zhihu.createtime}" name="createtime"  placeholder="修改创建时间" id="createtime"/>
+                                <input type="input-text" class="input-text" th:value="${answer.answerone}" name="answerone"  placeholder="修改回答一" id="answerone"/>
                             </div>
                     </div>
                 </div>
                 <div class="row cl">
                     <label class="form-label col-xs-2 col-sm-2"><span
-                                class="c-red">*</span>关键词：</label>
+                                class="c-red">*</span>回答二：</label>
                             <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${zhihu.keyword}" name="keyword"  placeholder="修改关键词" id="keyword"/>
+                                <input type="input-text" class="input-text" th:value="${answer.answertwo}" name="answertwo"  placeholder="修改回答二" id="answertwo"/>
+                            </div>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>回答三：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text" th:value="${answer.answerthree}" name="answerthree"  placeholder="修改回答三" id="answerthree"/>
+                            </div>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>回答四：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text" th:value="${answer.answerfour}" name="answerfour"  placeholder="修改回答四" id="answerfour"/>
+                            </div>
+                    </div>
+                </div>
+                <div class="row cl">
+                    <label class="form-label col-xs-2 col-sm-2"><span
+                                class="c-red">*</span>回答五：</label>
+                            <div class="formControls col-xs-10 col-sm-10">
+                                <input type="input-text" class="input-text" th:value="${answer.answerfive}" name="answerfive"  placeholder="修改回答五" id="answerfive"/>
                             </div>
                     </div>
                 </div>
@@ -36,7 +60,7 @@
                     <label class="form-label col-xs-2 col-sm-2"><span
                                 class="c-red">*</span>用户名：</label>
                             <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${zhihu.username}" name="username"  placeholder="修改用户名" id="username"/>
+                                <input type="input-text" class="input-text" th:value="${answer.username}" name="username"  placeholder="修改用户名" id="username"/>
                             </div>
                     </div>
                 </div>
@@ -55,17 +79,29 @@
 <!--请在下方写此页面业务相关的脚本-->
 <script>
     $(function () {
-        $("#form-zhihu-edit").validate({
+        $("#form-answer-edit").validate({
             rules: {
         title:
         {
             required: true,
         },
-        createtime:
+        answerone:
         {
             required: true,
         },
-        keyword:
+        answertwo:
+        {
+            required: true,
+        },
+        answerthree:
+        {
+            required: true,
+        },
+        answerfour:
+        {
+            required: true,
+        },
+        answerfive:
         {
             required: true,
         },
@@ -87,7 +123,7 @@
         function (form) {
             $(form).ajaxSubmit({
                 type: 'POST',
-                url: "/admin/zhihu/edit",
+                url: "/admin/answer/edit",
                 success: function (data) {
                     if (data.code == "0") {
                         layer.designMsg('编辑成功!', 1, function () {

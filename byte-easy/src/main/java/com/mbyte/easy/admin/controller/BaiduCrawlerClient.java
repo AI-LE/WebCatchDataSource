@@ -1,20 +1,17 @@
 package com.mbyte.easy.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mbyte.easy.admin.Util.Request;
 import com.mbyte.easy.admin.entity.Baidu;
 import com.mbyte.easy.admin.entity.BdOldrecords;
 import com.mbyte.easy.admin.entity.BdRecords;
 import com.mbyte.easy.admin.entity.P;
 import com.mbyte.easy.admin.Util.ExportWord;
-import com.mbyte.easy.admin.mapper.BaiduMapper;
 import com.mbyte.easy.admin.service.IBaiduService;
 import com.mbyte.easy.admin.service.IBdOldrecordsService;
 import com.mbyte.easy.admin.service.IBdRecordsService;
-import com.mbyte.easy.common.web.AjaxResult;
 import com.mbyte.easy.util.FileUtil;
+import com.mbyte.easy.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +22,6 @@ import org.jsoup.select.Elements;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +41,7 @@ public class BaiduCrawlerClient {
     @Autowired
     private IBdRecordsService iBdRecordsService;
 
-    private int n =0;
+
     private String  url = "https://zhidao.baidu.com/search?word=知道&ie=gbk&site=-1&sites=0&date=0&pn=";
     /**
      * 这个是百度知道的测试接口，通过把关键词和路径置入，实现对数据的抓取
@@ -57,15 +52,24 @@ public class BaiduCrawlerClient {
      //@Test
     @RequestMapping(value = "test")
     public void zhidaocrawlerClient(Model model, HttpServletResponse response, HttpServletRequest request) {
-//        response.setCharacterEncoding("utf-8");
+         int n =0;//定义循环次数
+        Baidu baidu =new Baidu();
+        //定义word链表
+        List<String> wordPrit=new ArrayList<String>();
        response.setContentType("text/html;charset=utf-8");
+       //获得当前用户
+        String loginUserName = Utility.getCurrentUsername();
         String id = request.getParameter("id");
         QueryWrapper<BdRecords> queryCWrapper = new QueryWrapper<BdRecords>();
         queryCWrapper = queryCWrapper.eq("id", id);
         System.out.println("queryCWrapper" + queryCWrapper);
+        /**
+         * 获得查到记录的所有数据，存入old中
+         */
         String word =iBdRecordsService.getOne(queryCWrapper).getKeyword();
-        System.out.println("word" + word);
         Document doc = null;
+        int conut = 0;
+        int count = 0;
         List<String> list=new ArrayList<String>();
        for(int i = 0;i<19;i++){
             int p = i*10;
@@ -73,43 +77,59 @@ public class BaiduCrawlerClient {
                url = "https://zhidao.baidu.com/search?word="+word+"&ie=gbk&site=-1&sites=0&date=0&pn=" + p;
                doc = Jsoup.connect(url).userAgent(P.REQUEST.USER_AGENT).timeout(5000).get();
                Elements listDiv = doc.getElementsByAttributeValue("class", "ti");
-               int count = 0;
-              count = n * 11;
+                   count = n * 11;
                for (Element text : listDiv) {
                    String ptext = text.html();
                    count ++;
                    String reg = "[^\u4e00-\u9fa5]";
                    ptext = ptext.replaceAll(reg, "");
                    System.out.println("问题"+count+":" + ptext+"?");
-                   Baidu baidu =new Baidu();
-                   baidu.setTitle(ptext);
-                   baidu.setKeyword(word);
-                 //  baidu.setCreattime((LocalDateTime)punchTime);
-                   baiduService.save(baidu);
-          //         list.add("问题"+count+":"+ptext.toString()+"？\n");
+                   /**
+                    * 百度爬取到的标题存入数据库
+                    */
+                    //先进行数据是否已经存在的判断
+                   Baidu baidu1 = new Baidu();
+                   QueryWrapper<Baidu> BaiduqueryCWrapper = new QueryWrapper<Baidu>();
+                   BaiduqueryCWrapper = BaiduqueryCWrapper.eq("title", ptext);
+                   baidu1 = baiduService.getOne(BaiduqueryCWrapper);
+                   System.out.println("BaiduqueryCWrapper" + baidu1);
+                   if(baidu1 == null){
+                       baidu.setTitle(ptext);
+                       baidu.setKeyword(word);
+                       baidu.setUsername(loginUserName);
+                       baiduService.save(baidu);
+                   }
+                   //word链表
+                   wordPrit.add(count+":"+ptext.toString()+"？\n");
 
-                   if(count==200){
-                       System.out.println("list======"+list);
+                   if(count == 200){
+                       /**
+                        *  存入一条历史记录
+                        */
+                         BdOldrecords bdOldrecords = new BdOldrecords();
+                         bdOldrecords.setKeyword(word);
+                           bdOldrecords.setUsername(Utility.getCurrentUser().getUsername());
+                         iBdOldrecordsService.save(bdOldrecords);
+                         System.out.println("list======"+list);
                        /**
                         * 生成word
                         */
-                       List<Baidu> listsave=new ArrayList<Baidu>();
-                       List<String> wordPrit=new ArrayList<String>();
-                       int conut = 0;
-                       QueryWrapper<Baidu> queryCWrapper2 = new QueryWrapper<Baidu>();
-                       queryCWrapper = queryCWrapper.eq("keyword", word);
-                       listsave = baiduService.list(queryCWrapper2);
-                       for(Baidu list1:listsave){
-                           conut++;
-                           wordPrit.add("问题"+conut+":"+list1.getTitle().toString()+"？\n");
-                       }
+//                       List<Baidu> listsave=new ArrayList<Baidu>();
+//
+//                       QueryWrapper<Baidu> queryCWrapper2 = new QueryWrapper<Baidu>();
+//                       queryCWrapper2 = queryCWrapper2.eq("keyword", word);
+//                       listsave = baiduService.list(queryCWrapper2);
+//                       for(Baidu list1:listsave){
+//                           conut++;
+//
+//                       }
                        String datareplace = wordPrit.toString().replace(",","");
                        String datarea = datareplace.replace("[","");
                        String datareb = datarea.replace("]","");
                        ExportWord e = new ExportWord();
-                       e.creatDoc(FileUtil.uploadLocalPath +word+"_baidu.doc", datareb.toString());
+                       e.creatDoc(FileUtil.uploadLocalPath +word+"_百度.doc", datareb.toString());
                        //返回给前台
-                       response.getWriter().write(list.toString());
+                       response.getWriter().write(word);
                        return ;
                    }
                }
@@ -126,7 +146,7 @@ public class BaiduCrawlerClient {
 
 
         /**
-     * 这个是导出word文档，目标是G盘的word文件夹下的zhidao.doc文档
+     * 这个是导出word文档，导出的是查询记录文件
      * @param model
      * @param response
      * @param request
@@ -145,12 +165,11 @@ public class BaiduCrawlerClient {
         catch (IOException e){
             e.printStackTrace();
         }
-
     }
 
 
     /**
-     * 这个是历史文件的导出文档方式
+     * 这个是导出word文档，导出的是历史记录文件
      * @param model
      * @param response
      * @param request
@@ -159,27 +178,18 @@ public class BaiduCrawlerClient {
     public void OldExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
         response.setContentType("text/html;charset=utf-8");
         String id = request.getParameter("id");
-        //  String path = request.getParameter("path");
-        QueryWrapper<BdOldrecords> queryCWrapper1 = new QueryWrapper<BdOldrecords>();
-        queryCWrapper1 = queryCWrapper1.eq("id", id);
-        String keyword =iBdOldrecordsService.getOne(queryCWrapper1).getKeyword();
-        System.out.println("keyword"+keyword);
-        List<Baidu> list=new ArrayList<Baidu>();
-        List<String> wordPrit=new ArrayList<String>();
-        int conut = 0;
-        Baidu baidu;
-        QueryWrapper<Baidu> queryCWrapper = new QueryWrapper<Baidu>();
-        queryCWrapper = queryCWrapper.eq("keyword", keyword);
-        list = baiduService.list(queryCWrapper);
-        for(Baidu list1:list){
-            conut++;
-            wordPrit.add("问题"+conut+":"+list1.getTitle().toString()+"？\n");
+        // String filename = request.getParameter("filename");
+        try{
+            QueryWrapper<BdOldrecords> queryCWrapper1 = new QueryWrapper<BdOldrecords>();
+            queryCWrapper1 = queryCWrapper1.eq("id", id);
+            String keyword =iBdOldrecordsService.getOne(queryCWrapper1).getKeyword();
+            System.out.println("keyword" + keyword);
+            response.getWriter().write(keyword);
         }
-        String datareplace = wordPrit.toString().replace(",","");
-        String datarea = datareplace.replace("[","");
-        String datareb = datarea.replace("]","");
-        ExportWord e = new ExportWord();
-        e.creatDoc("G:/word/zhidao.doc", datareb.toString());
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
     }
 }
 

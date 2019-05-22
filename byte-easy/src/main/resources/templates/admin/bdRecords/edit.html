@@ -10,14 +10,6 @@
         <input type="hidden" name="id" th:value="${bdRecords.id}"/>
                 <div class="row cl">
                     <label class="form-label col-xs-2 col-sm-2"><span
-                                class="c-red">*</span>创建时间：</label>
-                            <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text timeSpace" readonly="readonly" autocomplete="off" th:value="${#temporals.format(bdRecords.createtime, 'yyyy-MM-dd HH:mm:ss')}" name="createtime" placeholder="请选择创建时间"/>
-                            </div>
-                    </div>
-                </div>
-                <div class="row cl">
-                    <label class="form-label col-xs-2 col-sm-2"><span
                                 class="c-red">*</span>关键词：</label>
                             <div class="formControls col-xs-10 col-sm-10">
                                 <input type="input-text" class="input-text" th:value="${bdRecords.keyword}" name="keyword"  placeholder="修改关键词" id="keyword"/>
@@ -41,14 +33,10 @@
     $(function () {
         $("#form-bdRecords-edit").validate({
             rules: {
-        createtime:
-        {
-            required: true,
-        },
         keyword:
         {
             required: true,
-        },
+        }
     },
         onkeyup:false,
             debug

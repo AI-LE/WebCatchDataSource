@@ -61,6 +61,11 @@ public class BaiduController extends BaseController  {
             queryWrapper = queryWrapper.like("keyword",baidu.getKeyword());
          }
 
+
+        if(baidu.getUsername() != null  && !"".equals(baidu.getUsername() + "")) {
+            queryWrapper = queryWrapper.like("username",baidu.getUsername());
+         }
+
         IPage<Baidu> pageInfo = baiduService.page(page, queryWrapper);
         model.addAttribute("searchInfo", baidu);
         model.addAttribute("pageInfo", new PageInfo(pageInfo));
@@ -124,13 +129,6 @@ public class BaiduController extends BaseController  {
     public AjaxResult deleteAll(@RequestBody List<Long> ids){
         return toAjax(baiduService.removeByIds(ids));
     }
-    /**
-     * 添加跳转页面
-     * @return
-     */
-    @GetMapping("detail")
-    public String detail(){
-        return "admin/baidu/function";
-    }
+
 }
 

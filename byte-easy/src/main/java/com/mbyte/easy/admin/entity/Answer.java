@@ -1,7 +1,6 @@
 package com.mbyte.easy.admin.entity;
 
 import com.mbyte.easy.common.entity.BaseEntity;
-import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -12,29 +11,44 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-21
+ * @since 2019-05-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class Baidu extends BaseEntity {
+public class Answer extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 百度知道标题
+     * 标题
      */
     private String title;
 
     /**
-     * 创建时间
+     * 回答一
      */
-    private LocalDateTime creattime;
+    private String answerone;
 
     /**
-     * 搜索的关键词
+     * 回答二
      */
-    private String keyword;
+    private String answertwo;
+
+    /**
+     * 回答三
+     */
+    private String answerthree;
+
+    /**
+     * 回答四
+     */
+    private String answerfour;
+
+    /**
+     * 回答五
+     */
+    private String answerfive;
 
     /**
      * 用户名

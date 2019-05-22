@@ -1,6 +1,6 @@
 package com.mbyte.easy.admin.service;
 
-import com.mbyte.easy.admin.entity.ZhihuRecords;
+import com.mbyte.easy.admin.entity.Answer;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-21
+ * @since 2019-05-23
  */
-public interface IZhihuRecordsService extends IService<ZhihuRecords> {
+public interface IAnswerService extends IService<Answer> {
 
 }

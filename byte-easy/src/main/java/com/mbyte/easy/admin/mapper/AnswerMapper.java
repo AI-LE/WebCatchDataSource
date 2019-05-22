@@ -1,6 +1,6 @@
 package com.mbyte.easy.admin.mapper;
 
-import com.mbyte.easy.admin.entity.ZhihuOldrecords;
+import com.mbyte.easy.admin.entity.Answer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-21
+ * @since 2019-05-23
  */
-public interface ZhihuOldrecordsMapper extends BaseMapper<ZhihuOldrecords> {
+public interface AnswerMapper extends BaseMapper<Answer> {
 
 }

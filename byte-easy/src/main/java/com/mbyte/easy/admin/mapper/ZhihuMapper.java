@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-18
+ * @since 2019-05-21
  */
 public interface ZhihuMapper extends BaseMapper<Zhihu> {
 

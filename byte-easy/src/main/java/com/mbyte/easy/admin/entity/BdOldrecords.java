@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-19
+ * @since 2019-05-21
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -30,6 +30,11 @@ public class BdOldrecords extends BaseEntity {
      * 关键词
      */
     private String keyword;
+
+    /**
+     * 用户名
+     */
+    private String username;
 
 
 }

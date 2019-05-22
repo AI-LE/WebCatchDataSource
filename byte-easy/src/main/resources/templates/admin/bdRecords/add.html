@@ -6,19 +6,14 @@
 <body>
 <article class="page-container">
 	<form class="form form-horizontal"  id="form-bdRecords-add" action="#" th:action="@{/admin/bdRecords/add}">
-        <div class="row cl">
-             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>创建时间：</label>
-             <div class="formControls col-xs-10 col-sm-10">
-                 <input type="input-text" class="input-text timeSpace" readonly="readonly"
-                        autocomplete="off" name="createtime" placeholder="请选择创建时间"/>
-             </div>
-        </div>
+
         <div class="row cl">
              <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>关键词：</label>
             <div class="formControls col-xs-10 col-sm-10">
                 <input type="input-text" class="input-text" name="keyword" placeholder="请填写关键词" id="keyword"/>
             </div>
         </div>
+
 	<div class="row cl">
 	<div class="col-xs-4 col-sm-3 col-xs-offset-4 col-sm-offset-3">
 		<input class="btn btn-primary radius" id="subbtn" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
@@ -37,12 +32,9 @@
  $(function(){
 	$("#form-bdRecords-add").validate({
 		rules:{
-            createtime:{
-                required: true,
-			},
             keyword:{
                 required: true,
-			},
+			}
 		},
 		onkeyup:false,
 		debug: true,

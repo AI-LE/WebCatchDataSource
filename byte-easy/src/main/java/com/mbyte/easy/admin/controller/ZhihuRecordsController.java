@@ -3,18 +3,21 @@ package com.mbyte.easy.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mbyte.easy.admin.entity.ZhihuOldrecords;
+import com.mbyte.easy.admin.entity.BdRecords;
 import com.mbyte.easy.admin.entity.ZhihuRecords;
-import com.mbyte.easy.admin.service.IZhihuOldrecordsService;
 import com.mbyte.easy.admin.service.IZhihuRecordsService;
 import com.mbyte.easy.common.controller.BaseController;
 import com.mbyte.easy.common.web.AjaxResult;
 import com.mbyte.easy.util.PageInfo;
+import com.mbyte.easy.util.Utility;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,8 +38,6 @@ public class ZhihuRecordsController extends BaseController  {
     @Autowired
     private IZhihuRecordsService zhihuRecordsService;
 
-    @Autowired
-    private IZhihuOldrecordsService iZhihuOldrecordsService;
     /**
     * 查询列表
     *
@@ -51,19 +52,22 @@ public class ZhihuRecordsController extends BaseController  {
         Page<ZhihuRecords> page = new Page<ZhihuRecords>(pageNo, pageSize);
         QueryWrapper<ZhihuRecords> queryWrapper = new QueryWrapper<ZhihuRecords>();
 
-        if(zhihuRecords.getCreatetime() != null  && !"".equals(zhihuRecords.getCreatetime() + "")) {
-            queryWrapper = queryWrapper.like("createtime",zhihuRecords.getCreatetime());
-         }
-
-
-        if(zhihuRecords.getKeyword() != null  && !"".equals(zhihuRecords.getKeyword() + "")) {
-            queryWrapper = queryWrapper.like("keyword",zhihuRecords.getKeyword());
-         }
+        if(Utility.getCurrentUser().getUsername() != null  ) {
+            queryWrapper = queryWrapper.like("username", Utility.getCurrentUser().getUsername());//传入当前用户
+        }
 
         IPage<ZhihuRecords> pageInfo = zhihuRecordsService.page(page, queryWrapper);
+        List<Object> list = new ArrayList<Object>();
+        PageInfo pageInfo1 = new PageInfo(pageInfo);
+        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
+            list.add(pageInfo1.getList().get(i));
+        }
+        System.out.println("list+++"+list);
+        pageInfo1.setList(list);
+
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", zhihuRecords);
-        model.addAttribute("pageInfo", new PageInfo(pageInfo));
+        model.addAttribute("pageInfo", pageInfo1);
         return prefix+"zhihuRecords-list";
     }
 
@@ -82,21 +86,17 @@ public class ZhihuRecordsController extends BaseController  {
     */
     @PostMapping("add")
     @ResponseBody
-    public AjaxResult add(ZhihuRecords zhihuRecords, ZhihuOldrecords zhihuOldrecords){
-        zhihuOldrecords.setCreatetime(zhihuRecords.getCreatetime());
-        zhihuOldrecords.setKeyword(zhihuRecords.getKeyword());
-        iZhihuOldrecordsService.save(zhihuOldrecords);
-        return toAjax(zhihuRecordsService.save(zhihuRecords));
-    }
+    public AjaxResult add(ZhihuRecords zhihuRecords){
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+        String localTime = df.format(time);
+        LocalDateTime timechange = LocalDateTime.parse(localTime,df);
 
-    /**
-     * 添加跳转页面
-     * @return
-     */
-    @GetMapping("unloadfileBefore/{id}")
-    public String unloadfileBefore(Model model,@PathVariable("id")Long id){
-        model.addAttribute("bdRecords",zhihuRecordsService.getById(id));
-        return prefix+"unloadfile";
+        String loginUserName = Utility.getCurrentUsername();
+        zhihuRecords.setUsername(loginUserName);
+        zhihuRecords.setCreatetime(timechange);
+
+        return toAjax(zhihuRecordsService.save(zhihuRecords));
     }
     /**
     * 添加跳转页面
