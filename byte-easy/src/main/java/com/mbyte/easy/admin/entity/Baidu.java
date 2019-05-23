@@ -11,8 +11,8 @@ import lombok.experimental.Accessors;
  * 
  * </p>
  *
- * @author 吴天豪
- * @since 2019-05-21
+ * @author 黄润宣
+ * @since 2019-05-16
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -35,11 +35,6 @@ public class Baidu extends BaseEntity {
      * 搜索的关键词
      */
     private String keyword;
-
-    /**
-     * 用户名
-     */
-    private String username;
 
 
 }

@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head th:include="_meta :: header">
+<title>添加</title>
+</head>
+<body>
+<article class="page-container">
+	<form class="form form-horizontal"  id="form-tUser-add" action="#" th:action="@{/admin/tUser/add}">
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>昵称：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="nickName" placeholder="请填写昵称" id="nickName"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>性别 1：男：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="gender" placeholder="请填写性别 1：男" id="gender"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>语言：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="language" placeholder="请填写语言" id="language"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>城市：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="city" placeholder="请填写城市" id="city"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>省份：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="province" placeholder="请填写省份" id="province"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>唯一主键id：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="openId" placeholder="请填写唯一主键id" id="openId"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>创建时间：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="createtime" placeholder="请填写创建时间" id="createtime"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>更新时间：</label>
+             <div class="formControls col-xs-10 col-sm-10">
+                 <input type="input-text" class="input-text timeSpace" readonly="readonly"
+                        autocomplete="off" name="updatetime" placeholder="请选择更新时间"/>
+             </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>用户姓名：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="userName" placeholder="请填写用户姓名" id="userName"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>用户联系方式：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="phone" placeholder="请填写用户联系方式" id="phone"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>所在单位：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="currentUnit" placeholder="请填写所在单位" id="currentUnit"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>角色:1/项目经理2/审计3/工长：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="role" placeholder="请填写角色:1/项目经理2/审计3/工长" id="role"/>
+            </div>
+        </div>
+        <div class="row cl">
+             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>用户备注：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="remarks" placeholder="请填写用户备注" id="remarks"/>
+            </div>
+        </div>
+	<div class="row cl">
+	<div class="col-xs-4 col-sm-3 col-xs-offset-4 col-sm-offset-3">
+		<input class="btn btn-primary radius" id="subbtn" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;"/>
+		<input class="btn radius" id="reset" type="reset" value="&nbsp;&nbsp;重置&nbsp;&nbsp;"/>
+	</div>
+	</div>
+	</form>
+</article>
+
+<!--_footer 作为公共模版分离出去-->
+<div th:replace="_footer :: footerjs"></div>
+<div th:replace="_ueditor :: ueditor"></div>
+ <!--/_footer 作为公共模版分离出去-->
+<!--请在下方写此页面业务相关的脚本-->
+<script>
+ $(function(){
+	$("#form-tUser-add").validate({
+		rules:{
+            nickName:{
+                required: true,
+			},
+            gender:{
+                required: true,
+			},
+            language:{
+                required: true,
+			},
+            city:{
+                required: true,
+			},
+            province:{
+                required: true,
+			},
+            avatarUrl:{
+                required: true,
+			},
+            openId:{
+                required: true,
+			},
+            createtime:{
+                required: true,
+			},
+            updatetime:{
+                required: true,
+			},
+            userName:{
+                required: true,
+			},
+            phone:{
+                required: true,
+			},
+            currentUnit:{
+                required: true,
+			},
+            role:{
+                required: true,
+			},
+            remarks:{
+                required: true,
+			},
+		},
+		onkeyup:false,
+		debug: true,
+		success:"valid",
+		submitHandler:function(form){
+				$(form).ajaxSubmit({
+				type: 'POST',
+				url: "/admin/tUser/add" ,
+				success: function(data){
+					if(data.code == "0"){
+						layer.designMsg('添加成功!',1,function(){
+							var index = parent.layer.getFrameIndex(window.name);
+							parent.location.reload();
+							parent.layer.close(index);
+						});
+					}else{
+						layer.designMsg('添加失败!');
+					}
+				},
+                error: function(){
+					layer.designMsg('添加异常!',5);
+				}
+			});
+		}
+	});
+});
+        lay('.timeSpace').each(function(){
+            laydate.render({
+                elem: this
+                ,trigger: 'click'
+                ,type: 'datetime'
+            });
+        });
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

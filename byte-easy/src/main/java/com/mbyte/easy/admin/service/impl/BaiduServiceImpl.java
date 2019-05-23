@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
  *  服务实现类
  * </p>
  *
- * @author 吴天豪
- * @since 2019-05-21
+ * @author 黄润宣
+ * @since 2019-05-16
  */
 @Service
 public class BaiduServiceImpl extends ServiceImpl<BaiduMapper, Baidu> implements IBaiduService {

@@ -8,8 +8,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author 吴天豪
- * @since 2019-05-21
+ * @author 黄润宣
+ * @since 2019-05-16
  */
 public interface IBaiduService extends IService<Baidu> {
 

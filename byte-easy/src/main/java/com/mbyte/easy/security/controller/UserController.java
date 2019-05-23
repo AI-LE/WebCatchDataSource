@@ -1,7 +1,12 @@
 package com.mbyte.easy.security.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mbyte.easy.admin.entity.TUser;
+import com.mbyte.easy.admin.mapper.TUserMapper;
+import com.mbyte.easy.admin.service.ITUserService;
+import com.mbyte.easy.admin.service.impl.TUserServiceImpl;
 import com.mbyte.easy.entity.SysRole;
 import com.mbyte.easy.entity.SysUser;
 import com.mbyte.easy.entity.SysUserRoles;
@@ -14,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -37,9 +43,13 @@ public class UserController {
 	@Autowired
 	private SysUserMapper userMapper;
 	@Autowired
+	private TUserMapper tUserMapper;
+	@Autowired
 	private SysRoleMapper roleMapper;
 	@Autowired
 	private SysUserRolesMapper userRolesMapper;
+	@Autowired
+	private ITUserService itUserService;
 
 	@ModelAttribute("roleList")
 	public List<SysRole> resourceList() {
@@ -87,10 +97,11 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping(value = "/add-user", params = "save=true")
 	public String addRole(Model model, @ModelAttribute(value = "user") SysUser user,
-			@RequestParam(required = false) String userRoles) {
+			@RequestParam(required = false) String userRoles, TUser tUser) {
 		SysUserRoles sysUserRoles = new SysUserRoles();
 		SysUser dbUser = userMapper.selectByUsername(user.getUsername());
 		// 用户名已存在
+		tUser.setUserName(user.getUsername());//把用户放进tUser中
 		if (dbUser != null) {
 			return "2";
 		}
@@ -99,6 +110,7 @@ public class UserController {
 			user.setCreatetime(new Date());
 			user.setUpdatetime(new Date());
 			userMapper.insert(user);
+			tUserMapper.insert(tUser);//把用户放进tUser中
 			user = userMapper.selectByUsername(user.getUsername());
 			if (!"".equals(userRoles) && userRoles != null) {
 				// 角色字段处理
@@ -141,7 +153,7 @@ public class UserController {
 	}
 
 	/**
-	 * 删除
+	 * 删除,这个是先进行对应的Systemuser的删除处理，后进行微信用户信息表的删除处理
 	 * 
 	 * @param id
 	 * @param model
@@ -150,10 +162,14 @@ public class UserController {
 	@PreAuthorize("hasAuthority('/user/delete-user')")
 	@ResponseBody
 	@RequestMapping(value = "/delete-user/{id}")
-	public Integer delet(Model model, @PathVariable("id") Long id) {
+	public Integer delet(Model model, @PathVariable("id") Long id, TUser user) {
 		try {
 			userRolesMapper.deleteByUserRoleId(id);
 			userMapper.deleteByPrimaryKey(id);
+			QueryWrapper<TUser> queryWrapper = new QueryWrapper<TUser>();
+			queryWrapper = queryWrapper.eq("userName", userMapper.selectByPrimaryKey(id).getUsername());
+			user = itUserService.getOne(queryWrapper);
+			tUserMapper.deleteById(user.getId());
 			return 1;
 		} catch (Exception e) {
 			logger.error(e.getMessage());

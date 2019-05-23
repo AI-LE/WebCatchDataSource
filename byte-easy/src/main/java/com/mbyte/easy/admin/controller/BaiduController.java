@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 * <p>
 * 前端控制器
 * </p>
-* @author 吴天豪
+* @author 黄润宣
 * @since 2019-03-11
 */
 @Controller
@@ -43,7 +43,7 @@ public class BaiduController extends BaseController  {
     * @return
     */
     @RequestMapping
-    public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, Baidu baidu) {
+    public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String creattimeSpace, Baidu baidu) {
         Page<Baidu> page = new Page<Baidu>(pageNo, pageSize);
         QueryWrapper<Baidu> queryWrapper = new QueryWrapper<Baidu>();
 
@@ -61,12 +61,8 @@ public class BaiduController extends BaseController  {
             queryWrapper = queryWrapper.like("keyword",baidu.getKeyword());
          }
 
-
-        if(baidu.getUsername() != null  && !"".equals(baidu.getUsername() + "")) {
-            queryWrapper = queryWrapper.like("username",baidu.getUsername());
-         }
-
         IPage<Baidu> pageInfo = baiduService.page(page, queryWrapper);
+        model.addAttribute("creattimeSpace", creattimeSpace);
         model.addAttribute("searchInfo", baidu);
         model.addAttribute("pageInfo", new PageInfo(pageInfo));
         return prefix+"baidu-list";
@@ -130,5 +126,14 @@ public class BaiduController extends BaseController  {
         return toAjax(baiduService.removeByIds(ids));
     }
 
+
+    /**
+     * 添加跳转页面
+     * @return
+     */
+    @GetMapping("detailtext")
+    public String detailtext(){
+        return prefix+"add";
+    }
 }
 

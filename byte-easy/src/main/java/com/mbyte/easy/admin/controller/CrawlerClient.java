@@ -1,7 +1,7 @@
 package com.mbyte.easy.admin.controller;
 
 
-import com.mbyte.easy.admin.Util.Request;
+import com.mbyte.easy.admin.model.Request;
 import com.mbyte.easy.admin.entity.P;
 import org.junit.Test;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by rongyaowen on 2018/10/4.
  */
-@Controller
+
 @RequestMapping(value = "test")
 public class CrawlerClient {
 
@@ -29,7 +29,7 @@ public class CrawlerClient {
    // @RequestMapping
     public void crawlerClient_01() {
         //  String url = "https://www.douban.com";
-        String url = "https://www.zhihu.com/api/v4/search_v3?t=general&q=%E6%95%99%E5%B8%88&correction=1&offset=20&limit=20&lc_idx=23&show_all_topics=0&search_hash_id=d9f7c0b41027082f72f78a8df1706d87&vertical_info=1%2C1%2C1%2C1%2C0%2C1%2C0%2C0%2C0%2C1";
+        String url = "https://www.zhihu.com/search?type=content&q=%E6%95%99%E5%B8%88";
         //这个是JSON爬虫
         Map<String, Object> headerParams = new HashMap<>();
         headerParams.put(P.REQUEST.USER_AGENT, P.USER_AGENT);
