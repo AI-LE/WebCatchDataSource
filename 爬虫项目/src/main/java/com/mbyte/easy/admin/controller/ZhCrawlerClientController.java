@@ -43,6 +43,8 @@ public class ZhCrawlerClientController {
     private  IAnswerService iAnswerService;
     @RequestMapping(value = "zhihucatch")
     public void crawlerClient_01(Model model, HttpServletResponse response, HttpServletRequest request) {
+        //生成唯一标识
+    //    String uuid =  UUID.randomUUID().toString().replaceAll("-","");
         response.setContentType("text/html;charset=utf-8");
         int page;
         int currt = 0;
@@ -136,7 +138,6 @@ public class ZhCrawlerClientController {
                                         QueryWrapper<Zhihu> LookZhihudata = new QueryWrapper<Zhihu>();//这个是用来查找标题的
                                         LookZhihudata = LookZhihudata.eq("keyword", question);
                                         List<Zhihu> listodap = iZhihuService.list(LookZhihudata);//这个是用来查找所有标题的
-                                      System.out.println("list#￥%￥#……#￥……#￥……￥#……￥#……#￥……#……￥#……￥" + listodap);
 
                                         for (int r = 0;r < listodap.size(); r++){
                                             Zhihu zhihute = new Zhihu();
@@ -167,7 +168,7 @@ public class ZhCrawlerClientController {
                                                 String datareplace = zhihudatatest.toString().replace(",","");
                                                 datareplace= datareplace.replace("[","");
                                                 datareplace.replace("]","");
-                                                e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
+                                                e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
                                             }
                                         }
                                         response.getWriter().write(question);
@@ -182,8 +183,8 @@ public class ZhCrawlerClientController {
                          */
                         List<String>list1 = new ArrayList<String>();
                         int urlindex=v.indexOf("question");
-
-                        if(urlindex!=-1){
+                        int urlindex2=v.indexOf("http://zhuanlan.zhihu.com/p/");
+                        if(urlindex!=-1 || urlindex2!=-1){
                             int urlend=v.indexOf("\"", urlindex+1);
                             if(urlend!=-1){
                                 String urlresult=v.substring(urlindex,urlend);
@@ -202,7 +203,7 @@ public class ZhCrawlerClientController {
                                     //这个是字符串，得到网站的数据字符串
                                     System.out.println("==========" + resMapanswer.get(P.REQUEST.RES_BODY) + "=================================");
                                     String answer = resMapanswer.get(P.REQUEST.RES_BODY).toString();
-                                    String[] valueanswer = resMapanswer.get(P.REQUEST.RES_BODY).toString().split(",");
+                                    String[] valueanswer = resMapanswer.get(P.REQUEST.RES_BODY).toString().split("}");
                                     int putdatatime = 0;
                                     Answer answer1 = new Answer();
                                     for(String answersum :valueanswer){
@@ -240,50 +241,70 @@ public class ZhCrawlerClientController {
 //                                            }
                                         }
                                         //  System.out.println("========================++++++++++++"+answercount);
-                                        String regsdop = "[^\u4e00-\u9fa5]";
-                                        int indexans =answersum.indexOf("excerpt");
+                                        String regsdop = "[^\\x00-\\xff]";
+
+                                       // String regsdop = "[^\u4e00-\u9fa5]";
+                                        int indexans =answersum.indexOf("content");//规则
                                         if(indexans!=-1) {
-                                            //内容
-                                            answersum = answersum.replace("excerpt\":\"", "");
-                                            answersum = answersum.replace("\"", "");
-                                        //    System.out.println("=======]answersumanswersumanswersumanswersum" + answersum);
-                                            putdatatime++;
-                                         //   System.out.println("=======]putdatatime" + putdatatime);
-                                            QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<Answer>();
-                                            if (putdatatime == 1) {
-                                                answersum = answersum.replaceAll(regsdop, "");
-                                                if(answersum!=""){
-                                                    answer1.setAnswerone(answersum);
-                                                    iAnswerService.save(answer1);
+                                            int indexop=answersum.indexOf("content");//切割
+                                            int end=answersum.indexOf("editable_content", indexop+1);
+                                            if(end != -1){
+                                                answersum = answersum.substring(indexop, end);
+                                            //    answersum  = answersum.replace(regsdop, "");
+                                                Pattern p = Pattern.compile(regsdop);
+                                                Matcher m = p.matcher(answersum);
+                                                StringBuffer sb = new StringBuffer();
+                                                while (m.find()) {
+                                                    sb.append(m.group());
                                                 }
-                                            } else if (putdatatime == 2) {
-                                                answersum = answersum.replaceAll(regsdop, "");
-                                                if(answersum!="") {
-                                                    answer1.setAnswertwo(answersum);
-                                                    iAnswerService.save(answer1);
+                                                //    System.out.println("=======]answersumanswersumanswersumanswersum" + answersum);
+                                                putdatatime++;
+                                                //   System.out.println("=======]putdatatime" + putdatatime);
+                                                QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<Answer>();
+                                                if (putdatatime == 1) {
+                                                //    answersum = answersum.replaceAll(regsdop, "");
+                                                    sb.toString().replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
+                                                    if(sb.toString()!=""){
+                                                        answer1.setAnswerone(sb.toString());
+                                                        //     iAnswerService.save(answer1);
+                                                    }
+                                                } else if (putdatatime == 2) {
+                                                    sb.toString().replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
+//                                                    answersum = answersum.replaceAll(regsdop, "");
+                                                    if(sb.toString()!="") {
+                                                        answer1.setAnswertwo(sb.toString());
+                                                        //  iAnswerService.save(answer1);
+                                                    }
                                                 }
-                                            }
-                                            else if (putdatatime == 3) {
-                                                    answersum = answersum.replaceAll(regsdop, "");
-                                                    if(answersum!="") {
-                                                        answer1.setAnswerthree(answersum);
+                                                else if (putdatatime == 3) {
+                                                    sb.toString().replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
+                                                  //  answersum = answersum.replaceAll(regsdop, "");
+                                                    if(sb.toString()!="") {
+                                                        answer1.setAnswerthree(sb.toString());
+                                                        //    iAnswerService.save(answer1);
+                                                    }
+                                                }
+                                                else if (putdatatime == 4) {
+                                                    sb.toString().replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
+                                                //    answersum = answersum.replaceAll(regsdop, "");
+                                                    if(sb.toString()!="") {
+                                                        answer1.setAnswerfour(sb.toString());
+                                                        //    iAnswerService.save(answer1);
+                                                    }
+                                                }
+                                                else if (putdatatime == 5) {
+                                                    sb.toString().replaceAll("[\\ud800\\udc00-\\udbff\\udfff\\ud800-\\udfff]", "");
+                                             //       answersum = answersum.replaceAll(regsdop, "");
+//                                                QueryWrapper<Answer> searchrepla = new QueryWrapper<Answer>();
+//                                                searchrepla = searchrepla.eq("answerfive", answersum);
+//                                                if(iAnswerService.getOne(searchrepla)==null){//如果为空，插入数据
+                                                    if(sb.toString()!="") {
+                                                        answer1.setAnswerfive(sb.toString());
                                                         iAnswerService.save(answer1);
                                                     }
-                                            }
-                                            else if (putdatatime == 4) {
-                                                answersum = answersum.replaceAll(regsdop, "");
-                                                if(answersum!="") {
-                                                    answer1.setAnswerfour(answersum);
-                                                    iAnswerService.save(answer1);
                                                 }
                                             }
-                                            else if (putdatatime == 5) {
-                                                answersum = answersum.replaceAll(regsdop, "");
-                                                if(answersum!="") {
-                                                    answer1.setAnswerfive(answersum);
-                                                    iAnswerService.save(answer1);
-                                                }
-                                            }
+
                                         }
                                       //  System.out.println("time++++++++++++++++++++++++++++++++++++++++++++++++++=========="+ putdatatime);
                                     }
@@ -330,7 +351,7 @@ public class ZhCrawlerClientController {
                     LookZhihudata = LookZhihudata.eq("keyword", question);
                     List<Zhihu> listodap = iZhihuService.list(LookZhihudata);//这个是用来查找所有标题的
                     System.out.println("list#￥%￥#……#￥……#￥……￥#……￥#……#￥……#……￥#……￥" + listodap);
-
+                    int titlecout = 0;
                     for (int r = 0;r < listodap.size(); r++){
                         Zhihu zhihute = new Zhihu();
                         zhihute.setTitle(listodap.get(r).getTitle());//获得标题
@@ -338,29 +359,55 @@ public class ZhCrawlerClientController {
                         answerqueryWrapper = answerqueryWrapper.eq("title", zhihute.getTitle());//传入标题这个变量
                         List<Answer> list2 = iAnswerService.list(answerqueryWrapper);
                         //判断链表是否有值
+
                         for(int g = 0; g < list2.size(); g++){
                             Answer answerdata = list2.get(g);
-                            if(answerdata.getAnswerfive() != null &&answerdata.getAnswerfour() != null){
+                            if(answerdata.getAnswerfive() != null &&answerdata.getAnswerfour() != null &&answerdata.getUsername() != null){
                                 //标题存入链表
-                                zhihudatatest.add(r+1+":"+zhihute.getTitle()+"?\n");
-                                zhihudatatest.add("(1):"+answerdata.getAnswerone()+"?\n");
-                                zhihudatatest.add("(2):"+answerdata.getAnswertwo()+"?\n");
-                                zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"?\n");
-                                zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"?\n");
-                                zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"?\n\n");
+                                zhihudatatest.add(titlecout+1+":"+zhihute.getTitle()+"?\n");
+                                zhihudatatest.add("(1):"+answerdata.getAnswerone()+"\n");
+                                zhihudatatest.add("(2):"+answerdata.getAnswertwo()+"\n");
+                                zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"\n");
+                                zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"\n");
+                                zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"\n\n");
                                 System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
+//                                if(titlecout==200){
+//                                    ExportWord e = new ExportWord();
+//                                    Properties properties = new Properties();
+//                                    String datareplace = zhihudatatest.toString().replace(",","");
+//                                    datareplace= datareplace.replace("[","");
+//                                    datareplace.replace("]","");
+//                                    e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
+//                                }
+                                if(titlecout==199){
+                                    ExportWord e = new ExportWord();
+                                    Properties properties = new Properties();
+                                    String datareplace = zhihudatatest.toString().replace(",","");
+                                    datareplace= datareplace.replace("[","");
+                                    datareplace= datareplace.replace("]","");
+                                    e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
+                                    /**
+                                     * 导出word
+                                     */
+                                    System.out.println("对不起，没有爬取到数据哦");
+                                    QueryWrapper<Answer> answesuer = new QueryWrapper<Answer>();
+                                    answesuer = answesuer.eq("username", Utility.getCurrentUser().getUsername());
+                                    iAnswerService.remove(answesuer);
+                                    response.getWriter().write(question);
+                                    return;
+                                }
                                 answerdata = new Answer();
+                                titlecout++;
                             }
                         }
 
                         if(r == listodap.size()-1){
-//                                                System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
                             ExportWord e = new ExportWord();
                             Properties properties = new Properties();
                             String datareplace = zhihudatatest.toString().replace(",","");
                             datareplace= datareplace.replace("[","");
-                            datareplace.replace("]","");
-                            e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
+                            datareplace= datareplace.replace("]","");
+                            e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
                         }
                     }
 
@@ -368,7 +415,10 @@ public class ZhCrawlerClientController {
                      * 导出word
                      */
                     System.out.println("对不起，没有爬取到数据哦");
-                    response.getWriter().write(question);
+                    QueryWrapper<Answer> answesuer = new QueryWrapper<Answer>();
+                    answesuer = answesuer.eq("username", Utility.getCurrentUser().getUsername());
+                    iAnswerService.remove(answesuer);
+                    response.getWriter().write(question+Utility.getCurrentUser().getUsername());
                     return;
                 }
             } catch (IOException e) {
@@ -418,7 +468,7 @@ public class ZhCrawlerClientController {
             queryCWrapper1 = queryCWrapper1.eq("id", id);
             System.out.println("queryCWrapper" + queryCWrapper1);
             String keyword =iZhihuOldrecordsService.getOne(queryCWrapper1).getKeyword();
-            response.getWriter().write(keyword);
+            response.getWriter().write(keyword+Utility.getCurrentUser().getUsername());
         }
         catch (IOException e ){
             e.printStackTrace();

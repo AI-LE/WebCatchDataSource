@@ -52,6 +52,16 @@ public class ZhihuRecordsController extends BaseController  {
         Page<ZhihuRecords> page = new Page<ZhihuRecords>(pageNo, pageSize);
         QueryWrapper<ZhihuRecords> queryWrapper = new QueryWrapper<ZhihuRecords>();
 
+        if(zhihuRecords.getCreatetime() != null  && !"".equals(zhihuRecords.getCreatetime() + "")) {
+            queryWrapper = queryWrapper.like("createtime",zhihuRecords.getCreatetime());
+        }
+
+
+        if(zhihuRecords.getKeyword() != null  && !"".equals(zhihuRecords.getKeyword() + "")) {
+            queryWrapper = queryWrapper.like("keyword",zhihuRecords.getKeyword());
+        }
+
+
         if(Utility.getCurrentUser().getUsername() != null  ) {
             queryWrapper = queryWrapper.like("username", Utility.getCurrentUser().getUsername());//传入当前用户
         }

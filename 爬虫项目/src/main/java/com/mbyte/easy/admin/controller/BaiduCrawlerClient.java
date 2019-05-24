@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author 吴天豪
@@ -52,6 +53,7 @@ public class BaiduCrawlerClient {
      //@Test
     @RequestMapping(value = "test")
     public void zhidaocrawlerClient(Model model, HttpServletResponse response, HttpServletRequest request) {
+//        String uuid =  UUID.randomUUID().toString().replaceAll("-","");//生成唯一标识
          int n =0;//定义循环次数
         Baidu baidu =new Baidu();
         //定义word链表
@@ -102,7 +104,7 @@ public class BaiduCrawlerClient {
                        baiduService.save(baidu);
                    }
                    //word链表
-                   wordPrit.add(count+":"+ptext.toString()+"？\n");
+                   wordPrit.add(count+":"+ptext.toString()+"\n");
 
                    if(count == 200){
                        /**
@@ -129,9 +131,9 @@ public class BaiduCrawlerClient {
                        String datarea = datareplace.replace("[","");
                        String datareb = datarea.replace("]","");
                        ExportWord e = new ExportWord();
-                       e.creatDoc(FileUtil.uploadLocalPath +word+"_百度.doc", datareb.toString());
+                       e.creatDoc(FileUtil.uploadLocalPath +word+Utility.getCurrentUser().getUsername()+"_百度.doc", datareb.toString());
                        //返回给前台
-                       response.getWriter().write(word);
+                       response.getWriter().write(word + Utility.getCurrentUser().getUsername());
                        return ;
                    }
                }
@@ -155,6 +157,7 @@ public class BaiduCrawlerClient {
      */
     @RequestMapping("/ExportWord")
     public void ExportWord(Model model, HttpServletResponse response, HttpServletRequest request) {
+
         response.setContentType("text/html;charset=utf-8");
         String id = request.getParameter("id");
        // String filename = request.getParameter("filename");
@@ -186,7 +189,7 @@ public class BaiduCrawlerClient {
             queryCWrapper1 = queryCWrapper1.eq("id", id);
             String keyword =iBdOldrecordsService.getOne(queryCWrapper1).getKeyword();
             System.out.println("keyword" + keyword);
-            response.getWriter().write(keyword);
+            response.getWriter().write(keyword+Utility.getCurrentUser().getUsername());
         }
         catch (IOException e){
             e.printStackTrace();

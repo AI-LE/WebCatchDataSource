@@ -54,14 +54,14 @@ public class BdRecordsController extends BaseController  {
         QueryWrapper<BdRecords> queryWrapper = new QueryWrapper<BdRecords>();
         //获得当前用户,查询当前用户的信息
 
-//        if(bdRecords.getCreatetime() != null  && !"".equals(bdRecords.getCreatetime() + "")) {
-//            queryWrapper = queryWrapper.like("createtime",bdRecords.getCreatetime());
-//         }
-//
-//
-//        if(bdRecords.getKeyword() != null  && !"".equals(bdRecords.getKeyword() + "")) {
-//            queryWrapper = queryWrapper.like("keyword",bdRecords.getKeyword());
-//         }
+        if(bdRecords.getCreatetime() != null  && !"".equals(bdRecords.getCreatetime() + "")) {
+            queryWrapper = queryWrapper.like("createtime",bdRecords.getCreatetime());
+         }
+
+
+        if(bdRecords.getKeyword() != null  && !"".equals(bdRecords.getKeyword() + "")) {
+            queryWrapper = queryWrapper.like("keyword",bdRecords.getKeyword());
+         }
 
 
         if(Utility.getCurrentUser().getUsername() != null  ) {

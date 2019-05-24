@@ -33,8 +33,8 @@
 
                     <div class="cl pd-5 bg-1 bk-gray ">
                         <div class="searchByField">
-                                         <input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>
-                                         <input type="input-text" class="input-text" th:value="${searchInfo.keyword}" name="keyword" placeholder="搜索关键词" sid="keyword"/>
+                            <input type="input-text" class="input-text" th:value="${searchInfo.keyword}" name="keyword" placeholder="搜索关键词" sid="keyword"/>
+                            <input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>
                             <button type="submit"
                                     class="layui-btn  layui-btn-success radius"><i
                                         class="Hui-iconfont">&#xe665;</i> 搜索
@@ -54,7 +54,7 @@
                         </thead>
                         <tbody>
                         <tr class="text-c" th:if="${pageInfo.list.size() == 0}">
-                            <td colspan="15"><strong>暂无数据</strong></td>
+                            <td colspan="15"><span style="cursor:pointer;"class="label label-success radius"><strong>暂无数据</strong></span></td>
                         </tr>
                         <tr class="text-c" th:each="zhihuRecords,count:${pageInfo.list}">
                             <td><input type="checkbox" value="1" th:value="${zhihuRecords.id}"
