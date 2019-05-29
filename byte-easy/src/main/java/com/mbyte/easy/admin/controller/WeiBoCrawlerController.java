@@ -239,21 +239,24 @@ public class WeiBoCrawlerController {
                    SimpleDateFormat sdf  = new SimpleDateFormat( "yyyy-MM-dd");
                     try{
                         Date datecontent = sdf.parse(bloggerContent.getCreatetime());//获取到的微博时间
-                        /**
-                         * 开始时间
-                         */
-                        System.out.println("timestarttimestart" + timestart);
-                        int indexstart = timestart.indexOf("2019-");
-                        int end = timestart.toString().indexOf("T",indexstart+1);
-                        String timestartone = timestart.toString().substring(indexstart,end);
-                        timestartone =timestartone.replaceAll("T","");
-                        Date dateconstart = sdf.parse(timestartone);//获取到的微博时间
-                        //结束时间
-                        int changestart = timeend.toString().indexOf("2019-");
-                        int changeend= timeend.toString().indexOf("T",indexstart+1);
-                        String timesendone = timeend.toString().substring(changestart,changeend);
-                        timesendone =timesendone.replaceAll("T","");
-                        Date dateconend = sdf.parse(timesendone);//获取到的微博时间
+//                        /**
+//                         * 开始时间
+//                         */
+//                        System.out.println("timestarttimestart" + timestart);
+//                        int indexstart = timestart.indexOf("2019-");
+//                        int end = timestart.toString().indexOf("T",indexstart+1);
+//                        String timestartone = timestart.toString().substring(indexstart,end);
+//                        timestartone =timestartone.replaceAll("T","");
+//                        Date dateconstart = sdf.parse(timestartone);//获取到的微博时间
+//                        //结束时间
+//                        int changestart = timeend.toString().indexOf("2019-");
+//                        int changeend= timeend.toString().indexOf("T",indexstart+1);
+//                        String timesendone = timeend.toString().substring(changestart,changeend);
+//                        timesendone =timesendone.replaceAll("T","");
+//                        Date dateconend = sdf.parse(timesendone);//获取到的微博时间
+
+                        Date dateconstart = sdf.parse(timestart);
+                        Date dateconend = sdf.parse(timeend);
 
                         Timetest timetest1 = new Timetest();
                         boolean timetest1EffectiveDate = timetest1.isEffectiveDate(datecontent, dateconstart ,dateconend );

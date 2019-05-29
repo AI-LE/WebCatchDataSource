@@ -5,13 +5,8 @@
 </head>
 <body>
 <div id="popWindow" class="popWindow1" style="display: none;"></div>
-<div id="div1" style="width: 0px;height: 22px;text-align: center;  border-radius: 10px;margin-top:24%;opacity: 1;z-index:200;position: absolute;background-color: #74d04c;
-    background: -webkit-gradient(linear, 0 0, 44 44, color-stop(0.00, rgba(255,255,255,0.17)),color-stop(0.25, rgba(255,255,255,0.17)),color-stop(0.26, rgba(255,255,255,0)),color-stop(0.50, rgba(255,255,255,0)),
- color-stop(0.51, rgba(255,255,255,0.17)),
- color-stop(0.75, rgba(255,255,255,0.17)),
- color-stop(0.76, rgba(255,255,255,0)),
- color-stop(1.00, rgba(255,255,255,0))
- ), -webkit-gradient(linear, left bottom, left top, color-stop(0, #74d04c), color-stop(1, #9bdd62));" ></div>
+<div id="div1" ></div>
+
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>微博配置管理 <span
         class="c-gray en">&gt;</span>微博配置管理模块<a class="btn btn-success radius r"
                                                 style="line-height:1.6em;margin-top:3px"
@@ -63,9 +58,9 @@
                             <th width="25">序号</th>
                             <th width="40">博主名字</th>
                             <th width="40">uid</th>
-                            <!--<th width="40">containerid</th>-->
+                            <th width="40">开始时间</th>
+                            <th width="40">结束时间</th>
                             <th width="40">创建时间</th>
-
                             <th width="100">操作</th>
                         </tr>
                         </thead>
@@ -80,6 +75,8 @@
                             <td  th:onclick="'javascript:layer_show(\'详情\',\'/admin/'+'tBloggerOld'+'/oldmain/'+${tBlogger.id}+'\',1200,500)'"><span style="cursor:pointer;"class="label label-success radius"th:text="${tBlogger.bloggername}" ></span></td>
                             <td th:text="${tBlogger.uid}"></td>
                             <!--<td th:text="${tBlogger.containerid}"></td>-->
+                            <td th:text="${#temporals.format(tBlogger.timestart, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${#temporals.format(tBlogger.timeend, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td th:text="${#temporals.format(tBlogger.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td class="td-manage">
                                 <a title="编辑" href="javascript:;"
@@ -128,8 +125,6 @@
             setTimeout(function(){
 
                 layer.designMsg('程序正在执行',8 ,"",0.5);
-                //layer.dis();
-                //layer.style.cssText ='display : none';
                 document.getElementById('popWindow').style.cssText = 'display :block;background-color:lightgray;\n' +
                     '            width: 100%;\n' +
                     '            height: 100%;\n' +
@@ -139,9 +134,14 @@
                     '            opacity: 0.5;\n' +
                     '            z-index: 100;\n' +
                     '            position: fixed;';
-
-
-                tid = setInterval("getCount()", 80);
+                document.getElementById('div1').style.cssText = 'display :block;width: 0px;height: 22px;margin-left:20%;text-align: center;border: 1px solid #4c8932; border-radius: 10px;margin-top:24%;opacity: 1;z-index:200;position: absolute;background-color: #74d04c;\n' +
+                    '    background: -webkit-gradient(linear, 0 0, 44 44, color-stop(0.00, rgba(255,255,255,0.17)),color-stop(0.25, rgba(255,255,255,0.17)),color-stop(0.26, rgba(255,255,255,0)),color-stop(0.50, rgba(255,255,255,0)),\n' +
+                    ' color-stop(0.51, rgba(255,255,255,0.17)),\n' +
+                    ' color-stop(0.75, rgba(255,255,255,0.17)),\n' +
+                    ' color-stop(0.76, rgba(255,255,255,0)),\n' +
+                    ' color-stop(1.00, rgba(255,255,255,0))\n' +
+                    ' ), -webkit-gradient(linear, left bottom, left top, color-stop(0, #74d04c), color-stop(1, #9bdd62));';
+                tid = setInterval("getCount()", 100);
             },1000);
             var s ={
                 "id":id
@@ -157,7 +157,7 @@
                     try {
                         layer.designMsg('导出文件成功！',1);
                         flag1 = 1;
-                        tid = setInterval("getCount()", 80)
+                        tid = setInterval("getCount()", 100)
                         window.open("/fileSuffix/"+data+"_微博.doc","","");
                   //      location.replace(location.href);
                     }
@@ -183,51 +183,23 @@
         })
     }
 
-
-
-    var count = 0;
-    var tid;
-    var flag = 0;
-
-    function getCount() {
-        if(count <90){
-            count++;
-            var div = document.getElementById("div1")
-            div.innerText = count + "%"
-            div.style.width = count +"%"
-            if(count == 90){
-                count = 100
-            }
-
-        }else if ( count == 100){
-            var div = document.getElementById("div1")
-            div.innerText = 100 + "%"
-            div.style.width = "100%"
-        }
-        else  if(count = 101){
-            var divok = document.getElementById("div1");
-            divok.innerText = 0 + "%"
-            divok.style.width = "0%";
-        }
-        //}
-    }
-
-
     var count = 0;
     var tid;
     var  clickbut =0;
 
     function getCount() {
         var div = document.getElementById("div1")
+
         if(count <99 && flag1 == 0 && clickbut == 1){
             $(div).fadeIn()
             count++;
-            div.innerText = count + "%"
-            div.style.width = count +"%"
+            div.innerText = count  + "%"
+            div.style.width = (count * 0.6)  +"%"
         }
+
         if ( flag1 == 1){
             div.innerText = 100 + "%"
-            div.style.width = "100%"
+            div.style.width = "60%"
             flag1 = 0
             count = 0
             clickbut=0
