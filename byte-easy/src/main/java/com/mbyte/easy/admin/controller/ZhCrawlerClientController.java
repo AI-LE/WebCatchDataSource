@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.mbyte.easy.admin.Util.ExportWord;
 import com.mbyte.easy.admin.Util.Request;
 import com.mbyte.easy.admin.entity.*;
-import com.mbyte.easy.admin.service.IAnswerService;
-import com.mbyte.easy.admin.service.IZhihuOldrecordsService;
-import com.mbyte.easy.admin.service.IZhihuRecordsService;
-import com.mbyte.easy.admin.service.IZhihuService;
+import com.mbyte.easy.admin.service.*;
 import com.mbyte.easy.util.FileUtil;
 import com.mbyte.easy.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +31,18 @@ public class ZhCrawlerClientController {
     //    @Test
     @Autowired
     private IZhihuService iZhihuService;
+
     @Autowired
     private IZhihuOldrecordsService iZhihuOldrecordsService;
+
     @Autowired
     private IZhihuRecordsService iZhihuRecordsService;
-    @Autowired
 
+    @Autowired
     private  IAnswerService iAnswerService;
+
+    @Autowired
+    private ITRecordssumService itRecordssumService;
     @RequestMapping(value = "zhihucatch")
     public void crawlerClient_01(Model model, HttpServletResponse response, HttpServletRequest request) {
         //生成唯一标识
@@ -54,7 +56,9 @@ public class ZhCrawlerClientController {
         List<String> sum = new ArrayList<String>();
         //这个是接受数据库数据的对象，用来存入数据库数据的
         Zhihu zhihu = new Zhihu();
-        //
+        //存入条总数
+        TRecordssum tRecordssum = new TRecordssum();
+
         List<String> listsave = new ArrayList<String>();
         //获取系统当前时间
         LocalDateTime time = LocalDateTime.now();
@@ -259,14 +263,11 @@ public class ZhCrawlerClientController {
                                                   //  answersum = answersum.replaceAll(regsdop, "");
                                                     if(sb.toString()!="") {
                                                         answer1.setAnswerthree(sb.toString());
-                                                        //    iAnswerService.save(answer1);
                                                     }
                                                 }
                                                 else if (putdatatime == 4) {
-                                                //    answersum = answersum.replaceAll(regsdop, "");
                                                     if(sb.toString()!="") {
                                                         answer1.setAnswerfour(sb.toString());
-                                                        //    iAnswerService.save(answer1);
                                                     }
                                                 }
                                                 else if (putdatatime == 5) {
@@ -283,9 +284,7 @@ public class ZhCrawlerClientController {
                                             }
 
                                         }
-                                      //  System.out.println("time++++++++++++++++++++++++++++++++++++++++++++++++++=========="+ putdatatime);
                                     }
-                                    //System.out.println("=======]"+all);
                                 }
                                 list1.add(urlresult);
                                 currtans++;
@@ -295,9 +294,20 @@ public class ZhCrawlerClientController {
 
                   //  System.out.println("list=====" + list);
                     System.out.println("已统计个数" + currt);
+                    tRecordssum.setRecords(Long.parseLong(String.valueOf(currt)));
                 }
                 else {
+                    /**
+                     * 存入条数历史记录
+                     */
+                    LocalDateTime time1 = LocalDateTime.now();
+                    DateTimeFormatter df1= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+                    String localTimeever = df1.format(time);
+                    LocalDateTime timenow = LocalDateTime.parse(localTimeever,df1);
 
+                    tRecordssum.setCreatetime(timenow);
+                    tRecordssum.setType("知乎");
+                    itRecordssumService.save(tRecordssum);
                     /**
                      * 存入历史记录
                      */
@@ -327,7 +337,7 @@ public class ZhCrawlerClientController {
                     QueryWrapper<Zhihu> LookZhihudata = new QueryWrapper<Zhihu>();//这个是用来查找标题的
                     LookZhihudata = LookZhihudata.eq("keyword", question);
                     List<Zhihu> listodap = iZhihuService.list(LookZhihudata);//这个是用来查找所有标题的
-                    System.out.println("list#￥%￥#……#￥……#￥……￥#……￥#……#￥……#……￥#……￥" + listodap);
+              //      System.out.println("list#￥%￥#……#￥……#￥……￥#……￥#……#￥……#……￥#……￥" + listodap);
                     int titlecout = 0;
                     for (int r = 0;r < listodap.size(); r++){
                         Zhihu zhihute = new Zhihu();

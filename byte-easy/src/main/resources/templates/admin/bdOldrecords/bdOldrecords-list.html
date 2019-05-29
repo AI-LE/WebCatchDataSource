@@ -111,7 +111,7 @@
                 url: "/zhidaotest/OldExportWord",
                 success: function (data) {
                     try {
-                        window.open("http://localhost:8080/fileSuffix/"+data+"_百度.doc","","");
+                        window.open("/fileSuffix/"+data+"_百度.doc","","");
                     }
                     catch (e) {
                         layer.designMsg('导出文件失败!', 5);

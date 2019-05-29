@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE HTML>
-<html>
+<html  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,96 +14,252 @@
     <script data-n-head="true" th:src="@{/font/js/echarts.js}" ></script>
     <link rel="stylesheet" type="text/css" th:href="@{/font/css/amazeui.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/font/css/app.css}" />
-    <script src = "https://echarts.baidu.com/dist/echarts.min.js" ></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/welcome.css}" href="static/css/welcome.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui/css/layui.css}" href="static/h-ui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/css/H-ui.admin.css}" href="static/h-ui.admin/css/H-ui.admin.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/lib/Hui-iconfont/1.0.8/iconfont.css}" href="lib/Hui-iconfont/1.0.8/iconfont.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/skin/blue/skin.css}" href="static/h-ui.admin/skin/blue/skin.css" id="skin" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui.admin/css/style.css}" href="static/h-ui.admin/css/style.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/h-ui/css/H-ui.min.css}" href="static/h-ui/css/H-ui.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/fSelect.css}" href="static/css/fSelect.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/search.css}" href="static/css/search.css" />
+    <link rel="stylesheet"  type="text/css" th:href="@{/css/bootstrap.min.css}" href="static/css/bootstrap.min.css"/>
+    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
 </head>
-<body class="theme-blue">
-<div class="row-content am-cf">
-    欢迎使用信息爬取系统管理后台!<br/>
+<body class="gray-bg" >
+<div class="wrapper wrapper-content">
+    <span>欢迎登录信息爬取系统</span>
+    <!--<div class="row" style="padding-top: 60px;">-->
+        <!--<div class="col-sm-2" style="width:18%;margin-left: 5%">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
+                    <!--<span><h5>总抓取</h5></span>-->
+                <!--</div>-->
+                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
+                    <!--<span><h1 class="no-margins" style="text-align: center;">40 886,200</h1></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-sm-2" style="width:18%">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
+                    <!--<span><h5>今日抓取</h5></span>-->
+                <!--</div>-->
+                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
+                    <!--<span><h1 class="no-margins" style="text-align: center;">275,800</h1></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-sm-2" style="width:18%">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
+                    <!--<span><h5>今日百度知道抓取</h5></span>-->
+                <!--</div>-->
+                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
+                    <!--<span><h1 class="no-margins" style="text-align: center;">106,120</h1></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-sm-2" style="width:18%">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
+                    <!--<span><h5>今日知乎抓取</h5></span>-->
+                <!--</div>-->
+                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
+                    <!--<span><h1 class="no-margins" style="text-align: center;">80,600</h1></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-sm-2" style="width:18%">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--<div class="ibox-title">-->
+                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
+                    <!--<span><h5>今日微博抓取</h5></span>-->
+                <!--</div>-->
+                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
+                    <!--<span><h1 class="no-margins" style="text-align: center;">239,350</h1></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div style="height: 60px;"></div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-sm-6">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--&lt;!&ndash;                    <div class="ibox-title" style="width: 95%;margin-left: 5%;">&ndash;&gt;-->
+                <!--&lt;!&ndash;                        <h5>折线图</h5>&ndash;&gt;-->
+                <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+                <!--<div class="ibox-content" style="width: 95%;margin-left: 5%;margin-top: 2px;background-color: #fff;">-->
+                    <!--<div id="box-1" class="flot-chart" style="height: 280px;">-->
 
-<!--<table>-->
-    <!--<tr>-->
-        <!--<td>-->
-            <!--&lt;!&ndash; 为ECharts准备一个具备大小（宽高）的Dom &ndash;&gt;-->
-            <!--<div id="por" style="width: 600px;height:400px;margin-top:50px;"></div>-->
-            <!--<script type="text/javascript">-->
-                <!--// 基于准备好的dom，初始化echarts实例-->
-                <!--var myChart = echarts.init(document.getElementById('por'));-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-sm-6">-->
+            <!--<div class="ibox float-e-margins">-->
+                <!--&lt;!&ndash;                    <div class="ibox-title" style="width: 95%;">&ndash;&gt;-->
+                <!--&lt;!&ndash;                        <h5>柱状图</h5>&ndash;&gt;-->
+                <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+                <!--<div class="ibox-content" style="width: 95%;margin-top: 2px;background-color: #fff;">-->
+                    <!--<div id="box-2" class="flot-chart" style="height: 280px;">-->
 
-                <!--// 指定图表的配置项和数据-->
-                <!--option = {-->
-                    <!--title : {-->
-                        <!--text: '某地区蒸发量和降水量',-->
-                        <!--subtext: '纯属虚构'-->
-                    <!--},-->
-                    <!--tooltip : {-->
-                        <!--trigger: 'axis'-->
-                    <!--},-->
-                    <!--legend: {-->
-                        <!--data:['蒸发量','降水量']-->
-                    <!--},-->
-                    <!--toolbox: {-->
-                        <!--show : true,-->
-                        <!--feature : {-->
-                            <!--dataView : {show: true, readOnly: false},-->
-                            <!--magicType : {show: true, type: ['line', 'bar']},-->
-                            <!--restore : {show: true},-->
-                            <!--saveAsImage : {show: true}-->
-                        <!--}-->
-                    <!--},-->
-                    <!--calculable : true,-->
-                    <!--xAxis : [-->
-                        <!--{-->
-                            <!--type : 'category',-->
-                            <!--data : ['1月','2月','3月','4月','5月','6月','7月']-->
-                        <!--}-->
-                    <!--],-->
-                    <!--yAxis : [-->
-                        <!--{-->
-                            <!--type : 'value'-->
-                        <!--}-->
-                    <!--],-->
-                    <!--series : [-->
-                        <!--{-->
-                            <!--name:'蒸发量',-->
-                            <!--type:'bar',-->
-                            <!--data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6],-->
-                            <!--markPoint : {-->
-                                <!--data : [-->
-                                    <!--{type : 'max', name: '最大值'},-->
-                                    <!--{type : 'min', name: '最小值'}-->
-                                <!--]-->
-                            <!--},-->
-                            <!--markLine : {-->
-                                <!--data : [-->
-                                    <!--{type : 'average', name: '平均值'}-->
-                                <!--]-->
-                            <!--}-->
-                        <!--},-->
-                        <!--{-->
-                            <!--name:'降水量',-->
-                            <!--type:'bar',-->
-                            <!--data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6],-->
-                            <!--markPoint : {-->
-                                <!--data : [-->
-                                    <!--{name : '年最高', value : 182.2, xAxis: 7, yAxis: 183},-->
-                                    <!--{name : '年最低', value : 2.3, xAxis: 11, yAxis: 3}-->
-                                <!--]-->
-                            <!--},-->
-                            <!--markLine : {-->
-                                <!--data : [-->
-                                    <!--{type : 'average', name : '平均值'}-->
-                                <!--]-->
-                            <!--}-->
-                        <!--}-->
-                    <!--]-->
-                <!--};-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
-                <!--// 使用刚指定的配置项和数据显示图表。-->
-                <!--myChart.setOption(option);-->
-            <!--</script>-->
-        <!--</td>-->
-    <!--</tr>-->
-<!--</table>-->
 </div>
 </body>
+
+<script type="text/javascript">
+//     var myChart = echarts.init(document.getElementById("box-1"));
+//     var option = {
+//         // 标题
+//         title: {
+//             text: '本周抓取'
+//         },
+//         tooltip: {
+//             trigger: 'axis'
+//         },
+//         //图例名
+//         legend: {
+//             data:['百度知道','知乎','微博']
+//         },
+//         grid: {
+//             left: '3%',   //图表距边框的距离
+//             right: '4%',
+//             bottom: '3%',
+//             containLabel: true
+//         },
+//         //工具框，可以选择
+//         toolbox: {
+//             feature: {
+//                 saveAsImage: {}
+//             }
+//         },
+//         //x轴信息样式
+//         xAxis: {
+//             type: 'category',
+//             boundaryGap: false,
+//             data: ['12-01','12-02','12-03','12-04','12-05','12-06','12-07'],
+//             //坐标轴颜色
+//             axisLine:{
+//                 lineStyle:{
+//                     color:'red'
+//                 }
+//             },
+//             //x轴文字旋转
+//             axisLabel:{
+//                 rotate:30,
+//                 interval:0
+//             },
+//         },
+//
+//         yAxis : [
+//             {
+//                 type : 'value',
+//                 axisLabel : {
+//                     formatter: '{value} 条'
+//                 }
+//             }
+//         ],
+//         series: [
+//             //虚线
+//             {
+//                 name:'百度知道',
+//                 type:'line',
+//                 symbolSize:4,   //拐点圆的大小
+//                 color:['red'],  //折线条的颜色
+//                 data:[350000, 300000, 250000, 200000, 150000, 100000,50000],
+//                 smooth:false,   //关键点，为true是不支持虚线的，实线就用true
+//                 itemStyle:{
+//                     normal:{
+//                         lineStyle:{
+//                             width:2,
+//                             type:'dotted'  //'dotted'虚线 'solid'实线
+//                         }
+//                     }
+//                 }
+//             },
+//             //实线
+//             {
+//                 name:'知乎',
+//                 type:'line',
+//                 symbol:'circle',
+//                 symbolSize:4,
+//                 itemStyle:{
+//                     normal:{
+//                         color:'red',
+//                         borderColor:'red'  //拐点边框颜色
+//                     }
+//                 },
+//                 data:[22000, 182000, 191000, 234000, 290000, 330000, 310000]
+//             },
+//             {
+//                 name:'微博',
+//                 type:'line',
+// //                stack: '总量',
+//                 symbolSize:4,
+//                 color:['orange'],
+//                 smooth:false,   //关键点，为true是不支持虚线的，实线就用true
+//                 itemStyle:{
+//                     normal:{
+//                         lineStyle:{
+//                             width:2,
+//                             type:'dotted'  //'dotted'虚线 'solid'实线
+//                         }
+//                     }
+//                 },
+//                 data:[50000, 232000, 201000, 154000, 190000, 330000, 41000]
+//             }
+//         ]
+//     };
+//
+//     myChart.setOption(option);
+//
+//
+//     // 基于准备好的dom，初始化echarts实例
+//     var myChart_1 = echarts.init(document.getElementById('box-2'));
+//
+//     // 指定图表的配置项和数据
+//     myChart_1.setOption({
+//         title: {
+//             text: '本周抓取'
+//         },
+//         tooltip: {},
+//         legend: {
+//             data: ['条数']
+//         },
+//         xAxis: {
+//             data: ["百度知道","知乎","微博"]
+//         },
+//         yAxis: {},
+//         series: [{
+//             name: '条数',
+//             type: 'bar',
+//             data: [350000, 300000, 250000, 200000, 150000, 100000,50000]
+//         }]
+//     });
+//
+//     // 异步加载数据
+//     // $.get('data').done(function (data) {
+//     //     // 填入数据
+//     //     myChart_1.setOption({ xAxis: { data: data.categories  }, series: [{
+//     //             // 根据名字对应到相应的系列
+//     //             name: '条数',
+//     //             data: data.data
+//     //         }]
+//     //     });});
+//     //图表随浏览器宽度自适应
+//     window.onresize = function () {
+//         myChart.resize(); //使第一个图表适应
+//         myChart_1.resize(); //使第二个图表适应
+//     }
+</script>
 </html>

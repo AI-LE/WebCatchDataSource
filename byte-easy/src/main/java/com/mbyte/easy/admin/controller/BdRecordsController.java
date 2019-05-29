@@ -94,12 +94,13 @@ public class BdRecordsController extends BaseController  {
     public String addBefore(){
         return prefix+"add";
     }
+
     /**
     * 添加
     * @param bdRecords
     * @return
     */
-    @PostMapping("add")
+    @RequestMapping("add")
     @ResponseBody
     public AjaxResult add(BdRecords bdRecords){
         LocalDateTime time = LocalDateTime.now();
@@ -110,6 +111,10 @@ public class BdRecordsController extends BaseController  {
         String loginUserName = Utility.getCurrentUsername();
         bdRecords.setUsername(loginUserName);
         bdRecords.setCreatetime(timechange);
+//        AjaxResult ajaxResult =AjaxResult.success("查询成功");
+//        ajaxResult.put("data","ssss");
+//        ajaxResult.put("data","ssss");
+
         return toAjax(bdRecordsService.save(bdRecords));
     }
     /**

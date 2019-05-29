@@ -4,6 +4,15 @@
     <title>列表</title>
 </head>
 <body>
+
+<div id="popWindow" class="popWindow1" style="display: none;"></div>
+<div id="div1" style="width: 0px;height: 22px;text-align: center;  border-radius: 10px;margin-top:24%;opacity: 1;z-index:200;position: absolute;background-color: #74d04c;
+    background: -webkit-gradient(linear, 0 0, 44 44, color-stop(0.00, rgba(255,255,255,0.17)),color-stop(0.25, rgba(255,255,255,0.17)),color-stop(0.26, rgba(255,255,255,0)),color-stop(0.50, rgba(255,255,255,0)),
+ color-stop(0.51, rgba(255,255,255,0.17)),
+ color-stop(0.75, rgba(255,255,255,0.17)),
+ color-stop(0.76, rgba(255,255,255,0)),
+ color-stop(1.00, rgba(255,255,255,0))
+ ), -webkit-gradient(linear, left bottom, left top, color-stop(0, #74d04c), color-stop(1, #9bdd62));" ></div>
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>百度知道配置管理 <span
             class="c-gray en">&gt;</span>百度知道配置管理模块<a class="btn btn-success radius r"
                                                 style="line-height:1.6em;margin-top:3px"
@@ -86,7 +95,9 @@
                         </tbody>
                     </table>
                 </div>
+                <div id="div1" style="	width: 0px;height: 18px;background-color: #C7C7C7;text-align: center;"></div>
             </fieldset>
+
         </div>
         <div th:include="_pagination :: page"></div>
     </form>
@@ -96,6 +107,8 @@
 </div>
 <!--/_footer 作为公共模版分离出去-->
 <script>
+
+    var flag1 = 0;
     //日期时间范围选择
     laydate.render({
 
@@ -111,9 +124,28 @@
 
         //防止重复点击
         layer.confirm('确认要导出吗？',function(){
+
+            clickbut = 1;
+
             setTimeout(function(){
-                layer.designMsg('程序正在执行',8 ,"",1000);
+
+                layer.designMsg('程序正在执行',8 ,"",0.5);
+                //layer.dis();
+                //layer.style.cssText ='display : none';
+                document.getElementById('popWindow').style.cssText = 'display :block;background-color:lightgray;\n' +
+                    '            width: 100%;\n' +
+                    '            height: 100%;\n' +
+                    '            left: 0;\n' +
+                    '            top: 0;\n' +
+                    '            filter: alpha(opacity=50);\n' +
+                    '            opacity: 0.5;\n' +
+                    '            z-index: 100;\n' +
+                    '            position: fixed;';
+
+
+                tid = setInterval("getCount()", 80);
             },1000);
+
             var s ={
                 "id":id
             }
@@ -125,7 +157,9 @@
                     // location.replace(location.href);
                     try {
                         layer.designMsg('导出文件成功！',1);
-                        window.open("http://localhost:8080/fileSuffix/"+data+"_百度.doc","","");
+                        flag1 = 1;
+                        tid = setInterval("getCount()", 80)
+                        window.open("/fileSuffix/"+data+"_百度.doc","","");
                     }
                     catch (e) {
                         layer.designMsg('导出文件失败!', 5);
@@ -152,7 +186,7 @@
                 url: "/zhidaotest/ExportWord",
                 success: function (data) {
                     try {
-                        window.open("http://localhost:8080/fileSuffix/"+data+"_知乎.doc","","");
+                        window.open("/fileSuffix/"+data+"_知乎.doc","","");
                     }
                     catch (e) {
                         layer.designMsg('下载文件失败!', 5);
@@ -164,6 +198,30 @@
                 }
             });
         })
+    }
+
+    var count = 0;
+    var tid;
+    var  clickbut =0;
+
+    function getCount() {
+        var div = document.getElementById("div1")
+        if(count <99 && flag1 == 0 && clickbut == 1){
+            $(div).fadeIn()
+            count++;
+            div.innerText = count + "%"
+            div.style.width = count +"%"
+        }
+        if ( flag1 == 1){
+            div.innerText = 100 + "%"
+            div.style.width = "100%"
+            flag1 = 0
+            count = 0
+            clickbut=0
+            $(div).fadeOut()
+            clearInterval(tid);
+            document.getElementById('popWindow').style.display = 'none';
+        }
     }
 
 

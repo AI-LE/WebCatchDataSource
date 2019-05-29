@@ -1,14 +1,12 @@
 package com.mbyte.easy.admin.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.mbyte.easy.admin.entity.Baidu;
-import com.mbyte.easy.admin.entity.BdOldrecords;
-import com.mbyte.easy.admin.entity.BdRecords;
-import com.mbyte.easy.admin.entity.P;
+import com.mbyte.easy.admin.entity.*;
 import com.mbyte.easy.admin.Util.ExportWord;
 import com.mbyte.easy.admin.service.IBaiduService;
 import com.mbyte.easy.admin.service.IBdOldrecordsService;
 import com.mbyte.easy.admin.service.IBdRecordsService;
+import com.mbyte.easy.admin.service.ITRecordssumService;
 import com.mbyte.easy.util.FileUtil;
 import com.mbyte.easy.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +36,15 @@ public class BaiduCrawlerClient {
 
     @Autowired
     private IBaiduService baiduService;
+
     @Autowired
     private IBdOldrecordsService iBdOldrecordsService;
+
     @Autowired
     private IBdRecordsService iBdRecordsService;
 
+    @Autowired
+    private ITRecordssumService itRecordssumService;
 
     private String  url = "https://zhidao.baidu.com/search?word=知道&ie=gbk&site=-1&sites=0&date=0&pn=";
     /**
@@ -123,17 +125,18 @@ public class BaiduCrawlerClient {
                          iBdOldrecordsService.save(bdOldrecords);
                          System.out.println("list======"+list);
                        /**
-                        * 生成word
+                        *记录总数
                         */
-//                       List<Baidu> listsave=new ArrayList<Baidu>();
-//
-//                       QueryWrapper<Baidu> queryCWrapper2 = new QueryWrapper<Baidu>();
-//                       queryCWrapper2 = queryCWrapper2.eq("keyword", word);
-//                       listsave = baiduService.list(queryCWrapper2);
-//                       for(Baidu list1:listsave){
-//                           conut++;
-//
-//                       }
+                       LocalDateTime timebaidu = LocalDateTime.now();
+                       DateTimeFormatter dfbaidu= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+                       String baidulocaltime = dfbaidu.format(timebaidu);
+                       LocalDateTime timenow = LocalDateTime.parse(baidulocaltime,dfbaidu);
+
+                       TRecordssum tRecordssum = new TRecordssum();
+                       tRecordssum.setRecords(Long.parseLong(String.valueOf(count)));
+                       tRecordssum.setCreatetime(timenow);
+                       tRecordssum.setType("百度知道");
+                       itRecordssumService.save(tRecordssum);
                        String datareplace = wordPrit.toString().replace(",","");
                        String datarea = datareplace.replace("[","");
                        String datareb = datarea.replace("]","");

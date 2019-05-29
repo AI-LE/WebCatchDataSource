@@ -112,7 +112,7 @@
                 url: "/zhihu/ZhOldExportWord",
                 success: function (data) {
                     try {
-                        window.open("http://localhost:8080/fileSuffix/"+data+"_知乎.doc","","");
+                        window.open("/fileSuffix/"+data+"_知乎.doc","","");
                     }
                     catch (e) {
                         layer.designMsg('下载文件失败!', 5);

@@ -12,27 +12,27 @@
  color-stop(0.76, rgba(255,255,255,0)),
  color-stop(1.00, rgba(255,255,255,0))
  ), -webkit-gradient(linear, left bottom, left top, color-stop(0, #74d04c), color-stop(1, #9bdd62));" ></div>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>知乎配置管理 <span
-            class="c-gray en">&gt;</span>知乎配置管理模块<a class="btn btn-success radius r"
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>微博配置管理 <span
+        class="c-gray en">&gt;</span>微博配置管理模块<a class="btn btn-success radius r"
                                                 style="line-height:1.6em;margin-top:3px"
                                                 href="javascript:location.replace(location.href);" title="刷新"><i
-                class="Hui-iconfont">&#xe68f;</i></a></nav>
+        class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
-    <form action="#" th:action="@{/admin/zhihuRecords}" method="post">
+    <form action="#" th:action="@{/admin/tBlogger}" method="post">
         <div class="layui-body">
             <!-- 内容主体区域 -->
             <fieldset class="layui-elem-field">
-                <legend>知乎配置管理列表</legend>
+                <legend>微博配置管理列表</legend>
                 <div class="layui-field-box">
 
                     <hr style="margin: 0">
                     <div class="cl pd-5 bg-1 bk-gray">
 						<span class="l">
 						<a href="javascript:;"
-                           onclick="deleteAll('/admin/zhihuRecords/deleteAll')"
+                           onclick="deleteAll('/admin/tBlogger/deleteAll')"
                            class="layui-btn  layui-btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
 						<a href="javascript:;"
-                           onclick="layer_show('添加','/admin/zhihuRecords/addBefore',900,220)"
+                           onclick="layer_show('添加','/admin/tBlogger/addBefore',900,500)"
                            class="layui-btn  layui-btn-normal radius"><i class="Hui-iconfont">&#xe600;</i> 添加</a>
 						</span>
                         <span class="r wei-height">共有数据：<strong th:text="${pageInfo.total}"></strong> 条</span>
@@ -41,11 +41,17 @@
 
                     <div class="cl pd-5 bg-1 bk-gray ">
                         <div class="searchByField">
-                            <input type="input-text" class="input-text" th:value="${searchInfo.keyword}" name="keyword" placeholder="搜索关键词" sid="keyword"/>
+                            <input type="input-text" class="input-text" th:value="${searchInfo.bloggername}" name="bloggername" placeholder="搜索博主名字" sid="bloggername"/>
+                            <!--<input type="input-text" class="input-text" th:value="${searchInfo.uid}" name="uid" placeholder="搜索博主的uid" sid="uid"/>-->
+                            <!--<input type="input-text" class="input-text" th:value="${searchInfo.containerid}" name="containerid" placeholder="搜索博主的containerid" sid="containerid"/>-->
                             <!--<input type="input-text" placeholder="搜索创建时间" name="createtimeSpace" th:value="${createtimeSpace}" class="input-text  timeSpace"/>-->
+                            <!--<input type="input-text" class="input-text" th:value="${searchInfo.wordmax}" name="wordmax" placeholder="搜索最大字数" sid="wordmax"/>-->
+                            <!--<input type="input-text" class="input-text" th:value="${searchInfo.wordmin}" name="wordmin" placeholder="搜索最小字数" sid="wordmin"/>-->
+                            <!--<input type="input-text" placeholder="搜索抓取时间节点" name="timestartSpace" th:value="${timestartSpace}" class="input-text  timeSpace"/>-->
+                            <!--<input type="input-text" placeholder="搜索抓取时间尾节点" name="timeendSpace" th:value="${timeendSpace}" class="input-text  timeSpace"/>-->
                             <button type="submit"
                                     class="layui-btn  layui-btn-success radius"><i
-                                        class="Hui-iconfont">&#xe665;</i> 搜索
+                                    class="Hui-iconfont">&#xe665;</i> 搜索
                             </button>
                         </div>
                     </div>
@@ -55,37 +61,42 @@
                         <tr class="text-c">
                             <th width="25"><input type="checkbox" name="" value=""/></th>
                             <th width="25">序号</th>
-                                <th width="40">关键词</th>
+                            <th width="40">博主名字</th>
+                            <th width="40">uid</th>
+                            <!--<th width="40">containerid</th>-->
                             <th width="40">创建时间</th>
+
                             <th width="100">操作</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr class="text-c" th:if="${pageInfo.list.size() == 0}">
-                            <td colspan="15"><span style="cursor:pointer;"class="label label-success radius"><strong>暂无数据</strong></span></td>
+                            <td colspan="15"><strong>暂无数据</strong></td>
                         </tr>
-                        <tr class="text-c" th:each="zhihuRecords,count:${pageInfo.list}">
-                            <td><input type="checkbox" value="1" th:value="${zhihuRecords.id}"
+                        <tr class="text-c" th:each="tBlogger,count:${pageInfo.list}">
+                            <td><input type="checkbox" value="1" th:value="${tBlogger.id}"
                                        name="id"/></td>
                             <td th:text="${count.count}"></td>
-
-                            <td th:onclick="'javascript:layer_show(\'知乎历史记录\',\'/admin/'+'zhihuOldrecords'+'/rec/'+${zhihuRecords.id}+'\',1200,500)'"><span style="cursor:pointer;"class="label label-success radius"th:text="${zhihuRecords.keyword}" ></span></td>
-                            <td th:text="${#temporals.format(zhihuRecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td  th:onclick="'javascript:layer_show(\'详情\',\'/admin/'+'tBloggerOld'+'/oldmain/'+${tBlogger.id}+'\',1200,500)'"><span style="cursor:pointer;"class="label label-success radius"th:text="${tBlogger.bloggername}" ></span></td>
+                            <td th:text="${tBlogger.uid}"></td>
+                            <!--<td th:text="${tBlogger.containerid}"></td>-->
+                            <td th:text="${#temporals.format(tBlogger.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td class="td-manage">
                                 <a title="编辑" href="javascript:;"
-                                   th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'zhihuRecords'+'/editBefore/'+${zhihuRecords.id}+'\',900,220)'"
+                                   th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'tBlogger'+'/editBefore/'+${tBlogger.id}+'\',900,500)'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
                                 <a title="导出word" href="javascript:;" id="searword"
-                                   th:onclick="'javascript:searchword('+ ${zhihuRecords.id} + ')'"
+                                   th:onclick="'javascript:searchword('+ ${tBlogger.id} + ')'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>
                                 <a title="删除" href="javascript:;"
-                                   th:onclick="'javascript:deleteById(\'/admin/'+'zhihuRecords'+'/delete/'+${zhihuRecords.id}+'\')'"
+                                   th:onclick="'javascript:deleteById(\'/admin/'+'tBlogger'+'/delete/'+${tBlogger.id}+'\')'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
                             </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
+
             </fieldset>
         </div>
         <div th:include="_pagination :: page"></div>
@@ -96,7 +107,6 @@
 </div>
 <!--/_footer 作为公共模版分离出去-->
 <script>
-
     var flag1 = 0;
     //日期时间范围选择
     laydate.render({
@@ -114,7 +124,9 @@
         layer.confirm('确认要导出吗？',function(){
 
             clickbut = 1;
+
             setTimeout(function(){
+
                 layer.designMsg('程序正在执行',8 ,"",0.5);
                 //layer.dis();
                 //layer.style.cssText ='display : none';
@@ -131,23 +143,23 @@
 
                 tid = setInterval("getCount()", 80);
             },1000);
-
             var s ={
                 "id":id
             }
             $.ajax({
                 data:s,
                 type: 'POST',
-                url: "/zhihu/zhihucatch",
+                url: "/weibo/weibocommit",
                 success: function (data) {
                     console.log("==========]" + data);
                     // location.replace(location.href);
                     $("#searword").css("disabled",false);
                     try {
-                        layer.designMsg('导出文件成功！', 1);
+                        layer.designMsg('导出文件成功！',1);
                         flag1 = 1;
                         tid = setInterval("getCount()", 80)
-                        window.open("/fileSuffix/"+data+"_知乎.doc","","");
+                        window.open("/fileSuffix/"+data+"_微博.doc","","");
+                  //      location.replace(location.href);
                     }
                     catch (e) {
                         layer.designMsg('导出文件失败!', 5);
@@ -171,46 +183,47 @@
         })
     }
 
-    /**
-     * 这个是导出
-     */
-    function ExportWord(id) {
-        var s ={
-            "id":id
+
+
+    var count = 0;
+    var tid;
+    var flag = 0;
+
+    function getCount() {
+        if(count <90){
+            count++;
+            var div = document.getElementById("div1")
+            div.innerText = count + "%"
+            div.style.width = count +"%"
+            if(count == 90){
+                count = 100
+            }
+
+        }else if ( count == 100){
+            var div = document.getElementById("div1")
+            div.innerText = 100 + "%"
+            div.style.width = "100%"
         }
-        $(function () {
-            $.ajax({
-                data:s,
-                type: 'POST',
-                url: "/zhihu/ExportWord",
-                success: function (data) {
-                    try {
-                        layer.designMsg('下载成功！',1);
-                        flag1 = 1;
-                        tid = setInterval("getCount()", 80)
-                        window.open("/fileSuffix/"+data+"_知乎.doc","","");
-                    }
-                    catch (e) {
-                        layer.designMsg('下载文件失败!', 5);
-                    }
-                },
-                error: function () {
-                    layer.designMsg('下载异常!', 5);
-                }
-            });
-        })
+        else  if(count = 101){
+            var divok = document.getElementById("div1");
+            divok.innerText = 0 + "%"
+            divok.style.width = "0%";
+        }
+        //}
     }
+
 
     var count = 0;
     var tid;
     var  clickbut =0;
+
     function getCount() {
         var div = document.getElementById("div1")
-        if(count <800 && flag1 == 0 && clickbut == 1){
+        if(count <99 && flag1 == 0 && clickbut == 1){
             $(div).fadeIn()
             count++;
-            div.innerText = count/10 + "%"
-            div.style.width = count/10 +"%"
+            div.innerText = count + "%"
+            div.style.width = count +"%"
         }
         if ( flag1 == 1){
             div.innerText = 100 + "%"
@@ -223,7 +236,6 @@
             document.getElementById('popWindow').style.display = 'none';
         }
     }
-
 </script>
 </body>
 </html>
