@@ -127,8 +127,8 @@ public class Request {
      * @return
      */
     public static InputStream getAuthCode(String url, Map<String, Object> headerParams) {
-        RequestConfig config = RequestConfig.custom().setConnectionRequestTimeout(5000).setConnectTimeout(5000)
-                .setSocketTimeout(5000).build();
+        RequestConfig config = RequestConfig.custom().setConnectionRequestTimeout(50000).setConnectTimeout(50000)
+                .setSocketTimeout(50000).build();
         HttpGet httpGet = new HttpGet(url);
         httpGet.setConfig(config);
         // 拼装请求头
