@@ -11,6 +11,7 @@ import com.mbyte.easy.admin.model.Timetest;
 import com.mbyte.easy.admin.service.*;
 import com.mbyte.easy.util.FileUtil;
 import com.mbyte.easy.util.Utility;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -84,7 +85,12 @@ public class WeiBoCrawlerController {
 
 //        long wordmin = tBlogger.getWordmin();
         //点赞数
-      //  long hotpoint = itBloggerService.getOne(queryCWrapper).getPointersum();
+            long hotpoint = 0;
+            if (tBlogger.getPointersum()!=null){
+                hotpoint = tBlogger.getPointersum();
+            }
+            System.out.println(hotpoint);
+
         List<String> list = new ArrayList<String>();
         for (int i = 1; i < 20; i++) {
             String url = "https://m.weibo.cn/api/container/getIndex?type=uid&value=" + uid + "&containerid=107603" + uid+ "&page=" + i;
@@ -194,29 +200,46 @@ public class WeiBoCrawlerController {
                                          * 获得第0个,如果评论不为空
                                          */
                                         if (jsoncommit != null) {
-                                            JSONObject firstjsoncommit = (JSONObject) jsoncommit.getJSONObject("data");
-                                            if (firstjsoncommit != null && firstjsoncommit.toString() != "") {
-                                                JSONObject arrayJson = (JSONObject) firstjsoncommit.getJSONArray("data").get(0);
-//                                            String likecount = arrayJson.get("like_count").toString();//这个是获得点赞量
-                                                String regsdop = "[^\\x00-\\xff]";
-                                                Pattern p = Pattern.compile(regsdop);
-                                                Matcher m = p.matcher(arrayJson.get("text").toString());
-                                                StringBuffer sb = new StringBuffer();
-                                                while (m.find()) {
-                                                    sb.append(m.group());
-                                                }
-                                                System.out.println(sb.toString());
+                                            if(jsoncommit.getJSONObject("data")!=null){
+                                                JSONObject firstjsoncommit = (JSONObject) jsoncommit.getJSONObject("data");
+                                                if (firstjsoncommit != null && firstjsoncommit.toString() != "") {
+                                                    for(int j = 0;j < 7;j++){
+                                                        JSONArray fastcheck =  firstjsoncommit.getJSONArray("data");
+                                                        System.out.println("======" + fastcheck + "======" );
+                                                        if (fastcheck.isEmpty()!=true || fastcheck.size() > 1) {
+                                                            JSONObject arrayJson =(JSONObject) fastcheck.get(j);
+                                                            String likecount ="";
+                                                            if(arrayJson.get("like_count")!=null){
+                                                                likecount = arrayJson.get("like_count").toString();//这个是获得点赞量
+                                                            }
+                                                            System.out.println("likecount"+likecount);
+                                                            String regsdop = "[^\\x00-\\xff]";
+                                                            Pattern p = Pattern.compile(regsdop);
+                                                            Matcher m = p.matcher(arrayJson.get("text").toString());
+                                                            StringBuffer sb = new StringBuffer();
+                                                            while (m.find()) {
+                                                                sb.append(m.group());
+                                                            }
+                                                            System.out.println(sb.toString());
 
-                                                /**
-                                                 * 存进评论的数据库
-                                                 */
-                                                TBloggerPoint tBloggerPoint = new TBloggerPoint();
-                                                tBloggerPoint.setContentid(Long.parseLong(contentid));
-                                                tBloggerPoint.setComment(sb.toString());
-                                                //       tBloggerPoint.setPointsum(Long.parseLong(likecount));
-                                                itBloggerPointService.save(tBloggerPoint);
+                                                            /**
+                                                             * 存进评论的数据库,根据最大点赞数
+                                                             */
+                                                            if(hotpoint!=0){
+                                                                if(hotpoint>=Integer.parseInt(likecount)){
+                                                                    TBloggerPoint tBloggerPoint = new TBloggerPoint();
+                                                                    tBloggerPoint.setContentid(Long.parseLong(contentid));
+                                                                    tBloggerPoint.setComment(sb.toString());
+                                                                    tBloggerPoint.setPointsum(Long.parseLong(likecount));
+                                                                    itBloggerPointService.save(tBloggerPoint);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
+
                                     }
 //                                System.out.println(firstCardJson.getJSONObject("mblog").get("id"));
                                 }
@@ -239,22 +262,6 @@ public class WeiBoCrawlerController {
                    SimpleDateFormat sdf  = new SimpleDateFormat( "yyyy-MM-dd");
                     try{
                         Date datecontent = sdf.parse(bloggerContent.getCreatetime());//获取到的微博时间
-//                        /**
-//                         * 开始时间
-//                         */
-//                        System.out.println("timestarttimestart" + timestart);
-//                        int indexstart = timestart.indexOf("2019-");
-//                        int end = timestart.toString().indexOf("T",indexstart+1);
-//                        String timestartone = timestart.toString().substring(indexstart,end);
-//                        timestartone =timestartone.replaceAll("T","");
-//                        Date dateconstart = sdf.parse(timestartone);//获取到的微博时间
-//                        //结束时间
-//                        int changestart = timeend.toString().indexOf("2019-");
-//                        int changeend= timeend.toString().indexOf("T",indexstart+1);
-//                        String timesendone = timeend.toString().substring(changestart,changeend);
-//                        timesendone =timesendone.replaceAll("T","");
-//                        Date dateconend = sdf.parse(timesendone);//获取到的微博时间
-
                         Date dateconstart = sdf.parse(timestart);
                         Date dateconend = sdf.parse(timeend);
 
@@ -286,19 +293,28 @@ public class WeiBoCrawlerController {
                                     }
                                 }
                             }
+                            listContent.add(time_count+1+":"+sb+"\n" );//内容
                             /**
                              * 评论的
                              */
                             QueryWrapper<TBloggerPoint> tBloggerPointQueryWrapper = new QueryWrapper<TBloggerPoint>();
                             tBloggerPointQueryWrapper = tBloggerPointQueryWrapper.eq("contentid", bloggerContent.getContentid());
-                            TBloggerPoint tBloggerPoint = itBloggerPointService.getOne(tBloggerPointQueryWrapper);
-
-                            listContent.add(time_count+1+":"+sb+"\n" );
-                            time_count++;//加次数
-                            if(tBloggerPoint!=null){
-                                listContent.add("(1)" + tBloggerPoint.getComment() +"\n");
-                                itBloggerPointService.remove(tBloggerPointQueryWrapper);
+                            List<TBloggerPoint> list2 = itBloggerPointService.list(tBloggerPointQueryWrapper);
+                            int countpoint = 1;
+                            for(int l = 0;l<list2.size();l++){
+                                TBloggerPoint tBloggerPoint = list2.get(l);
+                                if(tBloggerPoint!=null){
+                                    listContent.add("("+countpoint+")" + tBloggerPoint.getComment() +"\n");
+                                    countpoint++;
+                                }
+                                if(l==list2.size()-1){
+                                    System.out.println(listContent);
+                                    itBloggerPointService.remove(tBloggerPointQueryWrapper);
+                                }
                             }
+                            TBloggerPoint tBloggerPoint = itBloggerPointService.getOne(tBloggerPointQueryWrapper);
+                            time_count++;//加次数
+
                         }
                         if(g == list1.size()-1){
                             /**

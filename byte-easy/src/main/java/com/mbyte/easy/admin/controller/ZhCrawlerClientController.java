@@ -355,9 +355,10 @@ public class ZhCrawlerClientController {
                                 zhihudatatest.add("(1):"+answerdata.getAnswerone()+"\n");
                                 zhihudatatest.add("(2):"+answerdata.getAnswertwo()+"\n");
                                 zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"\n");
+                                System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + answerdata.getAnswerthree());
                                 zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"\n");
                                 zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"\n\n");
-                                System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
+                             System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
 //                                if(titlecout==200){
 //                                    ExportWord e = new ExportWord();
 //                                    Properties properties = new Properties();
@@ -366,7 +367,7 @@ public class ZhCrawlerClientController {
 //                                    datareplace.replace("]","");
 //                                    e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
 //                                }
-                                if(titlecout==199){
+                                if(titlecout == 199){
                                     ExportWord e = new ExportWord();
                                     Properties properties = new Properties();
                                     String datareplace = zhihudatatest.toString().replace(",","");

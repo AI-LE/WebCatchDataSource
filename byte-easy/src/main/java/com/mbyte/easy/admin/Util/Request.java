@@ -85,8 +85,8 @@ public class Request {
      */
     private static Map<String, Object> response(HttpRequestBase httpRequestBase, Map<String, Object> headerParams, Map<String, Object> logMap) {
         Map<String, Object> resMap = new HashMap<>();
-        RequestConfig config = RequestConfig.custom().setConnectionRequestTimeout(5000).setConnectTimeout(5000)
-                .setSocketTimeout(5000).build();
+        RequestConfig config = RequestConfig.custom().setConnectionRequestTimeout(50000).setConnectTimeout(50000)
+                .setSocketTimeout(50000).build();
         httpRequestBase.setConfig(config);
         // 拼装请求头
         if (!headerParams.isEmpty()) {
