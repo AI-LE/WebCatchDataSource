@@ -173,6 +173,11 @@ public class TBloggerController extends BaseController  {
     @PostMapping("edit")
     @ResponseBody
     public AjaxResult edit(TBlogger tBlogger){
+        LocalDateTime time = LocalDateTime.now();
+        DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+        String localTime = df.format(time);
+        LocalDateTime timechange = LocalDateTime.parse(localTime,df);
+        tBlogger.setCreatetime(timechange);
         return toAjax(tBloggerService.updateById(tBlogger));
     }
     /**

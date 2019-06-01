@@ -7,8 +7,7 @@
 <div id="popWindow" class="popWindow1" style="display: none;"></div>
 <div id="div1" ></div>
 
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>微博抓取配置管理 <span
-        class="c-gray en">&gt;</span>微博抓取配置管理模块<a class="btn btn-success radius r"
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span>微博抓取<a class="btn btn-success radius r"
                                                 style="line-height:1.6em;margin-top:3px"
                                                 href="javascript:location.replace(location.href);" title="刷新"><i
         class="Hui-iconfont">&#xe68f;</i></a></nav>
@@ -17,7 +16,7 @@
         <div class="layui-body">
             <!-- 内容主体区域 -->
             <fieldset class="layui-elem-field">
-                <legend>微博抓取配置管理列表</legend>
+                <legend>微博抓取</legend>
                 <div class="layui-field-box">
                     <hr style="margin: 0">
                     <div class="cl pd-5 bg-1 bk-gray">
@@ -120,7 +119,6 @@
         layer.confirm('确认要导出吗？',function(){
 
             clickbut = 1;
-
             setTimeout(function(){
 
                 layer.designMsg('程序正在执行',8 ,"",0.5);
@@ -140,11 +138,12 @@
                     ' color-stop(0.76, rgba(255,255,255,0)),\n' +
                     ' color-stop(1.00, rgba(255,255,255,0))\n' +
                     ' ), -webkit-gradient(linear, left bottom, left top, color-stop(0, #74d04c), color-stop(1, #9bdd62));';
-                tid = setInterval("getCount()", 100);
+                tid = setInterval("getCount()", 1000);
             },1000);
             var s ={
                 "id":id
             }
+
             $.ajax({
                 data:s,
                 type: 'POST',
@@ -153,15 +152,22 @@
                     console.log("==========]" + data);
                     // location.replace(location.href);
                     $("#searword").css("disabled",false);
-                    try {
-                        layer.designMsg('导出文件成功！',1);
+                    if(data == "9999"){
+                        layer.designMsg('该博主没有更博!', 5);
                         flag1 = 1;
-                        tid = setInterval("getCount()", 100)
-                        window.open("/fileSuffix/"+data+"_微博.doc","","");
-                  //      location.replace(location.href);
+                        tid = setInterval("getCount()", 1000)
                     }
-                    catch (e) {
-                        layer.designMsg('导出文件失败!', 5);
+                    else{
+                        try {
+                            layer.designMsg('导出文件成功！',1);
+                            flag1 = 1;
+                            tid = setInterval("getCount()", 1000)
+                            window.open("/fileSuffix/"+data+"_微博.doc","","");
+                            //      location.replace(location.href);
+                        }
+                        catch (e) {
+                            layer.designMsg('导出文件失败!', 5);
+                        }
                     }
 
                     // if (data.code == "0") {
@@ -176,7 +182,7 @@
                     // }
                 },
                 error: function () {
-                    layer.designMsg('导出异常!', 5);
+                    layer.designMsg('导出文件异常!', 5);
                 }
             });
         })

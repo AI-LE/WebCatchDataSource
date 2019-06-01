@@ -25,11 +25,11 @@
             <!--</div>-->
         <!--</div>-->
         <div class="row cl">
-            <label class="form-label col-xs-2 col-sm-2" style="margin-left: -13px;"><span class="c-red">*</span>选择类型</label>
+            <label class="form-label col-xs-2 col-sm-2" style="margin-left: -13px;"><span class="c-red">*</span>选择类型：</label>
             <a style="margin-left: 32px; margin-top: 5px;height: 50px;position: absolute;">纯文字</a>
-            <input type="checkbox" id="wordsinge" style="margin-top: 8px;margin-left: 77px;width: 15px;height: 15px;" onchange="typechoice()">
+            <input type="checkbox" id="wordsinge" style="margin-top: 8px;margin-left: 77px;width: 15px;height: 15px;" checked="checked"  onchange="typechoice()">
             <a style="margin-left: 38px; margin-top: 5px;height: 50px;position: absolute;">文字和图片</a>
-            <input type="checkbox" id="wordsingephoto" style="margin-top: 8px;margin-left: 107px;width: 15px;height: 15px;" onchange="typechoice()">
+            <input type="checkbox" id="wordsingephoto" style="margin-top: 8px;margin-left: 107px;width: 15px;height: 15px;" onchange="typechoiceno()">
         </div>
         <div class="row cl" style="display: none;">
             <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>0等于纯文字 1等于文字加图片：</label>
@@ -43,7 +43,7 @@
             <!--no<input type="checkbox" id="wordno" onchange="closeword()">-->
         <!--</div>-->
         <div class="row cl" id ="wordmax" >
-            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>最大字数：</label>
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>最小字数：</label>
             <div class="formControls col-xs-10 col-sm-10">
                 <input type="input-text" class="input-text" name="wordmax" placeholder="请填写最大字数" id="wordmax"/>
             </div>
@@ -76,23 +76,23 @@
                        autocomplete="off" name="timeend" placeholder="请选择抓取时间尾节点"/>
             </div>
         </div>
-        <!--<div class="row cl">-->
-            <!--<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>是否抓取评论</label>-->
-            <!--<a style="margin-left: 43px;position: absolute;margin-top: 5px;">是</a><input style="margin-left: 65px;width: 15px;height: 15px;margin-top: 5px;"type="checkbox" id="commityes" onchange="commit()" >-->
-            <!--<a style="position: absolute;margin-left: 40px;margin-top: 5px;">否</a><input style="margin-left: 60px;width: 15px;height: 15px;margin-top: 5px;" type="checkbox" id="commitno" onchange="commitnop()">-->
-        <!--</div>-->
-        <!--<div class="row cl" style="display: none;" id = "point">-->
-            <!--<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>最大点赞数</label>-->
-            <!--<div class="formControls col-xs-10 col-sm-10">-->
-                <!--<input type="input-text" class="input-text" name="pointersum" placeholder="请填写点赞数" id="pointersum"/>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="row cl" style="display: none;">-->
-            <!--<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>0等于no 1等于yes：</label>-->
-            <!--<div class="formControls col-xs-10 col-sm-10">-->
-                <!--<input type="input-text" class="input-text" name="commitchioce" placeholder="请填写0等于no 1等于yes" id="commitchioce"/>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="row cl">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>是否抓取评论:</label>
+            <a style="margin-left: 43px;position: absolute;margin-top: 5px;">是</a><input style="margin-left: 65px;width: 15px;height: 15px;margin-top: 5px;"type="checkbox" id="commityes" onchange="commit()" >
+            <a style="position: absolute;margin-left: 40px;margin-top: 5px;">否</a><input style="margin-left: 60px;width: 15px;height: 15px;margin-top: 5px;" type="checkbox" id="commitno" checked="checked"  onchange="commitnop()">
+        </div>
+        <div class="row cl" style="display: none;" id = "point">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>最小点赞数：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="pointersum" placeholder="请填写点赞数" id="pointersum"/>
+            </div>
+        </div>
+        <div class="row cl" style="display: none;">
+            <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>0等于no 1等于yes：</label>
+            <div class="formControls col-xs-10 col-sm-10">
+                <input type="input-text" class="input-text" name="commitchioce" placeholder="请填写0等于no 1等于yes" id="commitchioce"/>
+            </div>
+        </div>
 
         <!--<div class="row cl" style="display: none;">-->
             <!--<label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>0等于纯文字 1等于文字加图片：</label>-->
@@ -236,7 +236,12 @@
             var box=document.getElementById("wordsingephoto");
             box.checked=false;
         }
-        else if($("#wordsingephoto").is(':checked')==true){
+        else{
+            $('#judge').val("0");
+        }
+    }
+    function  typechoiceno() {
+        if($("#wordsingephoto").is(':checked')==true){
             $('#judge').val("1");
             var box2=document.getElementById("wordsinge");
             box2.checked=false;
@@ -245,7 +250,6 @@
             $('#judge').val("0");
         }
     }
-
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

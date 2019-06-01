@@ -3,7 +3,6 @@ package com.mbyte.easy.admin.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.mbyte.easy.admin.entity.BdRecords;
 import com.mbyte.easy.admin.entity.ZhihuOldrecords;
 import com.mbyte.easy.admin.service.IZhihuOldrecordsService;
 import com.mbyte.easy.admin.service.IZhihuRecordsService;

@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-21
+ * @since 2019-05-29
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -35,6 +35,11 @@ public class ZhihuRecords extends BaseEntity {
      * 用户名
      */
     private String username;
+
+    /**
+     * 0不抓取答案 1抓取答案
+     */
+    private Integer typechoice;
 
 
 }

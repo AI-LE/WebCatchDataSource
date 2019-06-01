@@ -4,23 +4,30 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lowagie.text.DocumentException;
 import com.mbyte.easy.admin.Util.ExportWord;
 import com.mbyte.easy.admin.Util.Request;
 import com.mbyte.easy.admin.entity.*;
 import com.mbyte.easy.admin.model.Timetest;
 import com.mbyte.easy.admin.service.*;
 import com.mbyte.easy.util.FileUtil;
+import com.mbyte.easy.util.ImgUtil;
 import com.mbyte.easy.util.Utility;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +35,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -79,8 +87,11 @@ public class WeiBoCrawlerController {
         //时间的获得
         String timestart = tBlogger.getTimestart().toString();
         String timeend = tBlogger.getTimeend().toString();
+        boolean flag = false;
+        //博主
+        boolean flagblogger = false;
         //字数的限制
-        System.out.println("timestart" + timestart);
+      //  System.out.println("timestart" + timestart);
         long wordmax = tBlogger.getWordmax();
 
 //        long wordmin = tBlogger.getWordmin();
@@ -89,7 +100,8 @@ public class WeiBoCrawlerController {
             if (tBlogger.getPointersum()!=null){
                 hotpoint = tBlogger.getPointersum();
             }
-            System.out.println(hotpoint);
+            int imgflag =tBlogger.getJudge();
+
 
         List<String> list = new ArrayList<String>();
         for (int i = 1; i < 20; i++) {
@@ -98,19 +110,19 @@ public class WeiBoCrawlerController {
             Map<String, Object> headerParams = new HashMap<>();
             headerParams.put(P.REQUEST.USER_AGENT, P.USER_AGENT);//将cookie值也放入请求中
             Map<String, Object> resMap = Request.get(url, headerParams);
-            System.out.println("==========" + resMap.get(P.REQUEST.RES_BODY) + "=================================");
+          //  System.out.println("==========" + resMap.get(P.REQUEST.RES_BODY) + "=================================");
             String result = resMap.get(P.REQUEST.RES_BODY).toString();
 
             /**
              * 震哥json解析
              */
             JSONObject json = (JSONObject) JSON.parse(result);
-            for(int u = 0;u < 8;u++){
-                if(json!=null){
+                if (json != null) {
                     JSONObject firstCardJson = (JSONObject) json.getJSONObject("data");
-                    if(firstCardJson!=null) {
+                    if (firstCardJson != null) {
                         JSONArray dataNJson = firstCardJson.getJSONArray("cards");
-                        if (dataNJson.isEmpty()!=true || dataNJson.size() > 1) {
+                        if (dataNJson.isEmpty() != true || dataNJson.size() > 0) {
+                            for(int u = 0;u < dataNJson.size();u++) {
                             JSONObject firstCardJson1 = (JSONObject) dataNJson.get(u);
                             if (firstCardJson1 != null) {
                                 JSONObject firstmblog = firstCardJson1.getJSONObject("mblog");
@@ -120,136 +132,178 @@ public class WeiBoCrawlerController {
                                     String Content = firstCardJson1.getJSONObject("mblog").get("text").toString();
                                     String createtime = firstCardJson1.getJSONObject("mblog").get("created_at").toString();
 
-                                    /**
-                                     * 存博客的内容
-                                     */
-                                    tBloggerContent.setContent(Content);
-                                    tBloggerContent.setContentid(Long.parseLong(contentid));
-
-                                    /**
-                                     * 根据时间
-                                     */
-                                    Timetest timetest = new Timetest();
-                                    SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-                                    SimpleDateFormat sdfsql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                    //定义特殊时间符号
-                                    String hour = "小时";
-                                    String min = "分钟";
-                                    String ss = "秒钟";
-                                    String yesterday = "昨天";
-                                    boolean statushour = createtime.contains(hour);
-                                    boolean statusmin = createtime.contains(min);
-                                    boolean statusss = createtime.contains(ss);
-                                    boolean statuyesterday = createtime.contains(yesterday);
-                                    /**
-                                     * 小时存在
-                                     */
-                                    if (statushour == true || statusmin == true || statusss == true) {
-                                        SimpleDateFormat df = new SimpleDateFormat("MM-dd");//设置日期格式
-
-                                        tBloggerContent.setCreatetime("2019-" + df.format(new Date()));
-                                    } else if (statuyesterday == true) {
-                                        SimpleDateFormat df = new SimpleDateFormat("MM-dd");//设置日期格式
-                                        Date date = new Date();
-                                        date.getTime();
-                                        long lastday = date.getTime() - 24 * 60 * 60 * 1000;
-                                        date.setTime(lastday);
-                                        tBloggerContent.setCreatetime("2019-" + df.format(date));
-                                    } else {
-                                        if (createtime.length() < 8) {
-                                            tBloggerContent.setCreatetime("2019-" + createtime);
-                                        } else {
-                                            tBloggerContent.setCreatetime(createtime);
-                                        }
-                                    }
-                                    tBloggerContent.setBloggerid(bloggerid);
-                                    itBloggerContentService.save(tBloggerContent);
-
-                                    /**
-                                     * 尝试获得text中的图片路径
-                                     */
-                                    int Contentindex = Content.indexOf("img");
-                                    if (Contentindex != -1) {
-                                        int Contentend = Content.indexOf("style", Contentindex + 1);
-                                        if (Contentend != -1) {
-                                            String photourl = Content.substring(Contentindex, Contentend);
-                                            System.out.println("photourlphotourlphotourl" + photourl);
-                                            TBloggerImg tBloggerImg = new TBloggerImg();
-                                            tBloggerImg.setContentid(Long.parseLong(contentid));
-                                            tBloggerImg.setImgsourceurl(photourl);
-                                            itBloggerImgService.save(tBloggerImg);
+                                    if(imgflag==1){
+                                        /**
+                                         * 尝试获得text中的图片路径
+                                         */
+                                        TBloggerImg tBloggerImg = new TBloggerImg();
+                                        tBloggerImg.setContentid(Long.parseLong(contentid));
+                                        if (ImgUtil.getImageSrc(Content) != null && ImgUtil.getImageSrc(Content).size() > 0) {
+                                            for (int j = 0; j < ImgUtil.getImageSrc(Content).size(); j++) {
+                                                String imgurlSource = ImgUtil.getImageSrc(Content).get(j);
+                                                if (imgurlSource.indexOf("http") != -1) {
+                                                    //有前缀
+                                                    tBloggerImg.setImgsourceurl(imgurlSource);
+                                                    String imgUrllocal = FileUtil.uploadLocalPath + ImgUtil.generateSuffix() + ".jpg";
+                                                    ImgUtil.downloadPicture(tBloggerImg.getImgsourceurl(), imgUrllocal);
+                                                    tBloggerImg.setImglocalurl(imgUrllocal);
+                                                    itBloggerImgService.save(tBloggerImg);
+                                                } else {
+                                                    //没有前缀
+                                                    tBloggerImg.setImgsourceurl("https:" + imgurlSource);
+                                                    String imgUrllocal1 = FileUtil.uploadLocalPath + ImgUtil.generateSuffix() + ".jpg";
+                                                 //   System.out.println("==========" + tBloggerImg.getImgsourceurl());
+                                                    ImgUtil.downloadPicture(tBloggerImg.getImgsourceurl(), imgUrllocal1);
+                                                    tBloggerImg.setImglocalurl(imgUrllocal1);
+                                                    itBloggerImgService.save(tBloggerImg);
+                                                }
+                                            }
                                         }
                                     }
 
-
                                     /**
-                                     * 这里进行一个评论请求,
-                                     * @Param commitchioce是否评论，1是 0不要评论
+                                     * 图片路径存入，这个是博主的单独图片
                                      */
-                                    if (commitchioce == 1 && contentid != null) {
-                                        String urlpoint = "https://m.weibo.cn/comments/hotflow?id=" + contentid + "&mid=" + contentid + "&max_id_type=0";
-                                        //这个是JSON爬虫
-                                        Map<String, Object> headerParamcontent = new HashMap<>();
-                                        headerParamcontent.put(P.REQUEST.USER_AGENT, P.USER_AGENT);
-                                        Map<String, Object> resMapreply = Request.get(urlpoint, headerParamcontent);
-                                        System.out.println("==========" + resMapreply.get(P.REQUEST.RES_BODY) + "=================================");
-                                        String res = resMapreply.get(P.REQUEST.RES_BODY).toString();
-                                        JSONObject jsoncommit = (JSONObject) JSON.parse(res);
+                                    JSONArray dataImg = firstmblog.getJSONArray("pics");
+
+                                    if (dataImg != null &&dataImg.size()>0) {
+                                        for(int p = 0;p<dataImg.size();p++){
+                                            JSONObject firstImgJson = (JSONObject) dataImg.get(p);
+                                         //   System.out.println("firstImgJson:" + firstImgJson);
+                                            if (firstImgJson != null) {
+                                                String imgURL = firstImgJson.getString("url");
+                                                TBloggerImg tBloggerImg = new TBloggerImg();
+                                                tBloggerImg.setContentid(Long.parseLong(contentid));
+                                                tBloggerImg.setImgsourceurl(imgURL);
+                                                String imgUrllocal = FileUtil.uploadLocalPath + ImgUtil.generateSuffix() + ".jpg";
+                                                /**
+                                                 * 下载图片操作
+                                                 */
+                                                ImgUtil.downloadPicture(imgURL, imgUrllocal);
+                                                tBloggerImg.setImglocalurl(imgUrllocal);
+                                                if(imgflag == 1){
+                                                    itBloggerImgService.save(tBloggerImg);
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (dataNJson.isEmpty() != true || dataNJson.size() > 1) {
+                                        /**
+                                         * 存博客的内容
+                                         */
+                                        tBloggerContent.setContent(Content);
+                                        tBloggerContent.setContentid(Long.parseLong(contentid));
 
                                         /**
-                                         * 获得第0个,如果评论不为空
+                                         * 根据时间
                                          */
-                                        if (jsoncommit != null) {
-                                            if(jsoncommit.getJSONObject("data")!=null){
-                                                JSONObject firstjsoncommit = (JSONObject) jsoncommit.getJSONObject("data");
-                                                if (firstjsoncommit != null && firstjsoncommit.toString() != "") {
-                                                    for(int j = 0;j < 7;j++){
-                                                        JSONArray fastcheck =  firstjsoncommit.getJSONArray("data");
-                                                        System.out.println("======" + fastcheck + "======" );
-                                                        if (fastcheck.isEmpty()!=true || fastcheck.size() > 1) {
-                                                            JSONObject arrayJson =(JSONObject) fastcheck.get(j);
-                                                            String likecount ="";
-                                                            if(arrayJson.get("like_count")!=null){
-                                                                likecount = arrayJson.get("like_count").toString();//这个是获得点赞量
-                                                            }
-                                                            System.out.println("likecount"+likecount);
-                                                            String regsdop = "[^\\x00-\\xff]";
-                                                            Pattern p = Pattern.compile(regsdop);
-                                                            Matcher m = p.matcher(arrayJson.get("text").toString());
-                                                            StringBuffer sb = new StringBuffer();
-                                                            while (m.find()) {
-                                                                sb.append(m.group());
-                                                            }
-                                                            System.out.println(sb.toString());
+                                        Timetest timetest = new Timetest();
+                                        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+                                        SimpleDateFormat sdfsql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                        //定义特殊时间符号
+                                        String hour = "小时";
+                                        String min = "分钟";
+                                        String ss = "秒钟";
+                                        String yesterday = "昨天";
+                                        boolean statushour = createtime.contains(hour);
+                                        boolean statusmin = createtime.contains(min);
+                                        boolean statusss = createtime.contains(ss);
+                                        boolean statuyesterday = createtime.contains(yesterday);
+                                        /**
+                                         * 小时存在
+                                         */
+                                        if (statushour == true || statusmin == true || statusss == true) {
+                                            SimpleDateFormat df = new SimpleDateFormat("MM-dd");//设置日期格式
 
-                                                            /**
-                                                             * 存进评论的数据库,根据最大点赞数
-                                                             */
-                                                            if(hotpoint!=0){
-                                                                if(hotpoint>=Integer.parseInt(likecount)){
-                                                                    TBloggerPoint tBloggerPoint = new TBloggerPoint();
-                                                                    tBloggerPoint.setContentid(Long.parseLong(contentid));
-                                                                    tBloggerPoint.setComment(sb.toString());
-                                                                    tBloggerPoint.setPointsum(Long.parseLong(likecount));
-                                                                    itBloggerPointService.save(tBloggerPoint);
+                                            tBloggerContent.setCreatetime("2019-" + df.format(new Date()));
+                                        } else if (statuyesterday == true) {
+                                            SimpleDateFormat df = new SimpleDateFormat("MM-dd");//设置日期格式
+                                            Date date = new Date();
+                                            date.getTime();
+                                            long lastday = date.getTime() - 24 * 60 * 60 * 1000;
+                                            date.setTime(lastday);
+                                            tBloggerContent.setCreatetime("2019-" + df.format(date));
+                                        } else {
+                                            if (createtime.length() < 8) {
+                                                tBloggerContent.setCreatetime("2019-" + createtime);
+                                            } else {
+                                                tBloggerContent.setCreatetime(createtime);
+                                            }
+                                        }
+                                        tBloggerContent.setBloggerid(bloggerid);
+                                        itBloggerContentService.save(tBloggerContent);
+
+                                        /**
+                                         * 这里进行一个评论请求,
+                                         * @Param commitchioce是否评论，1是 0不要评论
+                                         */
+                                        if (commitchioce == 1 && contentid != null) {
+                                            String urlpoint = "https://m.weibo.cn/comments/hotflow?id=" + contentid + "&mid=" + contentid + "&max_id_type=0";
+                                            //这个是JSON爬虫
+                                            Map<String, Object> headerParamcontent = new HashMap<>();
+                                            headerParamcontent.put(P.REQUEST.USER_AGENT, P.USER_AGENT);
+                                            Map<String, Object> resMapreply = Request.get(urlpoint, headerParamcontent);
+                                           // System.out.println("==========" + resMapreply.get(P.REQUEST.RES_BODY) + "=================================");
+                                            String res = resMapreply.get(P.REQUEST.RES_BODY).toString();
+                                            JSONObject jsoncommit = (JSONObject) JSON.parse(res);
+
+                                            /**
+                                             * 获得第0个,如果评论不为空
+                                             */
+                                            if (jsoncommit != null) {
+                                                if (jsoncommit.getJSONObject("data") != null) {
+                                                    JSONObject firstjsoncommit = (JSONObject) jsoncommit.getJSONObject("data");
+                                                    if (firstjsoncommit != null && firstjsoncommit.toString() != "") {
+                                                            JSONArray fastcheck = firstjsoncommit.getJSONArray("data");
+                                                         //   System.out.println("======" + fastcheck + "======");
+                                                            if (fastcheck.isEmpty() != true || fastcheck.size() > 0) {
+                                                                for (int j = 0; j < fastcheck.size(); j++) {
+                                                                JSONObject arrayJson = (JSONObject) fastcheck.get(j);
+                                                                String likecount = "";
+                                                                if (arrayJson.get("like_count") != null) {
+                                                                    likecount = arrayJson.get("like_count").toString();//这个是获得点赞量
+                                                                }
+                                                                String textCommit = arrayJson.get("text").toString();
+                                                                String regsdop = "[^\\x00-\\xff]";
+                                                                Pattern p = Pattern.compile(regsdop);
+                                                                Matcher m = p.matcher(textCommit);
+                                                                StringBuffer sb = new StringBuffer();
+                                                                while (m.find()) {
+                                                                    sb.append(m.group());
+                                                                }
+
+                                                                /**
+                                                                 * 存进评论的数据库,根据最大点赞数
+                                                                 */
+                                                                if (hotpoint != 0) {
+                                                                    if (hotpoint <= Integer.parseInt(likecount)) {
+                                                                        TBloggerPoint tBloggerPoint = new TBloggerPoint();
+                                                                        tBloggerPoint.setContentid(Long.parseLong(contentid));
+                                                                        tBloggerPoint.setComment(sb.toString());
+                                                                        tBloggerPoint.setPointsum(Long.parseLong(likecount));
+                                                                        itBloggerPointService.save(tBloggerPoint);
+                                                                    }
                                                                 }
                                                             }
                                                         }
                                                     }
                                                 }
                                             }
-                                        }
 
-                                    }
+                                        }
 //                                System.out.println(firstCardJson.getJSONObject("mblog").get("id"));
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+
             if(i == 15){
                 List<String> listContent = new ArrayList();
+//                List<String> listimg= new ArrayList();
                 QueryWrapper<TBloggerContent> queryWrapper = new QueryWrapper<TBloggerContent>();
                 queryWrapper = queryWrapper.eq("bloggerid", bloggerid);
                 List<TBloggerContent> list1 = itBloggerContentService.list(queryWrapper);
@@ -268,8 +322,8 @@ public class WeiBoCrawlerController {
                         Timetest timetest1 = new Timetest();
                         boolean timetest1EffectiveDate = timetest1.isEffectiveDate(datecontent, dateconstart ,dateconend );
 
+                        //符合时间范围内
                         if(timetest1EffectiveDate == true){
-
                             Pattern p = Pattern.compile(regsdop);
                             Matcher m = p.matcher(bloggerContent.getContent());
                             StringBuffer sb = new StringBuffer();
@@ -279,42 +333,64 @@ public class WeiBoCrawlerController {
                             /**
                              * 这个是判断字数的
                              */
-                            if(wordmax!=0){
-                                StringBuffer resetStringword = new StringBuffer();
+                            if(wordmax >= 0){
+//                                StringBuffer resetStringword = new StringBuffer();
                                 String[] word = sb.toString().split("");
                                 int length =word.length;
-                                for(int y=0;y<wordmax;y++){
-                                    if(y == wordmax-1 || length == 0){
-                                        sb = resetStringword;
-                                    }
-                                    else{
-                                        resetStringword.append(word[y]);
-                                        length--;
-                                    }
+                                if(wordmax<length){
+                                    listContent.add(time_count+1+":"+sb+"\n" );//内容
+                                    flag = true;
                                 }
+//                                for(int y=0;y<wordmax;y++){
+//                                    if(y == wordmax-1 || length == 0){
+//                                        sb = resetStringword;
+//                                    }
+//                                    else{
+//                                        resetStringword.append(word[y]);
+//                                        length--;
+//                                    }
+//                                }
                             }
-                            listContent.add(time_count+1+":"+sb+"\n" );//内容
-                            /**
-                             * 评论的
-                             */
-                            QueryWrapper<TBloggerPoint> tBloggerPointQueryWrapper = new QueryWrapper<TBloggerPoint>();
-                            tBloggerPointQueryWrapper = tBloggerPointQueryWrapper.eq("contentid", bloggerContent.getContentid());
-                            List<TBloggerPoint> list2 = itBloggerPointService.list(tBloggerPointQueryWrapper);
-                            int countpoint = 1;
-                            for(int l = 0;l<list2.size();l++){
-                                TBloggerPoint tBloggerPoint = list2.get(l);
-                                if(tBloggerPoint!=null){
-                                    listContent.add("("+countpoint+")" + tBloggerPoint.getComment() +"\n");
-                                    countpoint++;
-                                }
-                                if(l==list2.size()-1){
-                                    System.out.println(listContent);
-                                    itBloggerPointService.remove(tBloggerPointQueryWrapper);
-                                }
-                            }
-                            TBloggerPoint tBloggerPoint = itBloggerPointService.getOne(tBloggerPointQueryWrapper);
-                            time_count++;//加次数
 
+                            System.out.println(flag);
+
+                            if(imgflag == 1 && flag==true){
+                                /**
+                                 * 图片加载
+                                 */
+                                QueryWrapper<TBloggerImg> bloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
+                                bloggerImgQueryWrapper = bloggerImgQueryWrapper.eq("contentid", bloggerContent.getContentid());
+                                List<TBloggerImg> tBloggerImgList = itBloggerImgService.list(bloggerImgQueryWrapper);
+                                for(int j = 0; j < tBloggerImgList.size();j++){
+                                    //得到它的一个对象数据
+                                    TBloggerImg tBloggerImg = tBloggerImgList.get(j);
+                                        listContent.add(tBloggerImg.getImglocalurl());
+                                }
+                            }
+
+
+                            if(commitchioce==1 && flag==true ){
+                                /**
+                                 * 评论的
+                                 */
+                                QueryWrapper<TBloggerPoint> tBloggerPointQueryWrapper = new QueryWrapper<TBloggerPoint>();
+                                tBloggerPointQueryWrapper = tBloggerPointQueryWrapper.eq("contentid", bloggerContent.getContentid());
+                                List<TBloggerPoint> list2 = itBloggerPointService.list(tBloggerPointQueryWrapper);
+                                int countpoint = 1;
+                                for(int l = 0;l<list2.size();l++){
+                                    TBloggerPoint tBloggerPoint = list2.get(l);
+                                    if(tBloggerPoint!=null){
+                                        listContent.add("("+countpoint+")" + tBloggerPoint.getComment() +"\n");
+                                        countpoint++;
+                                    }
+//                                    if(l==list2.size()-1){
+//                                        //               System.out.println(listContent);
+//                                        itBloggerPointService.remove(tBloggerPointQueryWrapper);
+//                                    }
+                                }
+                              //  TBloggerPoint tBloggerPoint = itBloggerPointService.getOne(tBloggerPointQueryWrapper);
+                            }
+                            time_count++;//加次数
                         }
                         if(g == list1.size()-1){
                             /**
@@ -339,10 +415,7 @@ public class WeiBoCrawlerController {
                 /**
                  * 切割字符串
                  */
-                Properties properties = new Properties();
-                String datareplace = listContent.toString().replace(",","");
-                datareplace= datareplace.replace("[","");
-                datareplace= datareplace.replace("]","");
+
 
 
                 try{
@@ -364,19 +437,100 @@ public class WeiBoCrawlerController {
                     tBloggerOld.setBloggername(bloggername);
                     tBloggerOld.setUid(uid);
                     itBloggerOldService.save(tBloggerOld);
+
+                    if(imgflag == 1  && flag==true){
+                        try{
+                            /**
+                             * 文字+图片的生成
+                             */
+                            System.out.println(listContent);
+                            ImgUtil.exportDoc(listContent,bloggername);
+                            QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
+                            queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
+                            List<TBloggerContent> tBloggerContents =  itBloggerContentService.list(queryWrapper1);
+
+                            /**
+                             * 删除图片操作
+                             */
+                            for(int w = 0 ;w<tBloggerContents.size();w++){
+                                TBloggerContent tBloggerContent = tBloggerContents.get(w);
+                                QueryWrapper<TBloggerImg> queryWrapperimg = new QueryWrapper();
+                                queryWrapperimg = queryWrapperimg.eq("contentid", tBloggerContent.getContentid());
+                                itBloggerImgService.remove(queryWrapperimg);
+                            }
+                            /**
+                             * 删除评论操作
+                             */
+                            if(commitchioce == 1){
+                                for(int w = 0 ;w<tBloggerContents.size();w++){
+                                    TBloggerContent tBloggerContent = tBloggerContents.get(w);
+                                    QueryWrapper<TBloggerPoint> queryWrapperPoint = new QueryWrapper();
+                                    queryWrapperPoint = queryWrapperPoint.eq("contentid", tBloggerContent.getContentid());
+                                    itBloggerPointService.remove(queryWrapperPoint);
+                                }
+                            }
+                            itBloggerContentService.remove(queryWrapper1);
+                          //  System.out.println(bloggername);
+                            String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
+                     //    System.out.println(datarepsonse);
+                            response.getWriter().write(datarepsonse);
+                            return;
+                        }
+                        catch (DocumentException d){
+                            d.printStackTrace();
+                        }
+                    }
+                    else{
                     /**
-                     * 导出文件
-                     */
-                    ExportWord e = new ExportWord();
-                    e.creatDoc(FileUtil.uploadLocalPath + bloggername + Utility.getCurrentUser().getUsername() + "_微博.doc", datareplace.toString());
-                    QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
-                    queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
-                    itBloggerContentService.remove(queryWrapper1);
-                    System.out.println(bloggername);
-                    String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
-                    System.out.println(datarepsonse);
-                    response.getWriter().write(datarepsonse);
-                    return;
+                    * 导出文件，纯文字
+                    */
+                        Properties properties = new Properties();
+                        String datareplace = listContent.toString().replace(",","");
+                        datareplace= datareplace.replace("[","");
+                        datareplace= datareplace.replace("]","");
+                        System.out.println(datareplace);
+                        if(datareplace.equals("")){
+                            String a = "9999";
+                            response.getWriter().write(a );
+                            return;
+                        }
+                        ExportWord e = new ExportWord();
+                        e.creatDoc(FileUtil.uploadLocalPath + bloggername + Utility.getCurrentUser().getUsername() + "_微博.doc", datareplace.toString());
+                        QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
+                        queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
+
+                        /**
+                         * 如果评论存在
+                         */
+                        if(commitchioce == 1){
+                            List<TBloggerContent> tBloggerContents =  itBloggerContentService.list(queryWrapper1);
+                            for(int w = 0 ;w<tBloggerContents.size();w++){
+                                TBloggerContent tBloggerContent = tBloggerContents.get(w);
+                                QueryWrapper<TBloggerPoint> queryWrapperPoint = new QueryWrapper();
+                                queryWrapperPoint = queryWrapperPoint.eq("contentid", tBloggerContent.getContentid());
+                                itBloggerPointService.remove(queryWrapperPoint);
+                            }
+                        }
+                        itBloggerContentService.remove(queryWrapper1);
+                      //  System.out.println(bloggername);
+                        String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
+                       // System.out.println(datarepsonse);
+                        response.getWriter().write(datarepsonse);
+                        return;
+                    }
+
+//                    /**
+//                     * 导出文件
+//                     */
+//                    ExportWord e = new ExportWord();
+//                    e.creatDoc(FileUtil.uploadLocalPath + bloggername + Utility.getCurrentUser().getUsername() + "_微博.doc", datareplace.toString());
+//                    QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
+//                    queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
+//                    itBloggerContentService.remove(queryWrapper1);
+//                    System.out.println(bloggername);
+//                    String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
+//                    System.out.println(datarepsonse);
+//                    response.getWriter().write(datarepsonse);
                 }
                 catch (IOException e1){
                     e1.printStackTrace();
@@ -433,7 +587,7 @@ public class WeiBoCrawlerController {
         try{
             QueryWrapper<TBloggerOld> queryCWrapper1 = new QueryWrapper<TBloggerOld>();
             queryCWrapper1 = queryCWrapper1.eq("id", id);
-            System.out.println("queryCWrapper" + queryCWrapper1);
+           // System.out.println("queryCWrapper" + queryCWrapper1);
             String keyword =itBloggerOldService.getOne(queryCWrapper1).getBloggername();
             response.getWriter().write(keyword + Utility.getCurrentUser().getUsername());
         }
@@ -441,5 +595,8 @@ public class WeiBoCrawlerController {
             e.printStackTrace();
         }
     }
+
+
+
 }
 

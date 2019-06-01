@@ -79,7 +79,7 @@ public class BaiduCrawlerClient {
        for(int i = 0;i<19;i++){
             int p = i*10;
            try {
-               url = "https://zhidao.baidu.com/search?word="+word+"&ie=gbk&site=-1&sites=0&date=0&pn=" + p;
+               url = "https://zhidao.baidu.com/search?ct=17&pn=" + p + "&tn=ikaslist&rn=10&fr=wwwt&word=" + word;
                doc = Jsoup.connect(url).userAgent(P.REQUEST.USER_AGENT).timeout(5000).get();
                Elements listDiv = doc.getElementsByAttributeValue("class", "ti");
                    count = n * 11;
@@ -143,6 +143,9 @@ public class BaiduCrawlerClient {
                        ExportWord e = new ExportWord();
                        e.creatDoc(FileUtil.uploadLocalPath +word+Utility.getCurrentUser().getUsername()+"_百度.doc", datareb.toString());
                        //返回给前台
+                       QueryWrapper<Baidu> bdRecordsQueryWrapper = new QueryWrapper<Baidu>();
+                       bdRecordsQueryWrapper = bdRecordsQueryWrapper.eq("username", Utility.getCurrentUser().getUsername());
+                       baiduService.remove(bdRecordsQueryWrapper);
                        response.getWriter().write(word + Utility.getCurrentUser().getUsername());
                        return ;
                    }

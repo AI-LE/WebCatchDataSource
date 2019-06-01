@@ -69,9 +69,10 @@ public class ZhCrawlerClientController {
         String id = request.getParameter("id");
         QueryWrapper<ZhihuRecords> queryCWrapper = new QueryWrapper<ZhihuRecords>();
         queryCWrapper = queryCWrapper.eq("id", id);
-        System.out.println("queryCWrapper" + queryCWrapper);
+      //  System.out.println("queryCWrapper" + queryCWrapper);
         String question =iZhihuRecordsService.getOne(queryCWrapper).getKeyword();
         ZhihuRecords zhihuRecords =iZhihuRecordsService.getOne(queryCWrapper);
+        int choice = zhihuRecords.getTypechoice();
         List<String> list = new ArrayList<String>();
         for (int i = 0; i < 20; i++) {
             page = 20 * i;
@@ -84,7 +85,7 @@ public class ZhCrawlerClientController {
                 headerParams.put(P.REQUEST.USER_AGENT, P.USER_AGENT);//将cookie值也放入请求中
                  headerParams.put(P.REQUEST.COOKIE, P.COOKIE);//将cookie值也放入请求中
                 Map<String, Object> resMap = Request.get(url, headerParams);
-              System.out.println("==========" + resMap.get(P.REQUEST.RES_BODY) + "=================================");
+            //  System.out.println("==========" + resMap.get(P.REQUEST.RES_BODY) + "=================================");
                 String a = resMap.get(P.REQUEST.RES_BODY).toString();
                 //汉字提取
                 String[] value = resMap.get(P.REQUEST.RES_BODY).toString().split(",");
@@ -160,7 +161,7 @@ public class ZhCrawlerClientController {
                                                     zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"?\n");
                                                     zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"?\n");
                                                     zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"?\n");
-                                                    System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
+                                             //       System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
                                                     answerdata = new Answer();
                                                 }
                                             }
@@ -185,111 +186,115 @@ public class ZhCrawlerClientController {
                                 }
                             }
 
-                        /**
-                         * 这个是问题的url
-                         */
-                        List<String>list1 = new ArrayList<String>();
-                        int urlindex=v.indexOf("question");
-                     //   int urlindex2=v.indexOf("http://zhuanlan.zhihu.com/p/");
-                        if(urlindex!=-1 ){
-                            int urlend=v.indexOf("\"", urlindex+1);
-                            if(urlend!=-1){
-                                String urlresult=v.substring(urlindex,urlend);
-                                Pattern pattern = Pattern.compile("[^0-9]");
-                                Matcher matcher = pattern.matcher(urlresult);
-                                String all = matcher.replaceAll("");
-                                if(0<all.length()&&all.length()<=10){
+                            //如果是需要爬取评论的
+                            if(choice==1){
+                                /**
+                                 * 这个是问题的url
+                                 */
+                                List<String>list1 = new ArrayList<String>();
+                                int urlindex=v.indexOf("question");
+                                //   int urlindex2=v.indexOf("http://zhuanlan.zhihu.com/p/");
+                                if(urlindex!=-1 ){
+                                    int urlend=v.indexOf("\"", urlindex+1);
+                                    if(urlend!=-1){
+                                        String urlresult=v.substring(urlindex,urlend);
+                                        Pattern pattern = Pattern.compile("[^0-9]");
+                                        Matcher matcher = pattern.matcher(urlresult);
+                                        String all = matcher.replaceAll("");
+                                        if(0<all.length()&&all.length()<=10){
 
-                                    /**
-                                     * 尝试请求路径拿前五的答案,
-                                     */
-                                    String urlanswer = "https://www.zhihu.com/api/v4/questions/"+all+"/answers?include=data%5B*%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cis_labeled%2Cis_recognized%2Cpaid_info%3Bdata%5B*%5D.mark_infos%5B*%5D.url%3Bdata%5B*%5D.author.follower_count%2Cbadge%5B*%5D.topics&offset=&limit=5&sort_by=default&platform=desktop";
-                                    Map<String, Object> headerParamsanswer = new HashMap<>();
-                                    headerParamsanswer.put(P.REQUEST.USER_AGENT, P.USER_AGENT);//将cookie值也放入请求中
-                                    Map<String, Object> resMapanswer = Request.get(urlanswer, headerParamsanswer);
-                                    //这个是字符串，得到网站的数据字符串
-                                    System.out.println("==========" + resMapanswer.get(P.REQUEST.RES_BODY) + "=================================");
-                                    String answer = resMapanswer.get(P.REQUEST.RES_BODY).toString();
-                                    String[] valueanswer = resMapanswer.get(P.REQUEST.RES_BODY).toString().split("}");
-                                    int putdatatime = 0;
-                                    Answer answer1 = new Answer();
-                                    for(String answersum :valueanswer){
-                                        answercount ++;
-                                        String globlchina = answersum;
-                                        int name =answersum.indexOf("title");
-                                        if(name != -1) {
-                                            String regs = "[^\u4e00-\u9fa5]";
-                                            globlchina = globlchina.replaceAll(regs, "");
-                                      //      System.out.println("=======]!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1" + globlchina);
-                                            answer1.setTitle(globlchina);
-                                            answer1.setUsername(Utility.getCurrentUser().getUsername());
-                                            iAnswerService.save(answer1);
-                                        }
-                                        //  System.out.println("========================++++++++++++"+answercount);
-                                        String regsdop = "[^\\x00-\\xff]";
-
-                                       // String regsdop = "[^\u4e00-\u9fa5]";
-                                        int indexans =answersum.indexOf("content");//规则
-                                        if(indexans!=-1) {
-                                            int indexop=answersum.indexOf("content");//切割
-                                            int end=answersum.indexOf("editable_content", indexop+1);
-                                            if(end != -1){
-                                                answersum = answersum.substring(indexop, end);
-                                            //    answersum  = answersum.replace(regsdop, "");
-                                                Pattern p = Pattern.compile(regsdop);
-                                                Matcher m = p.matcher(answersum);
-                                                StringBuffer sb = new StringBuffer();
-                                                while (m.find()) {
-                                                    sb.append(m.group());
+                                            /**
+                                             * 尝试请求路径拿前五的答案,
+                                             */
+                                            String urlanswer = "https://www.zhihu.com/api/v4/questions/"+all+"/answers?include=data%5B*%5D.is_normal%2Cadmin_closed_comment%2Creward_info%2Cis_collapsed%2Cannotation_action%2Cannotation_detail%2Ccollapse_reason%2Cis_sticky%2Ccollapsed_by%2Csuggest_edit%2Ccomment_count%2Ccan_comment%2Ccontent%2Ceditable_content%2Cvoteup_count%2Creshipment_settings%2Ccomment_permission%2Ccreated_time%2Cupdated_time%2Creview_info%2Crelevant_info%2Cquestion%2Cexcerpt%2Crelationship.is_authorized%2Cis_author%2Cvoting%2Cis_thanked%2Cis_nothelp%2Cis_labeled%2Cis_recognized%2Cpaid_info%3Bdata%5B*%5D.mark_infos%5B*%5D.url%3Bdata%5B*%5D.author.follower_count%2Cbadge%5B*%5D.topics&offset=&limit=5&sort_by=default&platform=desktop";
+                                            Map<String, Object> headerParamsanswer = new HashMap<>();
+                                            headerParamsanswer.put(P.REQUEST.USER_AGENT, P.USER_AGENT);//将cookie值也放入请求中
+                                            Map<String, Object> resMapanswer = Request.get(urlanswer, headerParamsanswer);
+                                            //这个是字符串，得到网站的数据字符串
+                                          //  System.out.println("==========" + resMapanswer.get(P.REQUEST.RES_BODY) + "=================================");
+                                            String answer = resMapanswer.get(P.REQUEST.RES_BODY).toString();
+                                            String[] valueanswer = resMapanswer.get(P.REQUEST.RES_BODY).toString().split("}");
+                                            int putdatatime = 0;
+                                            Answer answer1 = new Answer();
+                                            for(String answersum :valueanswer){
+                                                answercount ++;
+                                                String globlchina = answersum;
+                                                int name =answersum.indexOf("title");
+                                                if(name != -1) {
+                                                    String regs = "[^\u4e00-\u9fa5]";
+                                                    globlchina = globlchina.replaceAll(regs, "");
+                                                    //      System.out.println("=======]!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1" + globlchina);
+                                                    answer1.setTitle(globlchina);
+                                                    answer1.setUsername(Utility.getCurrentUser().getUsername());
+                                                    iAnswerService.save(answer1);
                                                 }
-                                                //    System.out.println("=======]answersumanswersumanswersumanswersum" + answersum);
-                                                putdatatime++;
-                                                //   System.out.println("=======]putdatatime" + putdatatime);
-                                                QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<Answer>();
-                                                if (putdatatime == 1) {
-                                                //    answersum = answersum.replaceAll(regsdop, "");
-                                                    if(sb.toString()!=""){
-                                                        answer1.setAnswerone(sb.toString());
-                                                        //     iAnswerService.save(answer1);
-                                                    }
-                                                } else if (putdatatime == 2) {
+                                                //  System.out.println("========================++++++++++++"+answercount);
+                                                String regsdop = "[^\\x00-\\xff]";
+
+                                                // String regsdop = "[^\u4e00-\u9fa5]";
+                                                int indexans =answersum.indexOf("content");//规则
+                                                if(indexans!=-1) {
+                                                    int indexop=answersum.indexOf("content");//切割
+                                                    int end=answersum.indexOf("editable_content", indexop+1);
+                                                    if(end != -1){
+                                                        answersum = answersum.substring(indexop, end);
+                                                        //    answersum  = answersum.replace(regsdop, "");
+                                                        Pattern p = Pattern.compile(regsdop);
+                                                        Matcher m = p.matcher(answersum);
+                                                        StringBuffer sb = new StringBuffer();
+                                                        while (m.find()) {
+                                                            sb.append(m.group());
+                                                        }
+                                                        //    System.out.println("=======]answersumanswersumanswersumanswersum" + answersum);
+                                                        putdatatime++;
+                                                        //   System.out.println("=======]putdatatime" + putdatatime);
+                                                        QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<Answer>();
+                                                        if (putdatatime == 1) {
+                                                            //    answersum = answersum.replaceAll(regsdop, "");
+                                                            if(sb.toString()!=""){
+                                                                answer1.setAnswerone(sb.toString());
+                                                                //     iAnswerService.save(answer1);
+                                                            }
+                                                        } else if (putdatatime == 2) {
 //                                                    answersum = answersum.replaceAll(regsdop, "");
-                                                    if(sb.toString()!="") {
-                                                        answer1.setAnswertwo(sb.toString());
-                                                        //  iAnswerService.save(answer1);
-                                                    }
-                                                }
-                                                else if (putdatatime == 3) {
-                                                  //  answersum = answersum.replaceAll(regsdop, "");
-                                                    if(sb.toString()!="") {
-                                                        answer1.setAnswerthree(sb.toString());
-                                                    }
-                                                }
-                                                else if (putdatatime == 4) {
-                                                    if(sb.toString()!="") {
-                                                        answer1.setAnswerfour(sb.toString());
-                                                    }
-                                                }
-                                                else if (putdatatime == 5) {
-                                                    System.out.println("==================" + sb);
-                                             //       answersum = answersum.replaceAll(regsdop, "");
+                                                            if(sb.toString()!="") {
+                                                                answer1.setAnswertwo(sb.toString());
+                                                                //  iAnswerService.save(answer1);
+                                                            }
+                                                        }
+                                                        else if (putdatatime == 3) {
+                                                            //  answersum = answersum.replaceAll(regsdop, "");
+                                                            if(sb.toString()!="") {
+                                                                answer1.setAnswerthree(sb.toString());
+                                                            }
+                                                        }
+                                                        else if (putdatatime == 4) {
+                                                            if(sb.toString()!="") {
+                                                                answer1.setAnswerfour(sb.toString());
+                                                            }
+                                                        }
+                                                        else if (putdatatime == 5) {
+                                                       //     System.out.println("==================" + sb);
+                                                            //       answersum = answersum.replaceAll(regsdop, "");
 //                                                QueryWrapper<Answer> searchrepla = new QueryWrapper<Answer>();
 //                                                searchrepla = searchrepla.eq("answerfive", answersum);
 //                                                if(iAnswerService.getOne(searchrepla)==null){//如果为空，插入数据
-                                                    if(sb.toString()!="") {
-                                                        answer1.setAnswerfive(sb.toString());
-                                                        iAnswerService.save(answer1);
+                                                            if(sb.toString()!="") {
+                                                                answer1.setAnswerfive(sb.toString());
+                                                                iAnswerService.save(answer1);
+                                                            }
+                                                        }
                                                     }
+
                                                 }
                                             }
-
                                         }
+                                        list1.add(urlresult);
+                                        currtans++;
                                     }
                                 }
-                                list1.add(urlresult);
-                                currtans++;
                             }
-                        }
+
                     }
 
                   //  System.out.println("list=====" + list);
@@ -316,98 +321,103 @@ public class ZhCrawlerClientController {
                     zhihuOldrecords.setKeyword(zhihuRecords.getKeyword());
                     zhihuOldrecords.setUsername(Utility.getCurrentUser().getUsername());
                     iZhihuOldrecordsService.save(zhihuOldrecords);
-                    /**
-                     *生成word文档
-                     */
-//                    List<Zhihu> listsave=new ArrayList<Zhihu>();
-//                    List<String> wordPrit=new ArrayList<String>();
-//                    int conut = 0;
-//                    QueryWrapper<Zhihu> queryCWrapper2 = new QueryWrapper<Zhihu>();
-//                    queryCWrapper2 = queryCWrapper2.eq("keyword", question);
-//                    listsave = iZhihuService.list(queryCWrapper2);
-//                    for(Zhihu list1:listsave){
-//                        conut++;
-//                        //  System.out.println("title"+list1.getTitle());
-//                        wordPrit.add(conut+":"+list1.getTitle().toString()+"？\n");
-//                    }
-//                    String datareplace = listsave.toString().replace(",","");
-//                    String datarea = datareplace.replace("[","");
-//                    String datareb = datarea.replace("]","");
                     List<String> zhihudatatest = new ArrayList<String>();//这个链表用来word存储
                     QueryWrapper<Zhihu> LookZhihudata = new QueryWrapper<Zhihu>();//这个是用来查找标题的
                     LookZhihudata = LookZhihudata.eq("keyword", question);
                     List<Zhihu> listodap = iZhihuService.list(LookZhihudata);//这个是用来查找所有标题的
-              //      System.out.println("list#￥%￥#……#￥……#￥……￥#……￥#……#￥……#……￥#……￥" + listodap);
-                    int titlecout = 0;
-                    for (int r = 0;r < listodap.size(); r++){
-                        Zhihu zhihute = new Zhihu();
-                        zhihute.setTitle(listodap.get(r).getTitle());//获得标题
-                        QueryWrapper<Answer> answerqueryWrapper = new QueryWrapper<Answer>();
-                        answerqueryWrapper = answerqueryWrapper.eq("title", zhihute.getTitle());//传入标题这个变量
-                        List<Answer> list2 = iAnswerService.list(answerqueryWrapper);
-                        //判断链表是否有值
 
-                        for(int g = 0; g < list2.size(); g++){
-                            Answer answerdata = list2.get(g);
-                            if(answerdata.getAnswerfive() != null &&answerdata.getAnswerfour() != null &&answerdata.getUsername() != null){
-                                //标题存入链表
-                                zhihudatatest.add(titlecout+1+":"+zhihute.getTitle()+"?\n");
-                                zhihudatatest.add("(1):"+answerdata.getAnswerone()+"\n");
-                                zhihudatatest.add("(2):"+answerdata.getAnswertwo()+"\n");
-                                zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"\n");
-                                System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + answerdata.getAnswerthree());
-                                zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"\n");
-                                zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"\n\n");
-                             System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
-//                                if(titlecout==200){
-//                                    ExportWord e = new ExportWord();
-//                                    Properties properties = new Properties();
-//                                    String datareplace = zhihudatatest.toString().replace(",","");
-//                                    datareplace= datareplace.replace("[","");
-//                                    datareplace.replace("]","");
-//                                    e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
-//                                }
-                                if(titlecout == 199){
-                                    ExportWord e = new ExportWord();
-                                    Properties properties = new Properties();
-                                    String datareplace = zhihudatatest.toString().replace(",","");
-                                    datareplace= datareplace.replace("[","");
-                                    datareplace= datareplace.replace("]","");
-                                    e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
-                                    /**
-                                     * 导出word
-                                     */
-                                    System.out.println("对不起，没有爬取到数据哦");
-                                    QueryWrapper<Answer> answesuer = new QueryWrapper<Answer>();
-                                    answesuer = answesuer.eq("username", Utility.getCurrentUser().getUsername());
-                                    iAnswerService.remove(answesuer);
-                                    response.getWriter().write(question);
-                                    return;
+                    if(choice==1){
+                        int titlecout = 0;
+                        for (int r = 0;r < listodap.size(); r++){
+                            Zhihu zhihute = new Zhihu();
+                            zhihute.setTitle(listodap.get(r).getTitle());//获得标题
+                            QueryWrapper<Answer> answerqueryWrapper = new QueryWrapper<Answer>();
+                            answerqueryWrapper = answerqueryWrapper.eq("title", zhihute.getTitle());//传入标题这个变量
+                            List<Answer> list2 = iAnswerService.list(answerqueryWrapper);
+                            //判断链表是否有值
+
+                            for(int g = 0; g < list2.size(); g++){
+                                Answer answerdata = list2.get(g);
+                                if(answerdata.getAnswerfive() != null &&answerdata.getAnswerfour() != null &&answerdata.getUsername() != null){
+                                    //标题存入链表
+                                    zhihudatatest.add(titlecout+1+":"+zhihute.getTitle()+"?\n");
+                                    zhihudatatest.add("(1):"+answerdata.getAnswerone()+"\n");
+                                    zhihudatatest.add("(2):"+answerdata.getAnswertwo()+"\n");
+                                    zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"\n");
+                                    zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"\n");
+                                    zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"\n\n");
+                                 //   System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
+                                    if(titlecout == 199){
+                                        ExportWord e = new ExportWord();
+                                        Properties properties = new Properties();
+                                        String datareplace = zhihudatatest.toString().replace(",","");
+                                        datareplace= datareplace.replace("[","");
+                                        datareplace= datareplace.replace("]","");
+//                                        datareplace = new String(datareplace.getBytes("gb2312"), "ISO8859-1");
+
+                                        e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
+                                        
+                                        /**
+                                         * 导出word
+                                         */
+                                        System.out.println("对不起，没有爬取到数据哦");
+                                        QueryWrapper<Answer> answesuer = new QueryWrapper<Answer>();
+                                        answesuer = answesuer.eq("username", Utility.getCurrentUser().getUsername());
+                                        iAnswerService.remove(answesuer);
+                                        response.getWriter().write(question);
+                                        return;
+                                    }
+                                    answerdata = new Answer();
+                                    titlecout++;
                                 }
-                                answerdata = new Answer();
-                                titlecout++;
+                            }
+
+                            if(r == listodap.size()-1){
+                                ExportWord e = new ExportWord();
+                                Properties properties = new Properties();
+                                String datareplace = zhihudatatest.toString().replace(",","");
+                                datareplace= datareplace.replace("[","");
+                                datareplace= datareplace.replace("]","");
+                                e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
                             }
                         }
-
-                        if(r == listodap.size()-1){
-                            ExportWord e = new ExportWord();
-                            Properties properties = new Properties();
-                            String datareplace = zhihudatatest.toString().replace(",","");
-                            datareplace= datareplace.replace("[","");
-                            datareplace= datareplace.replace("]","");
-                            e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
+                    }
+                    else{
+                        int titlecoutok = 0;
+                        for (int r = 0;r < listodap.size(); r++){
+                                Zhihu zhihu1 = new Zhihu();
+                                   zhihu1 = listodap.get(r);
+                                    //标题存入链表
+                                    zhihudatatest.add(titlecoutok+1+":"+zhihu1.getTitle()+"?\n");
+                                  //  System.out.println("zhihudatatestzhihudatatest"+zhihudatatest);
+                            if(r == listodap.size()-1){
+                                ExportWord e = new ExportWord();
+                                String datareplace = zhihudatatest.toString().replace(",","");
+                                datareplace= datareplace.replace("[","");
+                                datareplace= datareplace.replace("]","");
+                                e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
+                            }
+                            titlecoutok++;
                         }
                     }
 
                     /**
                      * 导出word
                      */
-                    System.out.println("对不起，没有爬取到数据哦");
-                    QueryWrapper<Answer> answesuer = new QueryWrapper<Answer>();
-                    QueryWrapper<Zhihu> answesuer1 = new QueryWrapper<Zhihu>();
-                    answesuer = answesuer.eq("username", Utility.getCurrentUser().getUsername());
-                    iAnswerService.remove(answesuer);
-                    iZhihuService.remove(answesuer1);
+                  //  System.out.println("对不起，没有爬取到数据哦");
+                    if(choice==1){
+                        QueryWrapper<Zhihu> answesuer1 = new QueryWrapper<Zhihu>();
+                        QueryWrapper<Answer> answesuer = new QueryWrapper<Answer>();
+                        answesuer = answesuer.eq("username", Utility.getCurrentUser().getUsername());
+                        answesuer1 = answesuer1.eq("username", Utility.getCurrentUser().getUsername());
+                        iAnswerService.remove(answesuer);
+                        iZhihuService.remove(answesuer1);
+                    }
+                    else{
+                        QueryWrapper<Zhihu> answesuer1 = new QueryWrapper<Zhihu>();
+                        answesuer1 = answesuer1.eq("username", Utility.getCurrentUser().getUsername());
+                        iZhihuService.remove(answesuer1);
+                    }
                     response.getWriter().write(question+Utility.getCurrentUser().getUsername());
                     return;
                 }
@@ -432,7 +442,7 @@ public class ZhCrawlerClientController {
         try{
             QueryWrapper<ZhihuRecords> queryCWrapper1 = new QueryWrapper<ZhihuRecords>();
             queryCWrapper1 = queryCWrapper1.eq("id", id);
-            System.out.println("queryCWrapper" + queryCWrapper1);
+          //  System.out.println("queryCWrapper" + queryCWrapper1);
             String keyword =iZhihuRecordsService.getOne(queryCWrapper1).getKeyword();
             response.getWriter().write(keyword);
         }

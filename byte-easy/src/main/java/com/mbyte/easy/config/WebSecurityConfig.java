@@ -70,14 +70,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-//		web.ignoring()
-//                .antMatchers("/font/**")
-//		 .antMatchers("/images/**")
-//		 .antMatchers("/css/**")
-//		 .antMatchers("/h-ui/**")
-//		 .antMatchers("/h-ui.admin/**")
-//				.antMatchers("/lib/**")
-//		 .antMatchers("/upload/**")
+		web.ignoring()
+                .antMatchers("/font/**")
+		 .antMatchers("/images/**")
+		 .antMatchers("/css/**")
+		 .antMatchers("/h-ui/**")
+		 .antMatchers("/h-ui.admin/**")
+		.antMatchers("/lib/**")
+		 .antMatchers("/upload/**");
 //		 .antMatchers("/js/**");
 	}
 
