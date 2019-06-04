@@ -106,7 +106,6 @@
 
     //日期时间范围选择
     laydate.render({
-
     });
     lay('.timeSpace').each(function(){
         laydate.render({
@@ -118,19 +117,13 @@
     function searchword(id) {
         $("#searword").attr("disabled",true);
         layer.confirm('确认要导出吗？',function(){
-
             click = 1;
             var bar = document.getElementById("wrapper");
-
             bar.style.display = (bar.style.display.match("block")) ? "none" : "block";
-
-            setInterval(increment,120);
-            //
+            setInterval(increment,220);
             setTimeout(function(){
                 layer.designMsg('程序正在执行',8 ,"",0.5);
             },1000);
-
-
             var s ={
                 "id":id
             }
@@ -139,7 +132,6 @@
                 type: 'POST',
                 url: "/zhihu/zhihucatch",
                 success: function (data) {
-                    console.log("==========]" + data);
                     // location.replace(location.href);
                     $("#searword").css("disabled",false);
                     try {
@@ -150,7 +142,6 @@
                     catch (e) {
                         layer.designMsg('导出文件失败!', 5);
                     }
-
                     // if (data.code == "0") {
                     //     console.log(data.data);
                     //     layer.designMsg('编辑成功!', 1, function () {
@@ -183,9 +174,8 @@
                 url: "/zhihu/ExportWord",
                 success: function (data) {
                     try {
-                        layer.designMsg('下载成功！',1);
                         flag1 = 1;
-                        tid = setInterval("getCount()", 80)
+                        layer.designMsg('下载成功！',1);
                         window.open("/fileSuffix/"+data+"_知乎.doc","","");
                     }
                     catch (e) {
@@ -202,7 +192,6 @@
     <!--进度条-->
     // $(function(){
     var div = document.getElementById("load-bar-inner");
-
     function increment(){
         if(current < 100 &&  click == 1){
             //setInterval(increment,100);
@@ -211,6 +200,24 @@
             $('#counter').html(current + '%');
             div.style.width = current + '%';
             current++;
+            if (flag == 1){
+                $('#counter').html('100%');
+                $("#h11").text('导出成功！');
+                $("#p11").text('');
+                div.style.width = '100%';
+                flag = 2;
+                //current = 100;
+                if( flag == 2){
+                    $("#wrapper").fadeOut(1800);
+                    current = 0;
+                    // div.style.width = '0%';
+                    // $('#counter').html('0%');
+                    // $("#h11").text('正在导出');
+                    // $("#p11").text('请等待...');
+                    flag = 0;
+                    click = 0;
+                }
+            }
         }else if (current >= 100 && flag == 1){
             $('#counter').html('100%');
             $("#h11").text('导出成功！');
@@ -218,9 +225,7 @@
             div.style.width = '100%';
             flag = 2;
             //current = 100;
-
         }
-
         if( flag == 2){
             $("#wrapper").fadeOut(1800);
             current = 0;
@@ -232,7 +237,6 @@
             click = 0;
         }
     }
-
 
 </script>
 </body>

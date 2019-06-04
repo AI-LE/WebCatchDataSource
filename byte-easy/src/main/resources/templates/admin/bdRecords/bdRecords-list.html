@@ -136,7 +136,7 @@
 
             bar.style.display = (bar.style.display.match("block")) ? "none" : "block";
 
-            setInterval(increment,100);
+            setInterval(increment,120);
             //
             setTimeout(function(){
                 layer.designMsg('程序正在执行',8 ,"",0.5);
@@ -152,8 +152,8 @@
                 success: function (data) {
                     // location.replace(location.href);
                     try {
-                        layer.designMsg('导出文件成功！',1);
                         flag = 1;
+                        layer.designMsg('导出文件成功！',1);
                         // tid = setInterval("getCount()", 65);
                         window.open("/fileSuffix/"+data+"_百度.doc","","");
                     }
@@ -197,11 +197,7 @@
     }
 
     <!--进度条-->
-    // $(function(){
-
-
     var div = document.getElementById("load-bar-inner");
-
     function increment(){
         if(current < 100 &&  click == 1){
             //setInterval(increment,100);
@@ -210,33 +206,35 @@
             $('#counter').html(current + '%');
             div.style.width = current + '%';
             current++;
-        }else if (current >= 100 && flag == 1){
+            if (flag == 1){
+                $('#counter').html('100%');
+                $("#h11").text('导出成功！');
+                $("#p11").text('');
+                div.style.width = '100%';
+                flag = 2;
+                //current = 100;
+                if( flag == 2){
+                    $("#wrapper").fadeOut(1800);
+                    current = 0;
+                    flag = 0;
+                    click = 0;
+                }
+            }
+        }else if (flag == 1){
             $('#counter').html('100%');
             $("#h11").text('导出成功！');
             $("#p11").text('');
-
             div.style.width = '100%';
             flag = 2;
-            //current = 100;
-
         }
 
         if( flag == 2){
             $("#wrapper").fadeOut(1800);
             current = 0;
-            // div.style.width = '0%';
-            // $('#counter').html('0%');
-            // $("#h11").text('正在导出');
-            // $("#p11").text('请等待...');
             flag = 0;
             click = 0;
         }
     }
-
-    //});
-    <!--进度条-->
-
-
 </script>
 </body>
 </html>

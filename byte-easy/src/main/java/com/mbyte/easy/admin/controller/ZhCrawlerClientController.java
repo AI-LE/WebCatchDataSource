@@ -358,7 +358,7 @@ public class ZhCrawlerClientController {
                                 String datareplace = zhihudatatest.toString().replace(",","");
                                 datareplace= datareplace.replace("[","");
                                 datareplace= datareplace.replace("]","");
-                             //   System.out.println(datareplace);
+//                                  System.out.println(datareplace);
                                 e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
                             }
                         }
@@ -376,6 +376,7 @@ public class ZhCrawlerClientController {
                                 String datareplace = zhihudatatest.toString().replace(",","");
                                 datareplace= datareplace.replace("[","");
                                 datareplace= datareplace.replace("]","");
+//                                System.out.println(datareplace);
                                 e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
                             }
                             titlecoutok++;
