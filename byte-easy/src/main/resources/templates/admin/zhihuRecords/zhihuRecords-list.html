@@ -193,12 +193,14 @@
     // $(function(){
     var div = document.getElementById("load-bar-inner");
     function increment(){
+        var width = $('#load-bar').css('width');
         if(current < 100 &&  click == 1){
             //setInterval(increment,100);
             $("#h11").text('请等待...');
             // $("#p11").text('请等待...');
             $('#counter').html(current + '%');
             div.style.width = current + '%';
+            $('#counter').css('left',parseInt(width) * current /100 - 25);
             current++;
             if (flag == 1){
                 $('#counter').html('100%');

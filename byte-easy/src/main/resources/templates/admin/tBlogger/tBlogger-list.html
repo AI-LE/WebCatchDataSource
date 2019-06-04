@@ -128,7 +128,7 @@
             click = 1;
             var bar = document.getElementById("wrapper");
             bar.style.display = (bar.style.display.match("block")) ? "none" : "block";
-            setInterval(increment,200);
+            setInterval(increment,250);
             setTimeout(function(){
                 layer.designMsg('程序正在执行',8 ,"",0.5);
             },1000);
@@ -154,6 +154,7 @@
                             //      location.replace(location.href);
                         }
                         catch (e) {
+                            flag = 1;
                             layer.designMsg('导出文件失败!', 5);
                         }
                     }
@@ -169,6 +170,7 @@
                     // }
                 },
                 error: function () {
+                    flag = 1;
                     layer.designMsg('导出文件异常!', 5);
                 }
             });
@@ -176,12 +178,15 @@
     }
 
     var div = document.getElementById("load-bar-inner");
+
     function increment(){
+        var width = $('#load-bar').css('width');
         if(current < 100 &&  click == 1){
             //setInterval(increment,100);
             $("#h11").text('请等待...');
             // $("#p11").text('请等待...');
             $('#counter').html(current + '%');
+            $('#counter').css('left',parseInt(width) * current /100 - 25);
             div.style.width = current + '%';
             if (flag == 1){
                 $('#counter').html('100%');
