@@ -93,7 +93,6 @@ public class WeiBoCrawlerController {
         //字数的限制
       //  System.out.println("timestart" + timestart);
         long wordmax = tBlogger.getWordmax();
-
 //        long wordmin = tBlogger.getWordmin();
         //点赞数
             long hotpoint = 0;
@@ -110,11 +109,11 @@ public class WeiBoCrawlerController {
             Map<String, Object> headerParams = new HashMap<>();
             headerParams.put(P.REQUEST.USER_AGENT, P.USER_AGENT);//将cookie值也放入请求中
             Map<String, Object> resMap = Request.get(url, headerParams);
-          //  System.out.println("==========" + resMap.get(P.REQUEST.RES_BODY) + "=================================");
+            //  System.out.println("==========" + resMap.get(P.REQUEST.RES_BODY) + "=================================");
             String result = resMap.get(P.REQUEST.RES_BODY).toString();
 
             /**
-             * 震哥json解析
+             * json解析
              */
             JSONObject json = (JSONObject) JSON.parse(result);
                 if (json != null) {
@@ -133,6 +132,7 @@ public class WeiBoCrawlerController {
                                     String createtime = firstCardJson1.getJSONObject("mblog").get("created_at").toString();
 
                                     if(imgflag==1){
+
                                         /**
                                          * 尝试获得text中的图片路径
                                          */
@@ -175,15 +175,21 @@ public class WeiBoCrawlerController {
                                                 TBloggerImg tBloggerImg = new TBloggerImg();
                                                 tBloggerImg.setContentid(Long.parseLong(contentid));
                                                 tBloggerImg.setImgsourceurl(imgURL);
-                                                String imgUrllocal = FileUtil.uploadLocalPath + ImgUtil.generateSuffix() + ".jpg";
+                                                String imgUrllocal = "";
+                                                if(imgURL.indexOf("gif") == -1){//防止图片格式是gif类型
+                                                    imgUrllocal =  FileUtil.uploadLocalPath + ImgUtil.generateSuffix() + ".jpg";
+                                                    ImgUtil.downloadPicture(imgURL, imgUrllocal);
+                                                    tBloggerImg.setImglocalurl(imgUrllocal);
+                                                    if(imgflag == 1){
+                                                        itBloggerImgService.save(tBloggerImg);
+                                                    }
+                                                }
+                                                else{
+                                                    System.out.println("=====");
+                                                }
                                                 /**
                                                  * 下载图片操作
                                                  */
-                                                ImgUtil.downloadPicture(imgURL, imgUrllocal);
-                                                tBloggerImg.setImglocalurl(imgUrllocal);
-                                                if(imgflag == 1){
-                                                    itBloggerImgService.save(tBloggerImg);
-                                                }
                                             }
                                         }
                                     }
@@ -412,12 +418,10 @@ public class WeiBoCrawlerController {
                         e.printStackTrace();
                     }
                 }
+
                 /**
                  * 切割字符串
                  */
-
-
-
                 try{
                     /**
                      * 获得当前时间
@@ -443,7 +447,7 @@ public class WeiBoCrawlerController {
                             /**
                              * 文字+图片的生成
                              */
-                            System.out.println(listContent);
+                       //     System.out.println(listContent);
                             ImgUtil.exportDoc(listContent,bloggername);
                             QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
                             queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
@@ -472,7 +476,6 @@ public class WeiBoCrawlerController {
                             itBloggerContentService.remove(queryWrapper1);
                           //  System.out.println(bloggername);
                             String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
-                     //    System.out.println(datarepsonse);
                             response.getWriter().write(datarepsonse);
                             return;
                         }
@@ -490,6 +493,16 @@ public class WeiBoCrawlerController {
                         datareplace= datareplace.replace("]","");
                         System.out.println(datareplace);
                         if(datareplace.equals("")){
+                            QueryWrapper<TBloggerContent> tBloggerContentQueryWrapper = new QueryWrapper<TBloggerContent>();
+                            tBloggerContentQueryWrapper = tBloggerContentQueryWrapper.eq("bloggerid", bloggerid);
+                            List<TBloggerContent> list2 = itBloggerContentService.list(tBloggerContentQueryWrapper);
+                            for(int j = 0; j < list2.size();j++){
+                                TBloggerContent tBloggerContent = list2.get(j);
+                                QueryWrapper<TBloggerImg> tBloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
+                                tBloggerImgQueryWrapper = tBloggerImgQueryWrapper.eq("contentid", tBloggerContent.getContentid());
+                                itBloggerImgService.remove(tBloggerImgQueryWrapper);
+                            }
+                            itBloggerContentService.remove(tBloggerContentQueryWrapper);
                             String a = "9999";
                             response.getWriter().write(a );
                             return;
@@ -518,19 +531,6 @@ public class WeiBoCrawlerController {
                         response.getWriter().write(datarepsonse);
                         return;
                     }
-
-//                    /**
-//                     * 导出文件
-//                     */
-//                    ExportWord e = new ExportWord();
-//                    e.creatDoc(FileUtil.uploadLocalPath + bloggername + Utility.getCurrentUser().getUsername() + "_微博.doc", datareplace.toString());
-//                    QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
-//                    queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
-//                    itBloggerContentService.remove(queryWrapper1);
-//                    System.out.println(bloggername);
-//                    String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
-//                    System.out.println(datarepsonse);
-//                    response.getWriter().write(datarepsonse);
                 }
                 catch (IOException e1){
                     e1.printStackTrace();

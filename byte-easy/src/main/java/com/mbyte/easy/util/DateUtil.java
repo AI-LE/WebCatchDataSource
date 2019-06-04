@@ -38,7 +38,7 @@ public class DateUtil {
     /**
      * date format yyyyMMdd
      */
-    public static final String PATTERN_yyyyMMdd = "yyyyMMdd";
+    public static final String PATTERN_yyyyMMdd = "yyyy-MM-dd";
     /**
      * date format yyyyMMdd
      */

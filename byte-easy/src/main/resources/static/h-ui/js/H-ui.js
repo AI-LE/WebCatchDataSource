@@ -1,5 +1,5 @@
 /*-----------H-ui前端框架-------------
-* H-ui.js v3.1
+* H-ui.tree v3.1
 * http://www.h-ui.net/
 * Created & Modified by guojunhui
 * Date modified 2017.05.16
@@ -10,47 +10,47 @@
 */
 /*
 Includes：
-jQuery.IEMobileHack.js
-jQuery.cookie.js v1.4.1
-jQuery.form.js v3.51.0
-jQuery.lazyload.js v1.9.3
-jQuery.responsive-nav.js v1.0.39
-jQuery.placeholder.js
-jQuery.emailsuggest.js v1.0
-jQuery.format.js
-jQuery.togglePassword.js
-jQuery.iCheck.js
-jQuery.raty.js v2.4.5
-jQuery.onePageNav.js
-jQuery.stickUp.js
-jQuery.ColorPicker.js
+jQuery.IEMobileHack.tree
+jQuery.cookie.tree v1.4.1
+jQuery.form.tree v3.51.0
+jQuery.lazyload.tree v1.9.3
+jQuery.responsive-nav.tree v1.0.39
+jQuery.placeholder.tree
+jQuery.emailsuggest.tree v1.0
+jQuery.format.tree
+jQuery.togglePassword.tree
+jQuery.iCheck.tree
+jQuery.raty.tree v2.4.5
+jQuery.onePageNav.tree
+jQuery.stickUp.tree
+jQuery.ColorPicker.tree
 
-jQuery.HuiaddFavorite.js
-jQuery.Huisethome.js
-jQuery.Huisidenav.js
-jQuery.Huihover.js v2.0
-jQuery.Huifocusblur.js V2.0
-jQuery.Huiselect.js
-jQuery.Huitab.js v2.0
-jQuery.Huifold.js v2.0
-jQuery.Huitags.js v2.0
-jQuery.Huitagsmixed.js
-jQuery.Huitextarealength.js v2.0
-jQuery.Huipreview.js v2.0
-jQuery.Huimodalalert.js
-jQuery.Huialert.js
-jQuery.Huitotop.js v2.0
-jQuery.Huimarquee.js
-jQuery.Huispinner.js v2.0
+jQuery.HuiaddFavorite.tree
+jQuery.Huisethome.tree
+jQuery.Huisidenav.tree
+jQuery.Huihover.tree v2.0
+jQuery.Huifocusblur.tree V2.0
+jQuery.Huiselect.tree
+jQuery.Huitab.tree v2.0
+jQuery.Huifold.tree v2.0
+jQuery.Huitags.tree v2.0
+jQuery.Huitagsmixed.tree
+jQuery.Huitextarealength.tree v2.0
+jQuery.Huipreview.tree v2.0
+jQuery.Huimodalalert.tree
+jQuery.Huialert.tree
+jQuery.Huitotop.tree v2.0
+jQuery.Huimarquee.tree
+jQuery.Huispinner.tree v2.0
 
-Bootstrap.modal.js v3.3.0
-Bootstrap.dropdown.js v3.3.0
-Bootstrap.transition.js v3.3.0
-Bootstrap.tooltip.js v3.3.0
-Bootstrap.popover.js v3.3.0
-Bootstrap.alert.js v3.3.0
-Bootstrap.slider.js v1.0.1
-Bootstrap.datetimepicker.js
+Bootstrap.modal.tree v3.3.0
+Bootstrap.dropdown.tree v3.3.0
+Bootstrap.transition.tree v3.3.0
+Bootstrap.tooltip.tree v3.3.0
+Bootstrap.popover.tree v3.3.0
+Bootstrap.alert.tree v3.3.0
+Bootstrap.slider.tree v1.0.1
+Bootstrap.datetimepicker.tree
 Bootstrap.Switch v1.3
 
 */
@@ -70,7 +70,7 @@ Bootstrap.Switch v1.3
 } ();
 
 /* =======================================================================
- * jQuery.stopDefault.js 阻止默认浏览器动作
+ * jQuery.stopDefault.tree 阻止默认浏览器动作
  * ======================================================================== */
 function stopDefault(e) {
 	if (e && e.preventDefault) e.preventDefault();
@@ -80,7 +80,7 @@ function stopDefault(e) {
 }
 
 /* =======================================================================
- * jQuery.cookie.js v1.4.1
+ * jQuery.cookie.tree v1.4.1
  * https://github.com/carhartl/jQuery-cookie
  *
  * Copyright 2006, 2014 Klaus Hartl
@@ -178,7 +178,7 @@ function stopDefault(e) {
 }));
 
 /* =======================================================================
- * jQuery.form.js Plugin v3.51.0 2014.06.20
+ * jQuery.form.tree Plugin v3.51.0 2014.06.20
  * Requires jQuery v1.5 or later
  * Copyright (c) 2014 M. Alsup
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -1729,7 +1729,7 @@ function stopDefault(e) {
 })(jQuery, window, document);
 
 /* =======================================================================
-* jQuery.responsive-nav.js v1.0.39
+* jQuery.responsive-nav.tree v1.0.39
 * https://github.com/viljamis/responsive-nav.js
 * http://responsive-nav.com
 *
@@ -1943,7 +1943,7 @@ function stopDefault(e) {
 				// String: Position of the opened nav, relative or static
 				navClass: "nav-collapse",
 				// String: Default CSS class. If changed, you need to edit the CSS too!
-				navActiveClass: "js-nav-active",
+				navActiveClass: "tree-nav-active",
 				// String: Class that is added to <html> element when nav is active
 				jsClass: "js",
 				// String: 'JS enabled' class which is added to <html> element
@@ -1959,7 +1959,7 @@ function stopDefault(e) {
 				this.options[i] = options[i];
 			}
 
-			// Adds "js" class for <html>
+			// Adds "tree" class for <html>
 			addClass(htmlEl, this.options.jsClass);
 
 			// Wrapper
@@ -2410,7 +2410,7 @@ function stopDefault(e) {
 } (document, window, 0));
 
 /* =======================================================================
- * jQuery.placeholder.js 兼容性处理
+ * jQuery.placeholder.tree 兼容性处理
  * ======================================================================== */
 !function(window, document, $) {
 	var isInputSupported = 'placeholder' in document.createElement('input');
@@ -2567,7 +2567,7 @@ function stopDefault(e) {
 } (this, document, jQuery);
 
 /* =======================================================================
- * jquery.emailsuggest.js v1.0 邮箱自动提示
+ * jquery.emailsuggest.tree v1.0 邮箱自动提示
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  * ======================================================================== */
 !function($) {
@@ -2767,7 +2767,7 @@ function stopDefault(e) {
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huispinner.js v2.0 微调器
+ * jQuery.Huispinner.tree v2.0 微调器
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.05
@@ -2884,7 +2884,7 @@ function stopDefault(e) {
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.format.js 金额格式化
+ * jQuery.format.tree 金额格式化
  * ========================================================================*/
 !function($) {
 	$.extend({
@@ -2911,7 +2911,7 @@ function stopDefault(e) {
 } (window.jQuery);
 
 /* =======================================================================
- * jquery.togglePassword.js 隐藏显示密码
+ * jquery.togglePassword.tree 隐藏显示密码
  * type="password"
  * ========================================================================*/
 !function($) {
@@ -2931,7 +2931,7 @@ function stopDefault(e) {
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.iCheck.js v1.0.2, http://git.io/arlzeA
+ * jQuery.iCheck.tree v1.0.2, http://git.io/arlzeA
  * Powerful jQuery and Zepto plugin for checkboxes and radio buttons customization
  *
  * (c) 2013 Damir Sultanov, http://fronteed.com
@@ -3441,7 +3441,7 @@ function stopDefault(e) {
 })(window.jQuery || window.Zepto);
 
 /* =======================================================================
- * jQuery.raty.js v2.4.5- A Star Rating Plugin
+ * jQuery.raty.tree v2.4.5- A Star Rating Plugin
  * -------------------------------------------------------------------
  * jQuery Raty is a plugin that generates a customizable star rating.
  * Licensed under The MIT License
@@ -3871,7 +3871,7 @@ function stopDefault(e) {
 })(jQuery);
 
 /* =======================================================================
- * jQuery.onePageNav.js v0.9One Page Nav Plugin
+ * jQuery.onePageNav.tree v0.9One Page Nav Plugin
  * http://github.com/davist11/jQuery-One-Page-Nav
  * Copyright (c) 2010 Trevor Davis (http://trevordavis.net)
  * Dual licensed under the MIT and GPL licenses.
@@ -4023,7 +4023,7 @@ function stopDefault(e) {
 })(jQuery);
 
  /* =======================================================================
- * jQuery.ColorPicker.js 颜色控件
+ * jQuery.ColorPicker.tree 颜色控件
  * ========================================================================*/
 (function($) {
 	'use strict';
@@ -4257,7 +4257,7 @@ function stopDefault(e) {
 }(jQuery));
 
 /* =======================================================================
- * jquery.HuiaddFavorite.js 添加收藏
+ * jquery.HuiaddFavorite.tree 添加收藏
  * <a title="收藏本站" href="javascript:;" onClick="addFavoritepage('H-ui前端框架','http://www.h-ui.net/');">收藏本站</a>
  * function shoucang(name,site){
 	$.addFavorite({
@@ -4280,7 +4280,7 @@ function HuiaddFavorite(obj) {
 }
 
 /* ========================================================================
- * jQuery.Huisethome.js 设为首页
+ * jQuery.Huisethome.tree 设为首页
  * ======================================================================== */
 function Huisethome(obj){
 	try{
@@ -4302,7 +4302,7 @@ function Huisethome(obj){
 }
 
 /* =======================================================================
- * jQuery.Huisidenav.js 左侧菜单-隐藏显示
+ * jQuery.Huisidenav.tree 左侧菜单-隐藏显示
  * ======================================================================== */
 function displaynavbar(obj){
 	if($(obj).hasClass("open")){
@@ -4315,7 +4315,7 @@ function displaynavbar(obj){
 }
 
 /* =======================================================================
- * jQuery.Huihover.js v2.0 Huihover
+ * jQuery.Huihover.tree v2.0 Huihover
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.05
@@ -4343,7 +4343,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huifocusblur.js v2.0 得到失去焦点
+ * jQuery.Huifocusblur.tree v2.0 得到失去焦点
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.09
@@ -4371,7 +4371,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huiselect.js 选择
+ * jQuery.Huiselect.tree 选择
  * ========================================================================*/
 !function($) {
 	$.Huiselect = function(divselectid, inputselectid) {
@@ -4394,7 +4394,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huitab.js v2.0 选项卡
+ * jQuery.Huitab.tree v2.0 选项卡
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.05
@@ -4432,7 +4432,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huifold.js v2.0 折叠
+ * jQuery.Huifold.tree v2.0 折叠
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.05
@@ -4489,7 +4489,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huitags.js v2.0 标签
+ * jQuery.Huitags.tree v2.0 标签
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.10
@@ -4644,7 +4644,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huitagsmixed.js 标签混排效果
+ * jQuery.Huitagsmixed.tree 标签混排效果
  * ========================================================================*/
 !function($) {
 	$.Huitagsmixed = function(obj) {
@@ -4658,7 +4658,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huitextarealength.js v2.0 字数限制
+ * jQuery.Huitextarealength.tree v2.0 字数限制
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.12
@@ -4708,7 +4708,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huipreview.js v2.0 图片预览
+ * jQuery.Huipreview.tree v2.0 图片预览
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.05
@@ -4780,7 +4780,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huimodalalert.js alert
+ * jQuery.Huimodalalert.tree alert
  * ========================================================================*/
 !function($) {
 	$.Huimodalalert = function(info, speed) {
@@ -4805,7 +4805,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huialert.js alert
+ * jQuery.Huialert.tree alert
  * ========================================================================*/
 !function($) {
 	$.Huialert = function() {
@@ -4822,7 +4822,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huitotop.js v2.0 返回顶部
+ * jQuery.Huitotop.tree v2.0 返回顶部
  * http://www.h-ui.net/
  * Created & Modified by guojunhui
  * Date modified 2017.05.05
@@ -4863,7 +4863,7 @@ function displaynavbar(obj){
 } (window.jQuery);
 
 /* =======================================================================
- * jQuery.Huimarquee.js 滚动
+ * jQuery.Huimarquee.tree 滚动
  * ========================================================================*/
 !function($) {
 	$.Huimarquee = function(height, speed, delay) {
@@ -4911,7 +4911,7 @@ $(function() {
 });
 
 /* ========================================================================
- * Bootstrap.button.js v3.3.0
+ * Bootstrap.button.tree v3.3.0
  * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -5012,7 +5012,7 @@ $(function() {
 } (jQuery);
 
 /* =======================================================================
- * jQuery.stickUp.js v0.5.7 BETA  by:LiranCohen
+ * jQuery.stickUp.tree v0.5.7 BETA  by:LiranCohen
  * https://github.com/LiranCohen/stickUp
  * ======================================================================== */
 jQuery(function($) {
@@ -5132,7 +5132,7 @@ jQuery(function($) {
 });
 
 /* =======================================================================
- * Bootstrap.modal.js v3.3.0
+ * Bootstrap.modal.tree v3.3.0
  * http://getbootstrap.com/javascript/#modals
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -5357,7 +5357,7 @@ jQuery(function($) {
 } (window.jQuery);
 
 /* =======================================================================
- * Bootstrap.dropdown.js v3.3.0
+ * Bootstrap.dropdown.tree v3.3.0
  * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -5495,7 +5495,7 @@ $(function() {
 });
 
 /* =======================================================================
- * Bootstrap.transition.js v3.3.0
+ * Bootstrap.transition.tree v3.3.0
  * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -5543,7 +5543,7 @@ $(function() {
 }(window.jQuery);
 
 /* =======================================================================
- * Bootstrap.tooltip.js v3.3.0
+ * Bootstrap.tooltip.tree v3.3.0
  * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
@@ -5989,7 +5989,7 @@ $(function() {
 });
 
 /* =======================================================================
- * Bootstrap.popover.js v3.3.0
+ * Bootstrap.popover.tree v3.3.0
  * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -6014,7 +6014,7 @@ function($) {
 		template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
 	})
 
-	// NOTE: POPOVER EXTENDS tooltip.js
+	// NOTE: POPOVER EXTENDS tooltip.tree
 	// ================================	
 	Popover.prototype = $.extend({},$.fn.tooltip.Constructor.prototype);
 	Popover.prototype.constructor = Popover;
@@ -6028,7 +6028,7 @@ function($) {
 		var content = this.getContent();
 
 		$tip.find('.popover-title')[this.options.html ? 'html': 'text'](title);
-		$tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain js events
+		$tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain tree events
 			this.options.html ? (typeof content == 'string' ? 'html': 'append') : 'text'](content)
 
 		$tip.removeClass('fade top bottom left right in');
@@ -6095,7 +6095,7 @@ $(function() {
 });
 
 /* =======================================================================
- * Bootstrap.alert.js v3.3.0
+ * Bootstrap.alert.tree v3.3.0
  * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
  * Copyright 2011-2014 Twitter, Inc.
@@ -6169,7 +6169,7 @@ $(function() {
 } (window.jQuery);
 
 /* =========================================================
- * Bootstrap.slider.js v1.0.1
+ * Bootstrap.slider.tree v1.0.1
  * Maintainers:
  *		Kyle Kemp
  *			- Twitter: @seiyria
@@ -7324,7 +7324,7 @@ function($) {
 }));
 
 /* =========================================================
-* Bootstrap.datetimepicker.js
+* Bootstrap.datetimepicker.tree
 * =========================================================
 * Copyright 2012 Stefan Petre
 *

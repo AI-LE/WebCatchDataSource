@@ -68,16 +68,13 @@ public class BdRecordsController extends BaseController  {
 
          }
 
-
-
-
         IPage<BdRecords> pageInfo = bdRecordsService.page(page, queryWrapper);
         List<Object> list = new ArrayList<Object>();
         PageInfo pageInfo1 = new PageInfo(pageInfo);
         for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
             list.add(pageInfo1.getList().get(i));
         }
-        System.out.println("list+++"+list);
+       // System.out.println("list+++"+list);
         pageInfo1.setList(list);
 
         model.addAttribute("createtimeSpace", createtimeSpace);
@@ -134,12 +131,12 @@ public class BdRecordsController extends BaseController  {
     @PostMapping("edit")
     @ResponseBody
     public AjaxResult edit(BdRecords bdRecords){
-
-        LocalDateTime time = LocalDateTime.now();
-        DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
-        String localTime = df.format(time);
-        LocalDateTime timechange = LocalDateTime.parse(localTime,df);
-        bdRecords.setCreatetime(timechange);
+//
+//        LocalDateTime time = LocalDateTime.now();
+//        DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+//        String localTime = df.format(time);
+//        LocalDateTime timechange = LocalDateTime.parse(localTime,df);
+//        bdRecords.setCreatetime(timechange);
         return toAjax(bdRecordsService.updateById(bdRecords));
     }
     /**

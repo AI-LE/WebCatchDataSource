@@ -280,14 +280,14 @@ h4 {
 	position: relative;
 	height: 44px;
 	overflow: hidden;
-	background-color:#eeeeee;
+	background-color:#fff;
 
 }
 
 .Hui-tabNav,
 .Hui-tabNav .acrossTab li,
 .Hui-tabNav .acrossTab li em {
-	background-image: url(../images/acrossTab/acrossTab-2.png)
+	background-image: url(../images/acrossTab/acrossTab-3.png)
 }
 
 .Hui-tabNav {
@@ -297,7 +297,7 @@ h4 {
 	position: relative;
 	background-repeat: repeat-x;
 	background-position: 0 -38px;
-	background-color:#eeeeee;
+	background-color:#fff;
 	border-bottom: 1px solid #e5e5e5;
 }
 

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE HTML>
-<html  xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,242 +24,415 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/fSelect.css}" href="static/css/fSelect.css" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/search.css}" href="static/css/search.css" />
     <link rel="stylesheet"  type="text/css" th:href="@{/css/bootstrap.min.css}" href="static/css/bootstrap.min.css"/>
-    <script src="http://echarts.baidu.com/build/dist/echarts-all.js"></script>
+    <script src = "https://echarts.baidu.com/dist/echarts.min.js" ></script>
 </head>
-<body class="gray-bg" >
-<div class="wrapper wrapper-content">
-    <span style="font-size: 20px;position: absolute;margin-top: 18px;margin-left: 20px;">欢迎登录信息爬取系统!</span>
-    <!--<div class="row" style="padding-top: 60px;">-->
-        <!--<div class="col-sm-2" style="width:18%;margin-left: 5%">-->
-            <!--<div class="ibox float-e-margins">-->
-                <!--<div class="ibox-title">-->
-                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
-                    <!--<span><h5>总抓取</h5></span>-->
-                <!--</div>-->
-                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
-                    <!--<span><h1 class="no-margins" style="text-align: center;">40 886,200</h1></span>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-2" style="width:18%">-->
-            <!--<div class="ibox float-e-margins">-->
-                <!--<div class="ibox-title">-->
-                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
-                    <!--<span><h5>今日抓取</h5></span>-->
-                <!--</div>-->
-                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
-                    <!--<span><h1 class="no-margins" style="text-align: center;">275,800</h1></span>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-2" style="width:18%">-->
-            <!--<div class="ibox float-e-margins">-->
-                <!--<div class="ibox-title">-->
-                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
-                    <!--<span><h5>今日百度知道抓取</h5></span>-->
-                <!--</div>-->
-                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
-                    <!--<span><h1 class="no-margins" style="text-align: center;">106,120</h1></span>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-2" style="width:18%">-->
-            <!--<div class="ibox float-e-margins">-->
-                <!--<div class="ibox-title">-->
-                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
-                    <!--<span><h5>今日知乎抓取</h5></span>-->
-                <!--</div>-->
-                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
-                    <!--<span><h1 class="no-margins" style="text-align: center;">80,600</h1></span>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-2" style="width:18%">-->
-            <!--<div class="ibox float-e-margins">-->
-                <!--<div class="ibox-title">-->
-                    <!--<span class="label label-primary pull-right" style="background-color: #028bff">条</span>-->
-                    <!--<span><h5>今日微博抓取</h5></span>-->
-                <!--</div>-->
-                <!--<div class="ibox-content" style="margin-top:2px;background-color: #fff;">-->
-                    <!--<span><h1 class="no-margins" style="text-align: center;">239,350</h1></span>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div style="height: 60px;"></div>-->
-    <!--<div class="row">-->
-        <!--<div class="col-sm-6">-->
-            <!--<div class="ibox float-e-margins">-->
-                <!--&lt;!&ndash;                    <div class="ibox-title" style="width: 95%;margin-left: 5%;">&ndash;&gt;-->
-                <!--&lt;!&ndash;                        <h5>折线图</h5>&ndash;&gt;-->
-                <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-                <!--<div class="ibox-content" style="width: 95%;margin-left: 5%;margin-top: 2px;background-color: #fff;">-->
-                    <!--<div id="box-1" class="flot-chart" style="height: 280px;">-->
+<style>
+    .ibox-title{
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+    .wrapper-content{
+        padding: 20px;
+    }
+    .topcon{
+        /*border: 5px solid #aaaaaa;*/
+        overflow: hidden;
+        padding: 10px;
+        color: #fff;
+        background: #fff;
+    }
+    .count{
+        background-image: linear-gradient(45deg, #ff9700 , #ed1c24);
+    }
+    .count-2{
+        background-image: linear-gradient(45deg , #EE3B3B , #EE799F);
+    }
+    .count-3{
+        background-image: linear-gradient(45deg  , #3CB371 , #7CCD7C);
+    }
+    .count-4{
+        background-image: linear-gradient(45deg, #5CACEE , #87CEFA );
+    }
+    .topcon h2,.topcon h5{
+        padding: 0;
+    }
+    .topcon h5{
+        color: #f5f5f5;
+    }
+    .topcon>div{
+        padding: 20px 0;
+        margin-right: 10px;
+        width: calc(25% - 8px);
+    }
+    .topcon>div:last-child{
+        margin-right: 0;
+    }
+    .topcon .left{
+       padding-right: 0;
+    }
+    .topcon .right{
+        text-align: right;
 
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="col-sm-6">-->
-            <!--<div class="ibox float-e-margins">-->
-                <!--&lt;!&ndash;                    <div class="ibox-title" style="width: 95%;">&ndash;&gt;-->
-                <!--&lt;!&ndash;                        <h5>柱状图</h5>&ndash;&gt;-->
-                <!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-                <!--<div class="ibox-content" style="width: 95%;margin-top: 2px;background-color: #fff;">-->
-                    <!--<div id="box-2" class="flot-chart" style="height: 280px;">-->
+    }
+    .char>div{
+        width: calc(50% - 10px);
+    }
+    .char>div:first-child{
+        margin-right: 20px;
+    }
+</style>
+<body class="gray-bg" style="background-color: #eeeeee;" onload="sum()">
+<div class="wrapper wrapper-content" >
+    <div class="topcon">
+        <div class="col-sm-3 count">
+            <div class="col-sm-4 left">
+                <img src="../h-ui.admin/images/pachong.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="sumZhua"></h2>
+                <h5>总抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-2" onclick="baiduZhua()" style="cursor: pointer;">
+            <div class="col-sm-4 left">
+                <img src="../images/baidu.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="baiduSum" >0</h2>
+                <h5 >百度知道抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-3"  onclick="zhihuZhua()" style="cursor: pointer;">
+            <div class="col-sm-4 left">
+                <img src="../images/zhihu.png" alt="" style="width: 45px;height: 45px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="zhihuSum">0</h2>
+                <h5>知乎抓取数量</h5>
+            </div>
+        </div>
+        <div class="col-sm-3 count-4" onclick="weiboZhua()"style="cursor: pointer;" >
+            <div class="col-sm-4 left">
+                <img src="../images/weibo.png" alt="" style="width: 50px;height: 50px;opacity: 0.8">
+            </div>
+            <div class="col-sm-8 right">
+                <h2 id="weiboSum">0</h2>
+                <h5>微博抓取数量</h5>
+            </div>
+        </div>
+    </div>
+    <div style="height: 30px;"></div>
+    <div class="char">
+        <div class="col-sm-6" style="background-color: #fff;">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="width: 95%;">
+                    <h3 style="text-align: center">最近七天抓取变化</h3>
+                    <div id="box-1" class="flot-chart" style="height: 280px;padding-top: 20px;padding-left: 20px;">
 
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6"  style="background-color: #fff;">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content" style="width: 95%;">
+                    <h3 style="text-align: center">最近七天抓取</h3>
+                    <div id="box-2" class="flot-chart" style="height: 280px;padding-top: 20px;padding-left: 20px;">
 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="clear:both"></div>
 </div>
 </body>
+<script>
+    function sum(){
+        $.ajax({
+            url:"/admin/recordsSum/selectSum",
+            type:"post",
+            dataType:"json",
+            success:function(data){
+                $("#sumZhua").text(data.data.sum);
+                $("#baiduSum").text(data.data.selectBaidu);
+                $("#zhihuSum").text(data.data.selectZhihu);
+                $("#weiboSum").text(data.data.selectWeibo);
+                console.log(data+"=========");
 
-<script type="text/javascript">
-//     var myChart = echarts.init(document.getElementById("box-1"));
-//     var option = {
-//         // 标题
-//         title: {
-//             text: '本周抓取'
-//         },
-//         tooltip: {
-//             trigger: 'axis'
-//         },
-//         //图例名
-//         legend: {
-//             data:['百度知道','知乎','微博']
-//         },
-//         grid: {
-//             left: '3%',   //图表距边框的距离
-//             right: '4%',
-//             bottom: '3%',
-//             containLabel: true
-//         },
-//         //工具框，可以选择
-//         toolbox: {
-//             feature: {
-//                 saveAsImage: {}
-//             }
-//         },
-//         //x轴信息样式
-//         xAxis: {
-//             type: 'category',
-//             boundaryGap: false,
-//             data: ['12-01','12-02','12-03','12-04','12-05','12-06','12-07'],
-//             //坐标轴颜色
-//             axisLine:{
-//                 lineStyle:{
-//                     color:'red'
-//                 }
-//             },
-//             //x轴文字旋转
-//             axisLabel:{
-//                 rotate:30,
-//                 interval:0
-//             },
-//         },
-//
-//         yAxis : [
-//             {
-//                 type : 'value',
-//                 axisLabel : {
-//                     formatter: '{value} 条'
-//                 }
-//             }
-//         ],
-//         series: [
-//             //虚线
-//             {
-//                 name:'百度知道',
-//                 type:'line',
-//                 symbolSize:4,   //拐点圆的大小
-//                 color:['red'],  //折线条的颜色
-//                 data:[350000, 300000, 250000, 200000, 150000, 100000,50000],
-//                 smooth:false,   //关键点，为true是不支持虚线的，实线就用true
-//                 itemStyle:{
-//                     normal:{
-//                         lineStyle:{
-//                             width:2,
-//                             type:'dotted'  //'dotted'虚线 'solid'实线
-//                         }
-//                     }
-//                 }
-//             },
-//             //实线
-//             {
-//                 name:'知乎',
-//                 type:'line',
-//                 symbol:'circle',
-//                 symbolSize:4,
-//                 itemStyle:{
-//                     normal:{
-//                         color:'red',
-//                         borderColor:'red'  //拐点边框颜色
-//                     }
-//                 },
-//                 data:[22000, 182000, 191000, 234000, 290000, 330000, 310000]
-//             },
-//             {
-//                 name:'微博',
-//                 type:'line',
-// //                stack: '总量',
-//                 symbolSize:4,
-//                 color:['orange'],
-//                 smooth:false,   //关键点，为true是不支持虚线的，实线就用true
-//                 itemStyle:{
-//                     normal:{
-//                         lineStyle:{
-//                             width:2,
-//                             type:'dotted'  //'dotted'虚线 'solid'实线
-//                         }
-//                     }
-//                 },
-//                 data:[50000, 232000, 201000, 154000, 190000, 330000, 41000]
-//             }
-//         ]
-//     };
-//
-//     myChart.setOption(option);
-//
-//
-//     // 基于准备好的dom，初始化echarts实例
-//     var myChart_1 = echarts.init(document.getElementById('box-2'));
-//
-//     // 指定图表的配置项和数据
-//     myChart_1.setOption({
-//         title: {
-//             text: '本周抓取'
-//         },
-//         tooltip: {},
-//         legend: {
-//             data: ['条数']
-//         },
-//         xAxis: {
-//             data: ["百度知道","知乎","微博"]
-//         },
-//         yAxis: {},
-//         series: [{
-//             name: '条数',
-//             type: 'bar',
-//             data: [350000, 300000, 250000, 200000, 150000, 100000,50000]
-//         }]
-//     });
-//
-//     // 异步加载数据
-//     // $.get('data').done(function (data) {
-//     //     // 填入数据
-//     //     myChart_1.setOption({ xAxis: { data: data.categories  }, series: [{
-//     //             // 根据名字对应到相应的系列
-//     //             name: '条数',
-//     //             data: data.data
-//     //         }]
-//     //     });});
-//     //图表随浏览器宽度自适应
-//     window.onresize = function () {
-//         myChart.resize(); //使第一个图表适应
-//         myChart_1.resize(); //使第二个图表适应
-//     }
+                var result = [];
+                var resulta = [];
+                var resulta1 = [];
+                var resulta2 = [];
+                result[0] = data.data.sevenday;
+                result[1] = data.data.sixday;
+                result[2] = data.data.fiveday;
+                result[3] = data.data.fourday;
+                result[4] = data.data.threeday;
+                result[5] = data.data.twoday;
+                result[6] = data.data.nowday;
+
+                //百度
+                if (typeof(data.data.seven1) != "undefined"){
+                    resulta[0] = data.data.seven1;
+                }else{
+                    resulta[0] = 0;
+                }
+                if (typeof(data.data.six1) != "undefined"){
+                    resulta[1] = data.data.six1;
+                }else{
+                    resulta[1] = 0;
+                }
+                if (typeof(data.data.five1) != "undefined"){
+                    resulta[2] = data.data.five1;
+                }else{
+                    resulta[2] = 0;
+                }
+                if (typeof(data.data.four1) != "undefined"){
+                    resulta[3] = data.data.four1;
+                }else{
+                    resulta[3] = 0;
+                }
+                if (typeof(data.data.three1) != "undefined"){
+                    resulta[4] = data.data.three1;
+                }else{
+                    resulta[4] = 0;
+                }
+                if (typeof(data.data.two1) != "undefined"){
+                    resulta[5] = data.data.two1;
+                }else{
+                    resulta[5] = 0;
+                }
+                if (typeof(data.data.now1) != "undefined"){
+                    resulta[6] = data.data.now1;
+                }else{
+                    resulta[6] = 0;
+                }
+
+                //知乎
+                if (typeof(data.data.seven2) != "undefined"){
+                    resulta1[0] = data.data.seven2;
+                }else{
+                    resulta1[0] = 0;
+                }
+                if (typeof(data.data.six2) != "undefined"){
+                    resulta1[1] = data.data.six2;
+                }else{
+                    resulta1[1] = 0;
+                }
+                if (typeof(data.data.five2) != "undefined"){
+                    resulta1[2] = data.data.five2;
+                }else{
+                    resulta1[2] = 0;
+                }
+                if (typeof(data.data.four2) != "undefined"){
+                    resulta1[3] = data.data.four2;
+                }else{
+                    resulta1[3] = 0;
+                }
+                if (typeof(data.data.three2) != "undefined"){
+                    resulta1[4] = data.data.three2;
+                }else{
+                    resulta1[4] = 0;
+                }
+                if (typeof(data.data.two2) != "undefined"){
+                    resulta1[5] = data.data.two2;
+                }else{
+                    resulta1[5] = 0;
+                }
+                if (typeof(data.data.now2) != "undefined"){
+                    resulta1[6] = data.data.now2;
+                }else {
+                    resulta1[6] = 0;
+                }
+
+                //微博
+                if (typeof(data.data.seven3) != "undefined"){
+                    resulta2[0] = data.data.seven3;
+                }else{
+                    resulta2[0] = 0;
+                }
+                if (typeof(data.data.six3) != "undefined"){
+                    resulta2[1] = data.data.six3;
+                }else{
+                    resulta2[1] = 0;
+                }
+                if (typeof(data.data.five3) != "undefined"){
+                    resulta2[2] = data.data.five3;
+                }else{
+                    resulta2[2] = 0;
+                }
+                if (typeof(data.data.four3) != "undefined"){
+                    resulta2[3] = data.data.four3;
+                }else{
+                    resulta2[3] = 0;
+                }
+                if (typeof(data.data.three3) != "undefined"){
+                    resulta2[4] = data.data.three3;
+                }else{
+                    resulta2[4] = 0;
+                }
+                if (typeof(data.data.two3) != "undefined"){
+                    resulta2[5] = data.data.two3;
+                }else{
+                    resulta2[5] = 0;
+                }
+                if (typeof(data.data.now3) != "undefined"){
+                    resulta2[6] = data.data.now3;
+                }else{
+                    resulta2[6] = 0;
+                }
+                brokenline(result,resulta,resulta1,resulta2);
+
+                var resultb = [];
+                resultb[0] = data.data.weekBaidu;
+                resultb[1] = data.data.weekZhihu;
+                resultb[2] = data.data.weekWeibo;
+                columnar(resultb);
+
+            }
+        })
+    }
+    //折线图
+    function brokenline(times,brokenlineData,brokenlineData1,brokenlineData2) {
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('box-1'));
+        // 指定图表的配置项和数据
+        option = {
+            color:['#EE799F','#71C671','#A4D3EE'],
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['百度知道', '知乎', '微博'],
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: times,
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: '百度知道',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#EE799F'
+                            }
+                        }
+                    },
+                    data: brokenlineData,
+                },
+                {
+                    name: '知乎',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#71C671'
+                            }
+                        }
+                    },
+                    data: brokenlineData1,
+                },
+                {
+                    name: '微博',
+                    type: 'line',
+                    itemStyle : {
+                        normal : {
+                            lineStyle:{
+                                color:'#A4D3EE'
+                            }
+                        }
+                    },
+                    data: brokenlineData2,
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        window.onresize = function () {
+            myChart.resize();
+        }
+    }
+
+    function columnar(columnarData) {
+        //柱状图
+        // 基于准备好的dom，初始化echarts实例
+        var myCharta = echarts.init(document.getElementById('box-2'));
+        // 指定图表的配置项和数据
+        optiona = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['百度知道', '知乎', '微博']
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['百度知道', '知乎', '微博']
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name:['条数'],
+                    type: 'bar',
+                    itemStyle:{
+                        color: function(params) {
+                            var colorList = [
+                               '#EE799F','#71C671',"#A4D3EE"
+                                ];
+                            return colorList[params.dataIndex]
+                        },
+                        label: {
+                            show: true,
+                            position: 'top',
+//                             formatter: '{c}'
+                            formatter: '{b}\n{c}'
+                        }
+                    },
+                    barWidth:75,
+                    data: columnarData,
+                }
+            ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myCharta.setOption(optiona);
+
+        window.onresize = function () {
+            myCharta.resize();
+        }
+    }
+
 </script>
+<script>
+    function baiduZhua(){
+        window.location.replace("/admin/bdRecords");
+    }
+    function zhihuZhua(){
+        window.location.replace("/admin/zhihuRecords");
+    }
+    function weiboZhua(){
+        window.location.replace("/admin/tBlogger");
+    }
+</script>
+
 </html>

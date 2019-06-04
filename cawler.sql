@@ -11,7 +11,7 @@
  Target Server Version : 50643
  File Encoding         : 65001
 
- Date: 01/06/2019 09:54:48
+ Date: 04/06/2019 09:14:10
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `answer`  (
   `answerfive` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '回答五',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11621 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2660 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for baidu
@@ -44,7 +44,7 @@ CREATE TABLE `baidu`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '搜索的关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2592 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for bd_oldrecords
@@ -56,14 +56,7 @@ CREATE TABLE `bd_oldrecords`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of bd_oldrecords
--- ----------------------------
-INSERT INTO `bd_oldrecords` VALUES (3, '2019-05-31 21:19:21', '兵乓球', 'admin');
-INSERT INTO `bd_oldrecords` VALUES (5, '2019-05-31 22:33:53', '兵乓球神', 'admin');
-INSERT INTO `bd_oldrecords` VALUES (9, '2019-06-01 00:06:50', '教师', 'admin');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for bd_records
@@ -75,7 +68,7 @@ CREATE TABLE `bd_records`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of bd_records
@@ -83,6 +76,7 @@ CREATE TABLE `bd_records`  (
 INSERT INTO `bd_records` VALUES (3, '2019-05-29 17:12:51', '眼镜', 'wth123');
 INSERT INTO `bd_records` VALUES (5, '2019-05-31 23:44:29', '教师', 'admin');
 INSERT INTO `bd_records` VALUES (8, '2019-06-01 00:01:06', '乒乓球', 'admin');
+INSERT INTO `bd_records` VALUES (11, '2019-06-01 13:51:51', '本子', 'admin');
 
 -- ----------------------------
 -- Table structure for blacklist
@@ -195,7 +189,7 @@ CREATE TABLE `sys_resource`  (
   `parent_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FK3fekum3ead5klp7y4lckn5ohi`(`parent_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 203 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 202 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_resource
@@ -220,7 +214,7 @@ INSERT INTO `sys_resource` VALUES (177, NULL, '用户信息', 2, '/admin/tUser',
 INSERT INTO `sys_resource` VALUES (180, NULL, '添加管理员', 100, '/user/add-user', 1, '/user/add-user', 5);
 INSERT INTO `sys_resource` VALUES (181, NULL, '删除用户', 100, '/user/delete-user', 1, '/user/delete-user', 5);
 INSERT INTO `sys_resource` VALUES (187, NULL, '个人信息', 2, 'admin/tUser/myself', 0, 'admin/tUser/myself', 168);
-INSERT INTO `sys_resource` VALUES (192, NULL, '配置管理栏', 2, '', 0, '', 1);
+INSERT INTO `sys_resource` VALUES (192, NULL, '信息抓取', 2, '', 0, '', 1);
 INSERT INTO `sys_resource` VALUES (193, NULL, '知道抓取', 2, '/admin/bdRecords', 0, '/admin/bdRecords', 192);
 INSERT INTO `sys_resource` VALUES (195, NULL, '知乎抓取', 4, '/admin/zhihuRecords', 0, '/admin/zhihuRecords', 192);
 INSERT INTO `sys_resource` VALUES (201, NULL, '微博抓取', 15, '/admin/tBlogger', 0, '/admin/tBlogger', 192);
@@ -235,7 +229,7 @@ CREATE TABLE `sys_role`  (
   `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_role
@@ -342,15 +336,16 @@ CREATE TABLE `t_blogger`  (
   `pointersum` bigint(20) DEFAULT NULL COMMENT '点赞数',
   `judge` int(255) DEFAULT NULL COMMENT '选择模式：0等于纯文字 1等于文字加图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_blogger
 -- ----------------------------
 INSERT INTO `t_blogger` VALUES (3, '郭德纲', 1854283601, NULL, '2019-05-30 18:25:17', 100, NULL, '2018-04-06 00:00:00', '2019-05-31 00:00:00', 'admin', 0, NULL, 1);
-INSERT INTO `t_blogger` VALUES (6, '迪丽热巴', 1669879400, NULL, '2019-05-31 09:13:00', 100, NULL, '2018-11-15 00:00:00', '2019-09-13 00:00:00', 'admin', 1, 1000, 1);
-INSERT INTO `t_blogger` VALUES (7, '张杰', 1241148864, NULL, '2019-05-31 09:21:15', 100, NULL, '2019-05-21 11:27:38', '2019-05-31 11:27:46', 'admin', 0, NULL, 1);
+INSERT INTO `t_blogger` VALUES (6, '迪丽热巴', 1669879400, NULL, '2019-06-01 16:17:11', 0, NULL, '2018-11-15 00:00:00', '2019-09-13 00:00:00', 'admin', 1, 0, 1);
 INSERT INTO `t_blogger` VALUES (8, '邓超', 5187664653, NULL, '2019-06-01 09:10:34', 1, NULL, '2019-04-01 00:00:00', '2019-05-31 00:00:00', 'admin', 0, 10, 1);
+INSERT INTO `t_blogger` VALUES (13, '杨幂', 1195242865, NULL, '2019-06-01 17:54:57', 0, NULL, '2018-01-03 00:00:00', '2019-06-01 17:40:16', 'admin', 0, NULL, 1);
+INSERT INTO `t_blogger` VALUES (14, '新浪娱乐', 1642591402, NULL, '2019-06-03 16:16:33', 0, NULL, '2019-05-30 00:00:00', '2019-06-01 00:00:00', 'admin', 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for t_blogger_content
@@ -365,7 +360,7 @@ CREATE TABLE `t_blogger_content`  (
   `contentid` bigint(20) DEFAULT NULL COMMENT '连表',
   `createtime` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '博主创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3181 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 584 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for t_blogger_img
@@ -377,7 +372,7 @@ CREATE TABLE `t_blogger_img`  (
   `imglocalurl` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '本地照片路径',
   `contentid` bigint(20) DEFAULT NULL COMMENT '连表id代表内容里的照片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3091 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 703 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for t_blogger_old
@@ -398,26 +393,7 @@ CREATE TABLE `t_blogger_old`  (
   `pointersum` bigint(20) DEFAULT NULL COMMENT '点赞数',
   `judge` int(255) DEFAULT NULL COMMENT '0等于纯文字 1等于文字加图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of t_blogger_old
--- ----------------------------
-INSERT INTO `t_blogger_old` VALUES (13, '王思聪', 1826792401, NULL, '2019-05-31 21:43:18', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (15, '王思聪', 1826792401, NULL, '2019-05-31 22:00:34', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (16, '王思聪', 1826792401, NULL, '2019-05-31 22:01:59', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (17, '王思聪', 1826792401, NULL, '2019-05-31 22:04:43', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (18, '王思聪', 1826792401, NULL, '2019-05-31 22:06:28', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (19, '王思聪', 1826792401, NULL, '2019-05-31 22:08:05', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (20, '王思聪', 1826792401, NULL, '2019-05-31 22:10:34', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (21, '王思聪', 1826792401, NULL, '2019-05-31 22:11:49', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (22, '王思聪', 1826792401, NULL, '2019-05-31 22:12:50', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (23, '王思聪', 1826792401, NULL, '2019-05-31 22:15:08', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (25, '王思聪', 1826792401, NULL, '2019-05-31 22:18:16', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (26, '王思聪', 1826792401, NULL, '2019-05-31 22:22:00', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (27, '王思聪', 1826792401, NULL, '2019-05-31 22:24:30', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (28, '王思聪', 1826792401, NULL, '2019-05-31 22:27:15', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
-INSERT INTO `t_blogger_old` VALUES (29, '王思聪', 1826792401, NULL, '2019-05-31 22:28:33', NULL, NULL, NULL, NULL, 'admin', NULL, NULL, NULL);
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for t_blogger_point
@@ -429,7 +405,7 @@ CREATE TABLE `t_blogger_point`  (
   `pointsum` bigint(20) DEFAULT NULL COMMENT '点赞数',
   `contentid` bigint(200) DEFAULT NULL COMMENT '连表内容id代表该内容的点赞数和评论',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8230 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for t_recordssum
@@ -441,7 +417,46 @@ CREATE TABLE `t_recordssum`  (
   `createtime` datetime(0) DEFAULT NULL COMMENT '抓取时间',
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '抓取类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of t_recordssum
+-- ----------------------------
+INSERT INTO `t_recordssum` VALUES (1, 148, '2019-06-03 13:54:50', '微博');
+INSERT INTO `t_recordssum` VALUES (2, 148, '2019-06-03 14:08:47', '微博');
+INSERT INTO `t_recordssum` VALUES (3, 148, '2019-06-03 14:11:56', '微博');
+INSERT INTO `t_recordssum` VALUES (4, 296, '2019-06-03 14:14:16', '微博');
+INSERT INTO `t_recordssum` VALUES (5, 148, '2019-06-03 14:44:20', '微博');
+INSERT INTO `t_recordssum` VALUES (6, 148, '2019-06-03 14:49:21', '微博');
+INSERT INTO `t_recordssum` VALUES (7, 148, '2019-06-03 14:54:51', '微博');
+INSERT INTO `t_recordssum` VALUES (8, 200, '2019-06-03 16:15:25', '百度知道');
+INSERT INTO `t_recordssum` VALUES (9, 77, '2019-06-03 16:15:45', '知乎');
+INSERT INTO `t_recordssum` VALUES (10, 148, '2019-06-03 16:17:03', '微博');
+INSERT INTO `t_recordssum` VALUES (12, 150, '2019-06-02 16:17:55', '知乎');
+INSERT INTO `t_recordssum` VALUES (14, 200, '2019-06-03 16:30:52', '百度知道');
+INSERT INTO `t_recordssum` VALUES (15, 150, '2019-05-29 16:38:33', '微博');
+INSERT INTO `t_recordssum` VALUES (16, 120, '2019-06-03 17:08:56', '知乎');
+INSERT INTO `t_recordssum` VALUES (17, 200, '2019-06-03 18:08:44', '百度知道');
+INSERT INTO `t_recordssum` VALUES (18, 200, '2019-06-03 18:11:11', '百度知道');
+INSERT INTO `t_recordssum` VALUES (19, 200, '2019-06-03 18:12:19', '百度知道');
+INSERT INTO `t_recordssum` VALUES (20, 200, '2019-06-03 18:14:12', '百度知道');
+INSERT INTO `t_recordssum` VALUES (21, 200, '2019-06-03 18:16:17', '百度知道');
+INSERT INTO `t_recordssum` VALUES (22, 200, '2019-06-03 18:19:41', '百度知道');
+INSERT INTO `t_recordssum` VALUES (23, 200, '2019-06-03 18:21:13', '百度知道');
+INSERT INTO `t_recordssum` VALUES (24, 200, '2019-06-03 18:22:32', '百度知道');
+INSERT INTO `t_recordssum` VALUES (25, 200, '2019-06-03 20:55:34', '百度知道');
+INSERT INTO `t_recordssum` VALUES (26, 200, '2019-06-03 21:21:17', '百度知道');
+INSERT INTO `t_recordssum` VALUES (27, 200, '2019-06-03 21:22:10', '百度知道');
+INSERT INTO `t_recordssum` VALUES (28, 200, '2019-06-03 21:23:00', '百度知道');
+INSERT INTO `t_recordssum` VALUES (29, 200, '2019-06-03 21:24:46', '百度知道');
+INSERT INTO `t_recordssum` VALUES (30, 122, '2019-06-03 21:27:24', '知乎');
+INSERT INTO `t_recordssum` VALUES (31, 122, '2019-06-03 21:28:07', '知乎');
+INSERT INTO `t_recordssum` VALUES (32, 122, '2019-06-03 21:29:51', '知乎');
+INSERT INTO `t_recordssum` VALUES (33, 122, '2019-06-03 21:36:20', '知乎');
+INSERT INTO `t_recordssum` VALUES (34, 122, '2019-06-03 21:39:37', '知乎');
+INSERT INTO `t_recordssum` VALUES (35, 122, '2019-06-03 21:40:09', '知乎');
+INSERT INTO `t_recordssum` VALUES (36, 139, '2019-06-03 21:46:41', '微博');
+INSERT INTO `t_recordssum` VALUES (37, 148, '2019-06-03 21:48:21', '微博');
 
 -- ----------------------------
 -- Table structure for zhihu
@@ -454,7 +469,7 @@ CREATE TABLE `zhihu`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1727 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 930 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for zhihu_oldrecords
@@ -466,7 +481,12 @@ CREATE TABLE `zhihu_oldrecords`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '知乎关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of zhihu_oldrecords
+-- ----------------------------
+INSERT INTO `zhihu_oldrecords` VALUES (1, '2019-06-03 16:15:45', '爱情', 'admin');
 
 -- ----------------------------
 -- Table structure for zhihu_records
@@ -479,14 +499,14 @@ CREATE TABLE `zhihu_records`  (
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   `typechoice` int(255) DEFAULT NULL COMMENT '0不抓取答案 1抓取答案',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of zhihu_records
 -- ----------------------------
-INSERT INTO `zhihu_records` VALUES (5, '2019-05-29 18:16:29', '爱情', 'admin', 0);
 INSERT INTO `zhihu_records` VALUES (10, '2019-05-31 16:12:25', '眼镜', 'admin', 1);
 INSERT INTO `zhihu_records` VALUES (11, '2019-05-31 17:45:52', '饼干', 'admin', 1);
-INSERT INTO `zhihu_records` VALUES (15, '2019-06-01 09:16:56', '教师', 'admin', 1);
+INSERT INTO `zhihu_records` VALUES (12, '2019-06-03 16:15:41', '爱情', 'admin', 0);
+INSERT INTO `zhihu_records` VALUES (13, '2019-06-03 17:08:53', '本子', 'admin', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

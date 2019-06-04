@@ -163,10 +163,10 @@ CSS写作注意事项：
   5. \9         IE6/7/8
   6. \0         IE8
   7. 条件hack
-      <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]--> IE7以下版本
-      <!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]--> IE7
-      <!--[if IE 8]> <html class="no-js lt-ie9"><![endif]--> IE8
-      <!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]--> IE8以上
+      <!--[if lt IE 7]><html class="no-tree lt-ie9 lt-ie8 lt-ie7"><![endif]--> IE7以下版本
+      <!--[if IE 7]><html class="no-tree lt-ie9 lt-ie8"><![endif]--> IE7
+      <!--[if IE 8]> <html class="no-tree lt-ie9"><![endif]--> IE8
+      <!--[if gt IE 8]><!--><html class="no-tree"><!--<![endif]--> IE8以上
 ----------------------------------
 css 命名规范
   1. 内容优先,表现为辅
@@ -1374,7 +1374,7 @@ input[type="radio"],input[type="checkbox"] {line-height: normal; margin-top:-4px
 	.responsive .radio-box{ display:block}
 }
 /*3.4.2.1 jQuery.icheck.css*/
-/* iCheck.js Minimal skin
+/* iCheck.tree Minimal skin
 ----------------------------------- */
 .icheckbox,.iradio{display: block;margin: 0;padding: 0;width: 18px;height: 18px;background: url(../images/iCheck/minimal.png) no-repeat;border: none;cursor: pointer}
 .icheckbox,.icheckbox.static:hover{background-position: 0 0}
@@ -1794,8 +1794,8 @@ input[type="radio"],input[type="checkbox"] {line-height: normal; margin-top:-4px
   <option value="3">菜单三</option>
 </select>
 需要引用2个js文件
-<script type="text/javascript" src="lib/squid.js"></script>
-<script type="text/javascript" src="lib/jselect-1.0.js"></script>
+<script type="text/javascript" src="lib/squid.tree"></script>
+<script type="text/javascript" src="lib/jselect-1.0.tree"></script>
 页面调用方法
 <script type="text/javascript">
 squid.swing.jselect()
@@ -3197,7 +3197,7 @@ H-ui采用Font Awesome 3.2.1的整套图标，因为是图标字体，所以可�
 /*4.2.3 翻页导航
 	Name:			mod_pageNav
 	Example:		<div class="pageNav" id="pageNav"></div>
-	Explain:		需要调用pagenav.cn.js
+	Explain:		需要调用pagenav.cn.tree
 
 */
 .pageNav{float:none;clear:both;font-size:0;font-family:Arial,Helvetica,sans-serif;padding:18px 0;text-align:center}
@@ -3410,7 +3410,7 @@ H-ui采用Font Awesome 3.2.1的整套图标，因为是图标字体，所以可�
     </ol>
   </div>
 </div>
-	<script type="text/javascript" src="lib/jquery.SuperSlide/2.1.1/jquery.SuperSlide.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.SuperSlide/2.1.1/jquery.SuperSlide.min.tree"></script>
 	<script type="text/javascript">
 	$(function() {
 		jQuery("#slider-1 .slider").slide({mainCell:".bd ul",titCell:".hd li",trigger:"click",effect:"leftLoop",autoPlay:true,delayTime:700,interTime:3000,pnLoop:false,titOnClassName:"active"});

@@ -69,7 +69,6 @@ public class ZhCrawlerClientController {
         String id = request.getParameter("id");
         QueryWrapper<ZhihuRecords> queryCWrapper = new QueryWrapper<ZhihuRecords>();
         queryCWrapper = queryCWrapper.eq("id", id);
-      //  System.out.println("queryCWrapper" + queryCWrapper);
         String question =iZhihuRecordsService.getOne(queryCWrapper).getKeyword();
         ZhihuRecords zhihuRecords =iZhihuRecordsService.getOne(queryCWrapper);
         int choice = zhihuRecords.getTypechoice();
@@ -111,7 +110,6 @@ public class ZhCrawlerClientController {
                                     QueryWrapper<Zhihu> ZhihuqueryCWrapper = new QueryWrapper<Zhihu>();
                                     ZhihuqueryCWrapper = ZhihuqueryCWrapper.eq("title", question);
                                     zhihu1 = iZhihuService.getOne(ZhihuqueryCWrapper);
-                                 //   System.out.println("ZhihuqueryCWrapper" + zhihu1);
                                     if(zhihu1 == null){
                                         zhihu.setTitle(b);
                                         zhihu.setKeyword(question);
@@ -122,11 +120,7 @@ public class ZhCrawlerClientController {
                                     list.add("话题"+currt+":"+b.toString()+"？\n");
                                     //这个是导出word文档的数据
                                     listsave.add(currt+":"+b.toString()+"？\n");
-
-
                                     if (currt == 200) {
-                                      //  System.out.println("list=====" + list + "====");
-                                     //   System.out.println("已统计个数" + currt);
                                         /**
                                          * 存入历史记录
                                          */
@@ -161,13 +155,11 @@ public class ZhCrawlerClientController {
                                                     zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"?\n");
                                                     zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"?\n");
                                                     zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"?\n");
-                                             //       System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
                                                     answerdata = new Answer();
                                                 }
                                             }
 
                                             if(r == listodap.size()-1){
-//                                                System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
                                                 ExportWord e = new ExportWord();
                                                 Properties properties = new Properties();
                                                 String datareplace = zhihudatatest.toString().replace(",","");
@@ -182,7 +174,6 @@ public class ZhCrawlerClientController {
                                         response.getWriter().write(question);
                                         return;
                                     }
-                              //      System.out.println("全是汉字==============" + b + "?==============");
                                 }
                             }
 
@@ -193,7 +184,6 @@ public class ZhCrawlerClientController {
                                  */
                                 List<String>list1 = new ArrayList<String>();
                                 int urlindex=v.indexOf("question");
-                                //   int urlindex2=v.indexOf("http://zhuanlan.zhihu.com/p/");
                                 if(urlindex!=-1 ){
                                     int urlend=v.indexOf("\"", urlindex+1);
                                     if(urlend!=-1){
@@ -228,7 +218,6 @@ public class ZhCrawlerClientController {
                                                     answer1.setUsername(Utility.getCurrentUser().getUsername());
                                                     iAnswerService.save(answer1);
                                                 }
-                                                //  System.out.println("========================++++++++++++"+answercount);
                                                 String regsdop = "[^\\x00-\\xff]";
 
                                                 // String regsdop = "[^\u4e00-\u9fa5]";
@@ -245,21 +234,16 @@ public class ZhCrawlerClientController {
                                                         while (m.find()) {
                                                             sb.append(m.group());
                                                         }
-                                                        //    System.out.println("=======]answersumanswersumanswersumanswersum" + answersum);
                                                         putdatatime++;
-                                                        //   System.out.println("=======]putdatatime" + putdatatime);
                                                         QueryWrapper<Answer> answerQueryWrapper = new QueryWrapper<Answer>();
                                                         if (putdatatime == 1) {
-                                                            //    answersum = answersum.replaceAll(regsdop, "");
                                                             if(sb.toString()!=""){
                                                                 answer1.setAnswerone(sb.toString());
-                                                                //     iAnswerService.save(answer1);
                                                             }
                                                         } else if (putdatatime == 2) {
 //                                                    answersum = answersum.replaceAll(regsdop, "");
                                                             if(sb.toString()!="") {
                                                                 answer1.setAnswertwo(sb.toString());
-                                                                //  iAnswerService.save(answer1);
                                                             }
                                                         }
                                                         else if (putdatatime == 3) {
@@ -346,17 +330,13 @@ public class ZhCrawlerClientController {
                                     zhihudatatest.add("(3):"+answerdata.getAnswerthree()+"\n");
                                     zhihudatatest.add("(4):"+answerdata.getAnswerfour()+"\n");
                                     zhihudatatest.add("(5):"+answerdata.getAnswerfive()+"\n\n");
-                                 //   System.out.println("zhihudatatestzhihudatatestzhihudatatestzhihudatatestzhihudatatest" + zhihudatatest);
                                     if(titlecout == 199){
                                         ExportWord e = new ExportWord();
                                         Properties properties = new Properties();
                                         String datareplace = zhihudatatest.toString().replace(",","");
                                         datareplace= datareplace.replace("[","");
                                         datareplace= datareplace.replace("]","");
-//                                        datareplace = new String(datareplace.getBytes("gb2312"), "ISO8859-1");
-
                                         e.creatDoc(FileUtil.uploadLocalPath +question+"_知乎.doc", datareplace.toString());
-                                        
                                         /**
                                          * 导出word
                                          */
@@ -378,6 +358,7 @@ public class ZhCrawlerClientController {
                                 String datareplace = zhihudatatest.toString().replace(",","");
                                 datareplace= datareplace.replace("[","");
                                 datareplace= datareplace.replace("]","");
+                             //   System.out.println(datareplace);
                                 e.creatDoc(FileUtil.uploadLocalPath +question+Utility.getCurrentUser().getUsername()+"_知乎.doc", datareplace.toString());
                             }
                         }

@@ -67,7 +67,6 @@ public class BaiduCrawlerClient {
         String id = request.getParameter("id");
         QueryWrapper<BdRecords> queryCWrapper = new QueryWrapper<BdRecords>();
         queryCWrapper = queryCWrapper.eq("id", id);
-        System.out.println("queryCWrapper" + queryCWrapper);
         /**
          * 获得查到记录的所有数据，存入old中
          */
@@ -90,7 +89,6 @@ public class BaiduCrawlerClient {
 //                   ptext = ptext.replaceAll(reg, "");
                    ptext = ptext.replaceAll("<em>", "");
                    ptext = ptext.replaceAll("</em>", "");
-                   System.out.println("问题"+count+":" + ptext);
                    /**
                     * 百度爬取到的标题存入数据库
                     */
@@ -99,7 +97,6 @@ public class BaiduCrawlerClient {
                    QueryWrapper<Baidu> BaiduqueryCWrapper = new QueryWrapper<Baidu>();
                    BaiduqueryCWrapper = BaiduqueryCWrapper.eq("title", ptext);
                    baidu1 = baiduService.getOne(BaiduqueryCWrapper);
-                   System.out.println("BaiduqueryCWrapper" + baidu1);
                    if(baidu1 == null){
                        baidu.setTitle(ptext);
                        baidu.setKeyword(word);
@@ -123,7 +120,6 @@ public class BaiduCrawlerClient {
                          bdOldrecords.setCreatetime(timechange);
                          bdOldrecords.setUsername(Utility.getCurrentUser().getUsername());
                          iBdOldrecordsService.save(bdOldrecords);
-                         System.out.println("list======"+list);
                        /**
                         *记录总数
                         */

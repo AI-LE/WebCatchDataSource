@@ -1,5 +1,5 @@
 /* -----------H-ui前端框架-------------
-* H-ui.admin.js v3.1
+* H-ui.admin.tree v3.1
 * http://www.h-ui.net/
 * Created & Modified by guojunhui
 * Date modified 2017.02.03
@@ -235,7 +235,7 @@ function getHTMLDate(obj) {
 $(function(){
 	getHTMLDate($("#top_time"));
 	getskincookie();
-	//layer.config({extend: 'extend/layer.ext.js'});
+	//layer.config({extend: 'extend/layer.ext.tree'});
 	Huiasidedisplay();
 	var resizeID;
 	$(window).resize(function(){
@@ -294,11 +294,11 @@ $(function(){
 	});
 	tabNavallwidth();
 	
-	$('#js-tabNav-next').click(function(){
+	$('#tree-tabNav-next').click(function(){
 		num==oUl.find('li').length-1?num=oUl.find('li').length-1:num++;
 		toNavPos();
 	});
-	$('#js-tabNav-prev').click(function(){
+	$('#tree-tabNav-prev').click(function(){
 		num==0?num=0:num--;
 		toNavPos();
 	});

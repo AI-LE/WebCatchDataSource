@@ -90,7 +90,7 @@
 	 }
 
 	 else{
-		 $('#typechoice').val("0");
+		 $('#typechoice').val("1");
 	 }
  }
  function  typechoiceno() {
@@ -104,7 +104,11 @@ if($("#wordsingephoto").is(':checked')==true){
 	 }
  }
 
-
+ $(function () {
+	 if($("#wordsinge").is(':checked')==true) {
+		 $('#typechoice').val("0");
+	 }
+ });
 </script>
 <!--/请在上方写此页面业务相关的脚本-->
 </body>

@@ -12,7 +12,7 @@
 <section class="Hui-article-box">
 	<div id="Hui-tabNav" class="Hui-tabNav hidden-xs">
 		<div class="Hui-tabNav-wp">
-			<ul id="min_title_list" class="acrossTab cl">
+			<ul id="min_title_list" class="acrossTab cl" onclick="myfunc()">
 				<li class="active">
 					<span title="首页" data-href="templates/welcome.html">首页</span>
 					<em></em></li>
@@ -104,7 +104,9 @@ function product_add(title,url){
 function member_add(title,url,w,h){
 	layer_show(title,url,w,h);
 }
-
+function myfunc(){
+	window.location.reload();
+}
 
 </script> 
 
