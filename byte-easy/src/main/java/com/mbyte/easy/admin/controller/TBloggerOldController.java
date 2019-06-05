@@ -9,12 +9,15 @@ import com.mbyte.easy.admin.service.ITBloggerService;
 import com.mbyte.easy.common.controller.BaseController;
 import com.mbyte.easy.common.web.AjaxResult;
 import com.mbyte.easy.util.PageInfo;
+import com.mbyte.easy.util.Utility;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -38,6 +41,8 @@ public class TBloggerOldController extends BaseController  {
 
     @Autowired
     private ITBloggerService itBloggerService;
+
+    TBloggerOld tBloggerOld = new TBloggerOld();
     /**
     * 查询列表
     *
@@ -56,7 +61,7 @@ public class TBloggerOldController extends BaseController  {
             queryWrapper = queryWrapper.like("bloggername",tBloggerOld.getBloggername());
          }
 
-
+        System.out.println(tBloggerOld.getContainerid());
         if(tBloggerOld.getUid() != null  && !"".equals(tBloggerOld.getUid() + "")) {
             queryWrapper = queryWrapper.like("uid",tBloggerOld.getUid());
          }
@@ -111,77 +116,53 @@ public class TBloggerOldController extends BaseController  {
             queryWrapper = queryWrapper.like("judge",tBloggerOld.getJudge());
          }
 
+
         IPage<TBloggerOld> pageInfo = tBloggerOldService.page(page, queryWrapper);
+        List<Object> list = new ArrayList<Object>();
+        PageInfo pageInfo1 = new PageInfo(pageInfo);
+        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
+            list.add(pageInfo1.getList().get(i));
+        }
+        System.out.println("list+++"+list);
+        pageInfo1.setList(list);
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("timestartSpace", timestartSpace);
         model.addAttribute("timeendSpace", timeendSpace);
         model.addAttribute("searchInfo", tBloggerOld);
-        model.addAttribute("pageInfo", new PageInfo(pageInfo));
+        model.addAttribute("pageInfo", pageInfo1);
         return prefix+"tBloggerOld-list";
     }
 
 
 
     @GetMapping("oldmain/{id}")
-    public String index(Model model, @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo, @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize,  String createtimeSpace, String timestartSpace, String timeendSpace, TBloggerOld tBloggerOld,
+    public String index(Model model, @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo, @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, String timestartSpace, String timeendSpace, TBloggerOld tBloggerOld,
                         @PathVariable("id")Long id) {
         Page<TBloggerOld> page = new Page<TBloggerOld>(pageNo, pageSize);
         QueryWrapper<TBloggerOld> queryWrapper = new QueryWrapper<TBloggerOld>();
 
-        if(itBloggerService.getById(id).getBloggername()!= null  ) {
+        if(itBloggerService.getById(id).getBloggername() != null  ) {
             queryWrapper = queryWrapper.like("bloggername",itBloggerService.getById(id).getBloggername());
         }
+        queryWrapper = queryWrapper.like("containerid",itBloggerService.getById(id).getId());
 
 
         if(tBloggerOld.getUid() != null  && !"".equals(tBloggerOld.getUid() + "")) {
             queryWrapper = queryWrapper.like("uid",tBloggerOld.getUid());
         }
 
-
-        if(tBloggerOld.getContainerid() != null  && !"".equals(tBloggerOld.getContainerid() + "")) {
-            queryWrapper = queryWrapper.like("containerid",tBloggerOld.getContainerid());
+//
+        if(Utility.getCurrentUser().getUsername()!=null) {
+            queryWrapper = queryWrapper.like("username", Utility.getCurrentUser().getUsername());
         }
-
-
-        if(tBloggerOld.getCreatetime() != null  && !"".equals(tBloggerOld.getCreatetime() + "")) {
-            queryWrapper = queryWrapper.like("createtime",tBloggerOld.getCreatetime());
-        }
-
-
-        if(tBloggerOld.getWordmax() != null  && !"".equals(tBloggerOld.getWordmax() + "")) {
-            queryWrapper = queryWrapper.like("wordmax",tBloggerOld.getWordmax());
-        }
-
-
-        if(tBloggerOld.getWordmin() != null  && !"".equals(tBloggerOld.getWordmin() + "")) {
-            queryWrapper = queryWrapper.like("wordmin",tBloggerOld.getWordmin());
-        }
-
-
-        if(tBloggerOld.getTimestart() != null  && !"".equals(tBloggerOld.getTimestart() + "")) {
-            queryWrapper = queryWrapper.like("timestart",tBloggerOld.getTimestart());
-        }
-
-
-        if(tBloggerOld.getTimeend() != null  && !"".equals(tBloggerOld.getTimeend() + "")) {
-            queryWrapper = queryWrapper.like("timeend",tBloggerOld.getTimeend());
-        }
-
-
-        if(tBloggerOld.getUsername() != null  && !"".equals(tBloggerOld.getUsername() + "")) {
-            queryWrapper = queryWrapper.like("username",tBloggerOld.getUsername());
-        }
-
-
-        if(tBloggerOld.getCommitchioce() != null  && !"".equals(tBloggerOld.getCommitchioce() + "")) {
-            queryWrapper = queryWrapper.like("commitchioce",tBloggerOld.getCommitchioce());
-        }
-
-
-        if(tBloggerOld.getPointersum() != null  && !"".equals(tBloggerOld.getPointersum() + "")) {
-            queryWrapper = queryWrapper.like("pointersum",tBloggerOld.getPointersum());
-        }
-
+//
+//
+//        if(tBloggerOld.getCommitchioce() != null  && !"".equals(tBloggerOld.getCommitchioce() + "")) {
+//            queryWrapper = queryWrapper.like("commitchioce",tBloggerOld.getCommitchioce());
+//        }
+//        if(tBloggerOld.getPointersum() != null  && !"".equals(tBloggerOld.getPointersum() + "")) {
+//            queryWrapper = queryWrapper.like("pointersum",tBloggerOld.getPointersum());
+//        }
 
         if(tBloggerOld.getJudge() != null  && !"".equals(tBloggerOld.getJudge() + "")) {
             queryWrapper = queryWrapper.like("judge",tBloggerOld.getJudge());
@@ -194,7 +175,6 @@ public class TBloggerOldController extends BaseController  {
         for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
             list.add(pageInfo1.getList().get(i));
         }
-        System.out.println("list+++"+list);
         pageInfo1.setList(list);
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("timestartSpace", timestartSpace);

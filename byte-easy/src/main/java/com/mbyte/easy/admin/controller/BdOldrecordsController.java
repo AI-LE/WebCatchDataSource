@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mbyte.easy.admin.entity.BdOldrecords;
-import com.mbyte.easy.admin.service.IBaiduService;
 import com.mbyte.easy.admin.service.IBdOldrecordsService;
 import com.mbyte.easy.admin.service.IBdRecordsService;
 import com.mbyte.easy.common.controller.BaseController;
@@ -37,6 +36,7 @@ public class BdOldrecordsController extends BaseController  {
 
     @Autowired
     private IBdOldrecordsService bdOldrecordsService;
+
     @Autowired
     private IBdRecordsService iBdRecordsService;
     /**
@@ -48,52 +48,6 @@ public class BdOldrecordsController extends BaseController  {
     * @param bdOldrecords
     * @return
     */
-    /**
-     * 查询列表
-     *
-     * @param model
-     * @param pageNo
-     * @param pageSize
-     * @param bdOldrecords
-     * @return
-     */
-    @GetMapping("oldmain/{id}")
-    public String index(Model model, @RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo, @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, BdOldrecords bdOldrecords,
-                        @PathVariable("id")Long id) {
-        Page<BdOldrecords> page = new Page<BdOldrecords>(pageNo, pageSize);
-        QueryWrapper<BdOldrecords> queryWrapper = new QueryWrapper<BdOldrecords>();
-        /**
-         * 根据传的id查询
-         */
-
-        System.out.println("iBdRecordsService==============================="+iBdRecordsService.getById(id).getKeyword());
-        if(bdOldrecords.getCreatetime() != null  && !"".equals(bdOldrecords.getCreatetime() + "")) {
-            queryWrapper = queryWrapper.like("createtime",bdOldrecords.getCreatetime());
-
-        }
-        if(iBdRecordsService.getById(id).getKeyword() != null) {
-            queryWrapper = queryWrapper.like("keyword", iBdRecordsService.getById(id).getKeyword());
-        }
-        if(Utility.getCurrentUser().getUsername() != null ) {
-            queryWrapper = queryWrapper.like("username",  Utility.getCurrentUser().getUsername());
-        }
-        if(bdOldrecords.getKeyword() != null  && !"".equals(bdOldrecords.getKeyword() + "")) {
-            queryWrapper = queryWrapper.like("keyword", iBdRecordsService.getById(id).getKeyword());
-        }
-
-        IPage<BdOldrecords> pageInfo = bdOldrecordsService.page(page, queryWrapper);
-        List<Object> list = new ArrayList<Object>();
-        PageInfo pageInfo1 = new PageInfo(pageInfo);
-        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
-            list.add(pageInfo1.getList().get(i));
-        }
-        System.out.println("list+++"+list);
-        pageInfo1.setList(list);
-        model.addAttribute("searchInfo", bdOldrecords);
-        model.addAttribute("pageInfo", pageInfo1);
-        return prefix+"bdOldrecords-list";
-    }
-
     @RequestMapping
     public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, BdOldrecords bdOldrecords) {
         Page<BdOldrecords> page = new Page<BdOldrecords>(pageNo, pageSize);
@@ -106,7 +60,6 @@ public class BdOldrecordsController extends BaseController  {
 
         if(bdOldrecords.getKeyword() != null  && !"".equals(bdOldrecords.getKeyword() + "")) {
             queryWrapper = queryWrapper.like("keyword",bdOldrecords.getKeyword());
-
          }
 
 
@@ -114,13 +67,59 @@ public class BdOldrecordsController extends BaseController  {
             queryWrapper = queryWrapper.like("username",bdOldrecords.getUsername());
          }
 
+
+        if(bdOldrecords.getBdid() != null  && !"".equals(bdOldrecords.getBdid() + "")) {
+            queryWrapper = queryWrapper.like("bdid",bdOldrecords.getBdid());
+         }
+
         IPage<BdOldrecords> pageInfo = bdOldrecordsService.page(page, queryWrapper);
+        List<Object> list = new ArrayList<Object>();
+        PageInfo pageInfo1 = new PageInfo(pageInfo);
+        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
+            list.add(pageInfo1.getList().get(i));
+        }
+        pageInfo1.setList(list);
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", bdOldrecords);
-        model.addAttribute("pageInfo", new PageInfo(pageInfo));
+        model.addAttribute("pageInfo", pageInfo1);
         return prefix+"bdOldrecords-list";
     }
 
+
+    @GetMapping("oldmain/{id}")
+    public String index2(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, BdOldrecords bdOldrecords
+           , @PathVariable("id")Long id) {
+        Page<BdOldrecords> page = new Page<BdOldrecords>(pageNo, pageSize);
+        QueryWrapper<BdOldrecords> queryWrapper = new QueryWrapper<BdOldrecords>();
+        long idContant = iBdRecordsService.getById(id).getId();
+
+        if(bdOldrecords.getCreatetime() != null  && !"".equals(bdOldrecords.getCreatetime() + "")) {
+            queryWrapper = queryWrapper.like("createtime",bdOldrecords.getCreatetime());
+        }
+        queryWrapper = queryWrapper.like("bdid",idContant);
+        if(Utility.getCurrentUser().getUsername() != null ) {
+            queryWrapper = queryWrapper.like("username",  Utility.getCurrentUser().getUsername());
+        }
+
+        if(bdOldrecords.getKeyword() != null  && !"".equals(bdOldrecords.getKeyword() + "")) {
+            queryWrapper = queryWrapper.like("keyword",bdOldrecords.getKeyword());
+        }
+
+
+
+
+        IPage<BdOldrecords> pageInfo = bdOldrecordsService.page(page, queryWrapper);
+        List<Object> list = new ArrayList<Object>();
+        PageInfo pageInfo1 = new PageInfo(pageInfo);
+        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
+            list.add(pageInfo1.getList().get(i));
+        }
+        pageInfo1.setList(list);
+        model.addAttribute("createtimeSpace", createtimeSpace);
+        model.addAttribute("searchInfo", bdOldrecords);
+        model.addAttribute("pageInfo", pageInfo1);
+        return prefix+"bdOldrecords-list";
+    }
     /**
     * 添加跳转页面
     * @return

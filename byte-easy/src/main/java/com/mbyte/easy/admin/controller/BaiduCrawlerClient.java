@@ -117,6 +117,7 @@ public class BaiduCrawlerClient {
                        LocalDateTime timechange = LocalDateTime.parse(localTime,df);
                          BdOldrecords bdOldrecords = new BdOldrecords();
                          bdOldrecords.setKeyword(word);
+                         bdOldrecords.setBdid(Long.parseLong(id));
                          bdOldrecords.setCreatetime(timechange);
                          bdOldrecords.setUsername(Utility.getCurrentUser().getUsername());
                          iBdOldrecordsService.save(bdOldrecords);

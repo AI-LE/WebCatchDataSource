@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-24
+ * @since 2019-06-04
  */
 public interface BdOldrecordsMapper extends BaseMapper<BdOldrecords> {
 

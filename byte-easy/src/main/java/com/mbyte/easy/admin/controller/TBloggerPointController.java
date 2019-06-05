@@ -61,6 +61,11 @@ public class TBloggerPointController extends BaseController  {
             queryWrapper = queryWrapper.like("contentid",tBloggerPoint.getContentid());
          }
 
+
+        if(tBloggerPoint.getCommitername() != null  && !"".equals(tBloggerPoint.getCommitername() + "")) {
+            queryWrapper = queryWrapper.like("commitername",tBloggerPoint.getCommitername());
+         }
+
         IPage<TBloggerPoint> pageInfo = tBloggerPointService.page(page, queryWrapper);
         model.addAttribute("searchInfo", tBloggerPoint);
         model.addAttribute("pageInfo", new PageInfo(pageInfo));

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-24
+ * @since 2019-06-04
  */
 @Service
 public class BdOldrecordsServiceImpl extends ServiceImpl<BdOldrecordsMapper, BdOldrecords> implements IBdOldrecordsService {

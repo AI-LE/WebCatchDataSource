@@ -154,11 +154,13 @@
                         window.open("/fileSuffix/"+data+"_百度.doc","","");
                     }
                     catch (e) {
+                        flag = 1;
                         layer.designMsg('导出文件失败!', 5);
                     }
 
                 },
                 error: function () {
+                    flag = 1;
                     layer.designMsg('导出异常!', 5);
                 }
             });

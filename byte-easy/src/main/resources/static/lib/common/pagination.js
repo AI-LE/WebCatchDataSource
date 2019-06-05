@@ -13,7 +13,6 @@ function goPage(){
 		return;
 	}else{
 		if(t>0&&t<=total){
-	
 			toPage(t);
 		}else{
 			layer.msg("请输入有效数字");

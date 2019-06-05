@@ -114,7 +114,7 @@ public class ImgUtil {
         // 设置标题格式对齐方式
         title.setAlignment(Element.ALIGN_CENTER);
 //         title.setFont(titleFont);
-        document.add(title);
+//        document.add(title);
 
         /**
          * 文字

@@ -128,6 +128,7 @@ public class ZhCrawlerClientController {
                                         zhihuOldrecords.setCreatetime(timechange);
                                         zhihuOldrecords.setKeyword(zhihuRecords.getKeyword());
                                         zhihuOldrecords.setUsername(Utility.getCurrentUser().getUsername());
+                                        zhihuOldrecords.setZhihuid(Long.parseLong(id));
                                         iZhihuOldrecordsService.save(zhihuOldrecords);
                                         /**
                                          *生成word文档
@@ -304,6 +305,7 @@ public class ZhCrawlerClientController {
                     zhihuOldrecords.setCreatetime(timechange);
                     zhihuOldrecords.setKeyword(zhihuRecords.getKeyword());
                     zhihuOldrecords.setUsername(Utility.getCurrentUser().getUsername());
+                    zhihuOldrecords.setZhihuid(Long.parseLong(id));
                     iZhihuOldrecordsService.save(zhihuOldrecords);
                     List<String> zhihudatatest = new ArrayList<String>();//这个链表用来word存储
                     QueryWrapper<Zhihu> LookZhihudata = new QueryWrapper<Zhihu>();//这个是用来查找标题的

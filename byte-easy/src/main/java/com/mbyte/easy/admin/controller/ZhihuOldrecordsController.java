@@ -10,6 +10,7 @@ import com.mbyte.easy.common.controller.BaseController;
 import com.mbyte.easy.common.web.AjaxResult;
 import com.mbyte.easy.util.PageInfo;
 import com.mbyte.easy.util.Utility;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
 * <p>
@@ -37,17 +40,17 @@ public class ZhihuOldrecordsController extends BaseController  {
     @Autowired
     private IZhihuRecordsService iZhihuRecordsService;
     /**
-    * 查询列表
-    *
-    * @param model
-    * @param pageNo
-    * @param pageSize
-    * @param zhihuOldrecords
-    * @return
-    */
+     * 查询列表
+     *
+     * @param model
+     * @param pageNo
+     * @param pageSize
+     * @param zhihuOldrecords
+     * @return
+     */
     @GetMapping("rec/{id}")
     public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, ZhihuOldrecords zhihuOldrecords
-                , @PathVariable("id")Long id) {
+            , @PathVariable("id")Long id) {
         Page<ZhihuOldrecords> page = new Page<ZhihuOldrecords>(pageNo, pageSize);
         QueryWrapper<ZhihuOldrecords> queryWrapper = new QueryWrapper<ZhihuOldrecords>();
 //
@@ -57,10 +60,61 @@ public class ZhihuOldrecordsController extends BaseController  {
         if(iZhihuRecordsService.getById(id).getKeyword() != null) {
             queryWrapper = queryWrapper.like("keyword", iZhihuRecordsService.getById(id).getKeyword());
         }
-
+        long zhihuid = iZhihuRecordsService.getById(id).getId();
+            queryWrapper = queryWrapper.like("zhihuid",zhihuid);
 
         if(Utility.getCurrentUser().getUsername() != null) {
             queryWrapper = queryWrapper.like("username",  Utility.getCurrentUser().getUsername());
+        }
+
+        IPage<ZhihuOldrecords> pageInfo = zhihuOldrecordsService.page(page, queryWrapper);
+        List<Object> list = new ArrayList<Object>();
+        PageInfo pageInfo1 = new PageInfo(pageInfo);
+        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
+            list.add(pageInfo1.getList().get(i));
+        }
+        pageInfo1.setList(list);
+        model.addAttribute("createtimeSpace", createtimeSpace);
+        model.addAttribute("searchInfo", zhihuOldrecords);
+        model.addAttribute("pageInfo", pageInfo1);
+        return prefix+"zhihuOldrecords-list";
+    }
+    /**
+    * 查询列表
+    *
+    * @param model
+    * @param pageNo
+    * @param pageSize
+    * @param zhihuOldrecords
+    * @return
+    */
+    @RequestMapping
+    public String index(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, ZhihuOldrecords zhihuOldrecords) {
+        Page<ZhihuOldrecords> page = new Page<ZhihuOldrecords>(pageNo, pageSize);
+        QueryWrapper<ZhihuOldrecords> queryWrapper = new QueryWrapper<ZhihuOldrecords>();
+
+        if(zhihuOldrecords.getCreatetime() != null  && !"".equals(zhihuOldrecords.getCreatetime() + "")) {
+            queryWrapper = queryWrapper.like("createtime",zhihuOldrecords.getCreatetime());
+         }
+
+
+        if(zhihuOldrecords.getKeyword() != null  && !"".equals(zhihuOldrecords.getKeyword() + "")) {
+            queryWrapper = queryWrapper.like("keyword",zhihuOldrecords.getKeyword());
+         }
+
+
+        if(zhihuOldrecords.getUsername() != null  && !"".equals(zhihuOldrecords.getUsername() + "")) {
+            queryWrapper = queryWrapper.like("username",zhihuOldrecords.getUsername());
+         }
+
+
+        if(zhihuOldrecords.getZhihuid() != null  && !"".equals(zhihuOldrecords.getZhihuid() + "")) {
+            queryWrapper = queryWrapper.like("zhihuid",zhihuOldrecords.getZhihuid());
+         }
+
+
+        if(zhihuOldrecords.getUuid() != null  && !"".equals(zhihuOldrecords.getUuid() + "")) {
+            queryWrapper = queryWrapper.like("uuid",zhihuOldrecords.getUuid());
          }
 
         IPage<ZhihuOldrecords> pageInfo = zhihuOldrecordsService.page(page, queryWrapper);
@@ -75,46 +129,7 @@ public class ZhihuOldrecordsController extends BaseController  {
         model.addAttribute("pageInfo", pageInfo1);
         return prefix+"zhihuOldrecords-list";
     }
-   @RequestMapping
-    public String index2(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, ZhihuOldrecords zhihuOldrecords
-            ) {
-        Page<ZhihuOldrecords> page = new Page<ZhihuOldrecords>(pageNo, pageSize);
-        QueryWrapper<ZhihuOldrecords> queryWrapper = new QueryWrapper<ZhihuOldrecords>();
 
-
-       if(zhihuOldrecords.getKeyword() != null  && !"".equals(zhihuOldrecords.getKeyword() + "")&&Utility.getCurrentUser().getUsername() != null) {
-           queryWrapper = queryWrapper.like("createtime",zhihuOldrecords.getCreatetime());
-           IPage<ZhihuOldrecords> pageInfo =zhihuOldrecordsService .page(page, queryWrapper);
-           List<Object> list = new ArrayList<Object>();
-           PageInfo pageInfo1 = new PageInfo(pageInfo);
-           for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
-               list.add(pageInfo1.getList().get(i));
-           }
-           System.out.println("list+++"+list);
-           pageInfo1.setList(list);
-
-           model.addAttribute("createtimeSpace", createtimeSpace);
-           model.addAttribute("searchInfo", zhihuOldrecords);
-           model.addAttribute("pageInfo", pageInfo1);
-           return prefix+"zhihuOldrecords-list";
-       }
-
-        if(Utility.getCurrentUser().getUsername() != null) {
-            queryWrapper = queryWrapper.like("username",  Utility.getCurrentUser().getUsername());
-        }
-
-        IPage<ZhihuOldrecords> pageInfo = zhihuOldrecordsService.page(page, queryWrapper);
-        List<Object> list = new ArrayList<Object>();
-        PageInfo pageInfo1 = new PageInfo(pageInfo);
-        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
-            list.add(pageInfo1.getList().get(i));
-        }
-        pageInfo1.setList(list);
-        model.addAttribute("createtimeSpace", createtimeSpace);
-        model.addAttribute("searchInfo", zhihuOldrecords);
-        model.addAttribute("pageInfo", pageInfo1);
-        return prefix+"zhihuOldrecords-list";
-    }
     /**
     * 添加跳转页面
     * @return

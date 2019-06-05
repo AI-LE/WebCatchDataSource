@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-27
+ * @since 2019-06-04
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -34,6 +34,11 @@ public class TBloggerPoint extends BaseEntity {
      * 连表内容id代表该内容的点赞数和评论
      */
     private Long contentid;
+
+    /**
+     * 回复者名字
+     */
+    private String commitername;
 
 
 }
