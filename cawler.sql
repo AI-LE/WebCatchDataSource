@@ -11,7 +11,7 @@
  Target Server Version : 50643
  File Encoding         : 65001
 
- Date: 04/06/2019 09:14:10
+ Date: 05/06/2019 20:07:02
 */
 
 SET NAMES utf8mb4;
@@ -31,7 +31,7 @@ CREATE TABLE `answer`  (
   `answerfive` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT '回答五',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2660 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 11569 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for baidu
@@ -44,7 +44,7 @@ CREATE TABLE `baidu`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '搜索的关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2592 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 9099 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for bd_oldrecords
@@ -55,6 +55,7 @@ CREATE TABLE `bd_oldrecords`  (
   `createtime` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
+  `bdid` bigint(20) DEFAULT NULL COMMENT '百度历史记录连表id',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
@@ -68,7 +69,7 @@ CREATE TABLE `bd_records`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of bd_records
@@ -77,6 +78,7 @@ INSERT INTO `bd_records` VALUES (3, '2019-05-29 17:12:51', '眼镜', 'wth123');
 INSERT INTO `bd_records` VALUES (5, '2019-05-31 23:44:29', '教师', 'admin');
 INSERT INTO `bd_records` VALUES (8, '2019-06-01 00:01:06', '乒乓球', 'admin');
 INSERT INTO `bd_records` VALUES (11, '2019-06-01 13:51:51', '本子', 'admin');
+INSERT INTO `bd_records` VALUES (12, '2019-06-04 19:38:23', '本子', 'admin');
 
 -- ----------------------------
 -- Table structure for blacklist
@@ -189,7 +191,7 @@ CREATE TABLE `sys_resource`  (
   `parent_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FK3fekum3ead5klp7y4lckn5ohi`(`parent_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 202 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 204 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_resource
@@ -274,6 +276,7 @@ INSERT INTO `sys_role_resources` VALUES (1, 193);
 INSERT INTO `sys_role_resources` VALUES (1, 195);
 INSERT INTO `sys_role_resources` VALUES (1, 201);
 INSERT INTO `sys_role_resources` VALUES (1, 202);
+INSERT INTO `sys_role_resources` VALUES (1, 203);
 
 -- ----------------------------
 -- Table structure for sys_user
@@ -334,18 +337,20 @@ CREATE TABLE `t_blogger`  (
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '用户名',
   `commitchioce` int(255) DEFAULT NULL COMMENT '评论的:0等于no 1等于yes',
   `pointersum` bigint(20) DEFAULT NULL COMMENT '点赞数',
-  `judge` int(255) DEFAULT NULL COMMENT '选择模式：0等于纯文字 1等于文字加图片',
+  `judge` int(255) DEFAULT NULL COMMENT '选择模式：0等于纯文字 1等于文字和图片 2文字加图片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_blogger
 -- ----------------------------
 INSERT INTO `t_blogger` VALUES (3, '郭德纲', 1854283601, NULL, '2019-05-30 18:25:17', 100, NULL, '2018-04-06 00:00:00', '2019-05-31 00:00:00', 'admin', 0, NULL, 1);
-INSERT INTO `t_blogger` VALUES (6, '迪丽热巴', 1669879400, NULL, '2019-06-01 16:17:11', 0, NULL, '2018-11-15 00:00:00', '2019-09-13 00:00:00', 'admin', 1, 0, 1);
-INSERT INTO `t_blogger` VALUES (8, '邓超', 5187664653, NULL, '2019-06-01 09:10:34', 1, NULL, '2019-04-01 00:00:00', '2019-05-31 00:00:00', 'admin', 0, 10, 1);
-INSERT INTO `t_blogger` VALUES (13, '杨幂', 1195242865, NULL, '2019-06-01 17:54:57', 0, NULL, '2018-01-03 00:00:00', '2019-06-01 17:40:16', 'admin', 0, NULL, 1);
-INSERT INTO `t_blogger` VALUES (14, '新浪娱乐', 1642591402, NULL, '2019-06-03 16:16:33', 0, NULL, '2019-05-30 00:00:00', '2019-06-01 00:00:00', 'admin', 0, 0, 0);
+INSERT INTO `t_blogger` VALUES (6, '迪丽热巴', 1669879400, NULL, '2019-06-05 18:37:03', 0, NULL, '2018-04-15 00:00:00', '2019-05-04 21:19:46', 'admin', 0, 0, 1);
+INSERT INTO `t_blogger` VALUES (8, '邓超', 5187664653, NULL, '2019-06-05 00:29:08', 1, NULL, '2019-04-01 00:00:00', '2019-05-31 00:00:00', 'admin', 1, 10, 1);
+INSERT INTO `t_blogger` VALUES (13, '杨幂', 1195242865, NULL, '2019-06-04 14:35:06', 0, NULL, '2018-01-03 00:00:00', '2019-06-01 17:40:16', 'admin', 1, 0, 1);
+INSERT INTO `t_blogger` VALUES (14, '新浪娱乐', 1642591402, NULL, '2019-06-05 19:06:22', 0, NULL, '2019-05-30 00:00:00', '2019-06-05 19:06:19', 'admin', 1, 0, 0);
+INSERT INTO `t_blogger` VALUES (16, '古力娜扎', 1350995007, NULL, '2019-06-05 20:03:38', 10, NULL, '2019-06-01 19:51:07', '2019-06-04 00:00:00', 'admin', 1, 100, 1);
+INSERT INTO `t_blogger` VALUES (18, '组织二号头目', 1782961197, NULL, '2019-06-05 19:20:14', 1, NULL, '2019-06-01 00:00:00', '2019-06-05 19:12:51', 'admin', 0, NULL, 1);
 
 -- ----------------------------
 -- Table structure for t_blogger_content
@@ -360,7 +365,7 @@ CREATE TABLE `t_blogger_content`  (
   `contentid` bigint(20) DEFAULT NULL COMMENT '连表',
   `createtime` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '博主创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 584 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 446 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for t_blogger_img
@@ -372,7 +377,7 @@ CREATE TABLE `t_blogger_img`  (
   `imglocalurl` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '本地照片路径',
   `contentid` bigint(20) DEFAULT NULL COMMENT '连表id代表内容里的照片',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 703 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for t_blogger_old
@@ -404,8 +409,9 @@ CREATE TABLE `t_blogger_point`  (
   `comment` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin COMMENT '评论',
   `pointsum` bigint(20) DEFAULT NULL COMMENT '点赞数',
   `contentid` bigint(200) DEFAULT NULL COMMENT '连表内容id代表该内容的点赞数和评论',
+  `commitername` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '回复者名字',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for t_recordssum
@@ -417,7 +423,7 @@ CREATE TABLE `t_recordssum`  (
   `createtime` datetime(0) DEFAULT NULL COMMENT '抓取时间',
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '抓取类型',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 200 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_recordssum
@@ -457,6 +463,168 @@ INSERT INTO `t_recordssum` VALUES (34, 122, '2019-06-03 21:39:37', '知乎');
 INSERT INTO `t_recordssum` VALUES (35, 122, '2019-06-03 21:40:09', '知乎');
 INSERT INTO `t_recordssum` VALUES (36, 139, '2019-06-03 21:46:41', '微博');
 INSERT INTO `t_recordssum` VALUES (37, 148, '2019-06-03 21:48:21', '微博');
+INSERT INTO `t_recordssum` VALUES (38, 148, '2019-06-04 09:21:02', '微博');
+INSERT INTO `t_recordssum` VALUES (39, 114, '2019-06-04 09:47:06', '知乎');
+INSERT INTO `t_recordssum` VALUES (40, 116, '2019-06-04 09:49:57', '知乎');
+INSERT INTO `t_recordssum` VALUES (41, 200, '2019-06-04 10:38:45', '百度知道');
+INSERT INTO `t_recordssum` VALUES (42, 200, '2019-06-04 10:41:20', '百度知道');
+INSERT INTO `t_recordssum` VALUES (43, 200, '2019-06-04 10:42:02', '百度知道');
+INSERT INTO `t_recordssum` VALUES (44, 200, '2019-06-04 10:43:07', '百度知道');
+INSERT INTO `t_recordssum` VALUES (45, 200, '2019-06-04 10:43:56', '百度知道');
+INSERT INTO `t_recordssum` VALUES (46, 200, '2019-06-04 10:46:06', '百度知道');
+INSERT INTO `t_recordssum` VALUES (47, 200, '2019-06-04 10:49:23', '百度知道');
+INSERT INTO `t_recordssum` VALUES (48, 200, '2019-06-04 10:50:37', '百度知道');
+INSERT INTO `t_recordssum` VALUES (49, 200, '2019-06-04 10:51:13', '百度知道');
+INSERT INTO `t_recordssum` VALUES (50, 200, '2019-06-04 10:54:04', '百度知道');
+INSERT INTO `t_recordssum` VALUES (51, 112, '2019-06-04 10:54:38', '知乎');
+INSERT INTO `t_recordssum` VALUES (52, 148, '2019-06-04 10:55:38', '微博');
+INSERT INTO `t_recordssum` VALUES (53, 200, '2019-06-04 10:57:20', '百度知道');
+INSERT INTO `t_recordssum` VALUES (54, 200, '2019-06-04 10:59:28', '百度知道');
+INSERT INTO `t_recordssum` VALUES (55, 200, '2019-06-04 11:01:54', '百度知道');
+INSERT INTO `t_recordssum` VALUES (56, 112, '2019-06-04 11:02:36', '知乎');
+INSERT INTO `t_recordssum` VALUES (57, 148, '2019-06-04 11:03:21', '微博');
+INSERT INTO `t_recordssum` VALUES (58, 148, '2019-06-04 11:04:17', '微博');
+INSERT INTO `t_recordssum` VALUES (59, 200, '2019-06-04 11:09:32', '百度知道');
+INSERT INTO `t_recordssum` VALUES (60, 111, '2019-06-04 11:09:38', '知乎');
+INSERT INTO `t_recordssum` VALUES (61, 148, '2019-06-04 11:10:23', '微博');
+INSERT INTO `t_recordssum` VALUES (62, 148, '2019-06-04 11:11:43', '微博');
+INSERT INTO `t_recordssum` VALUES (63, 148, '2019-06-04 11:13:23', '微博');
+INSERT INTO `t_recordssum` VALUES (64, 148, '2019-06-04 11:14:38', '微博');
+INSERT INTO `t_recordssum` VALUES (65, 148, '2019-06-04 11:18:24', '微博');
+INSERT INTO `t_recordssum` VALUES (66, 200, '2019-06-04 11:19:36', '百度知道');
+INSERT INTO `t_recordssum` VALUES (67, 111, '2019-06-04 11:19:41', '知乎');
+INSERT INTO `t_recordssum` VALUES (68, 111, '2019-06-04 11:20:00', '知乎');
+INSERT INTO `t_recordssum` VALUES (69, 200, '2019-06-04 11:27:49', '百度知道');
+INSERT INTO `t_recordssum` VALUES (70, 200, '2019-06-04 11:28:34', '百度知道');
+INSERT INTO `t_recordssum` VALUES (71, 200, '2019-06-04 11:29:40', '百度知道');
+INSERT INTO `t_recordssum` VALUES (72, 200, '2019-06-04 11:44:36', '百度知道');
+INSERT INTO `t_recordssum` VALUES (73, 148, '2019-06-04 11:45:29', '微博');
+INSERT INTO `t_recordssum` VALUES (74, 200, '2019-06-04 11:50:01', '百度知道');
+INSERT INTO `t_recordssum` VALUES (75, 200, '2019-06-04 11:51:14', '百度知道');
+INSERT INTO `t_recordssum` VALUES (76, 200, '2019-06-04 11:52:52', '百度知道');
+INSERT INTO `t_recordssum` VALUES (77, 200, '2019-06-04 11:55:12', '百度知道');
+INSERT INTO `t_recordssum` VALUES (78, 147, '2019-06-04 11:55:28', '知乎');
+INSERT INTO `t_recordssum` VALUES (79, 147, '2019-06-04 11:57:57', '知乎');
+INSERT INTO `t_recordssum` VALUES (80, 148, '2019-06-04 11:58:49', '微博');
+INSERT INTO `t_recordssum` VALUES (81, 143, '2019-06-04 14:04:31', '知乎');
+INSERT INTO `t_recordssum` VALUES (82, 143, '2019-06-04 14:04:58', '知乎');
+INSERT INTO `t_recordssum` VALUES (83, 148, '2019-06-04 14:05:44', '微博');
+INSERT INTO `t_recordssum` VALUES (84, 148, '2019-06-04 14:08:37', '微博');
+INSERT INTO `t_recordssum` VALUES (85, 143, '2019-06-04 14:16:33', '知乎');
+INSERT INTO `t_recordssum` VALUES (86, 143, '2019-06-04 14:22:57', '知乎');
+INSERT INTO `t_recordssum` VALUES (87, 143, '2019-06-04 14:24:26', '知乎');
+INSERT INTO `t_recordssum` VALUES (88, 143, '2019-06-04 14:25:06', '知乎');
+INSERT INTO `t_recordssum` VALUES (89, 142, '2019-06-04 14:26:40', '知乎');
+INSERT INTO `t_recordssum` VALUES (90, 148, '2019-06-04 14:27:42', '微博');
+INSERT INTO `t_recordssum` VALUES (91, 148, '2019-06-04 14:29:33', '微博');
+INSERT INTO `t_recordssum` VALUES (92, 142, '2019-06-04 14:31:13', '知乎');
+INSERT INTO `t_recordssum` VALUES (93, 200, '2019-06-04 14:31:44', '百度知道');
+INSERT INTO `t_recordssum` VALUES (94, 148, '2019-06-04 14:32:29', '微博');
+INSERT INTO `t_recordssum` VALUES (95, 148, '2019-06-04 14:33:10', '微博');
+INSERT INTO `t_recordssum` VALUES (96, 148, '2019-06-04 14:34:07', '微博');
+INSERT INTO `t_recordssum` VALUES (97, 142, '2019-06-04 14:34:11', '知乎');
+INSERT INTO `t_recordssum` VALUES (98, 200, '2019-06-04 14:34:53', '百度知道');
+INSERT INTO `t_recordssum` VALUES (99, 161, '2019-06-04 14:37:46', '微博');
+INSERT INTO `t_recordssum` VALUES (100, 144, '2019-06-04 14:40:02', '微博');
+INSERT INTO `t_recordssum` VALUES (101, 200, '2019-06-04 14:41:48', '百度知道');
+INSERT INTO `t_recordssum` VALUES (102, 200, '2019-06-04 14:44:27', '百度知道');
+INSERT INTO `t_recordssum` VALUES (103, 143, '2019-06-04 14:44:33', '知乎');
+INSERT INTO `t_recordssum` VALUES (104, 148, '2019-06-04 14:45:45', '微博');
+INSERT INTO `t_recordssum` VALUES (105, 148, '2019-06-04 14:54:18', '微博');
+INSERT INTO `t_recordssum` VALUES (106, 200, '2019-06-04 14:59:26', '百度知道');
+INSERT INTO `t_recordssum` VALUES (107, 141, '2019-06-04 14:59:38', '知乎');
+INSERT INTO `t_recordssum` VALUES (108, 148, '2019-06-04 15:06:02', '微博');
+INSERT INTO `t_recordssum` VALUES (109, 200, '2019-06-04 20:10:12', '百度知道');
+INSERT INTO `t_recordssum` VALUES (110, 200, '2019-06-04 20:10:38', '百度知道');
+INSERT INTO `t_recordssum` VALUES (111, 134, '2019-06-04 20:13:48', '知乎');
+INSERT INTO `t_recordssum` VALUES (112, 200, '2019-06-04 20:18:01', '百度知道');
+INSERT INTO `t_recordssum` VALUES (113, 200, '2019-06-04 20:18:20', '百度知道');
+INSERT INTO `t_recordssum` VALUES (114, 200, '2019-06-04 20:19:43', '百度知道');
+INSERT INTO `t_recordssum` VALUES (115, 200, '2019-06-04 20:20:00', '百度知道');
+INSERT INTO `t_recordssum` VALUES (116, 200, '2019-06-04 20:20:17', '百度知道');
+INSERT INTO `t_recordssum` VALUES (117, 200, '2019-06-04 20:20:35', '百度知道');
+INSERT INTO `t_recordssum` VALUES (118, 148, '2019-06-04 20:29:45', '微博');
+INSERT INTO `t_recordssum` VALUES (119, 148, '2019-06-04 20:36:43', '微博');
+INSERT INTO `t_recordssum` VALUES (120, 296, '2019-06-04 20:37:49', '微博');
+INSERT INTO `t_recordssum` VALUES (121, 148, '2019-06-04 20:39:49', '微博');
+INSERT INTO `t_recordssum` VALUES (122, 148, '2019-06-04 20:43:15', '微博');
+INSERT INTO `t_recordssum` VALUES (123, 148, '2019-06-04 20:45:22', '微博');
+INSERT INTO `t_recordssum` VALUES (124, 148, '2019-06-04 20:48:46', '微博');
+INSERT INTO `t_recordssum` VALUES (125, 148, '2019-06-04 20:49:26', '微博');
+INSERT INTO `t_recordssum` VALUES (126, 148, '2019-06-04 20:53:24', '微博');
+INSERT INTO `t_recordssum` VALUES (127, 148, '2019-06-04 20:58:52', '微博');
+INSERT INTO `t_recordssum` VALUES (128, 148, '2019-06-04 21:18:46', '微博');
+INSERT INTO `t_recordssum` VALUES (129, 144, '2019-06-04 21:20:11', '微博');
+INSERT INTO `t_recordssum` VALUES (130, 144, '2019-06-04 21:24:09', '微博');
+INSERT INTO `t_recordssum` VALUES (131, 144, '2019-06-04 21:39:39', '微博');
+INSERT INTO `t_recordssum` VALUES (132, 144, '2019-06-04 21:50:18', '微博');
+INSERT INTO `t_recordssum` VALUES (133, 144, '2019-06-04 21:58:24', '微博');
+INSERT INTO `t_recordssum` VALUES (134, 134, '2019-06-04 22:04:21', '微博');
+INSERT INTO `t_recordssum` VALUES (135, 144, '2019-06-04 22:13:54', '微博');
+INSERT INTO `t_recordssum` VALUES (136, 144, '2019-06-04 22:48:11', '微博');
+INSERT INTO `t_recordssum` VALUES (137, 144, '2019-06-04 22:50:05', '微博');
+INSERT INTO `t_recordssum` VALUES (138, 144, '2019-06-04 23:00:06', '微博');
+INSERT INTO `t_recordssum` VALUES (139, 144, '2019-06-04 23:09:09', '微博');
+INSERT INTO `t_recordssum` VALUES (140, 144, '2019-06-04 23:26:17', '微博');
+INSERT INTO `t_recordssum` VALUES (141, 148, '2019-06-04 23:34:11', '微博');
+INSERT INTO `t_recordssum` VALUES (142, 222, '2019-06-05 00:06:20', '微博');
+INSERT INTO `t_recordssum` VALUES (143, 148, '2019-06-05 00:08:47', '微博');
+INSERT INTO `t_recordssum` VALUES (144, 144, '2019-06-05 00:13:50', '微博');
+INSERT INTO `t_recordssum` VALUES (145, 144, '2019-06-05 00:18:25', '微博');
+INSERT INTO `t_recordssum` VALUES (146, 144, '2019-06-05 00:22:54', '微博');
+INSERT INTO `t_recordssum` VALUES (147, 144, '2019-06-05 00:26:43', '微博');
+INSERT INTO `t_recordssum` VALUES (148, 145, '2019-06-05 00:27:46', '微博');
+INSERT INTO `t_recordssum` VALUES (149, 145, '2019-06-05 00:32:22', '微博');
+INSERT INTO `t_recordssum` VALUES (150, 144, '2019-06-05 00:36:12', '微博');
+INSERT INTO `t_recordssum` VALUES (151, 148, '2019-06-05 11:42:23', '微博');
+INSERT INTO `t_recordssum` VALUES (152, 200, '2019-06-05 11:43:23', '百度知道');
+INSERT INTO `t_recordssum` VALUES (153, 129, '2019-06-05 11:43:34', '知乎');
+INSERT INTO `t_recordssum` VALUES (154, 129, '2019-06-05 11:43:56', '知乎');
+INSERT INTO `t_recordssum` VALUES (155, 148, '2019-06-05 11:48:38', '微博');
+INSERT INTO `t_recordssum` VALUES (156, 148, '2019-06-05 11:51:06', '微博');
+INSERT INTO `t_recordssum` VALUES (157, 148, '2019-06-05 12:15:17', '微博');
+INSERT INTO `t_recordssum` VALUES (158, 148, '2019-06-05 12:16:36', '微博');
+INSERT INTO `t_recordssum` VALUES (159, 148, '2019-06-05 12:17:47', '微博');
+INSERT INTO `t_recordssum` VALUES (160, 148, '2019-06-05 12:18:53', '微博');
+INSERT INTO `t_recordssum` VALUES (161, 148, '2019-06-05 12:21:38', '微博');
+INSERT INTO `t_recordssum` VALUES (162, 296, '2019-06-05 12:22:44', '微博');
+INSERT INTO `t_recordssum` VALUES (163, 144, '2019-06-05 12:23:44', '微博');
+INSERT INTO `t_recordssum` VALUES (164, 148, '2019-06-05 12:26:14', '微博');
+INSERT INTO `t_recordssum` VALUES (165, 144, '2019-06-05 12:55:11', '微博');
+INSERT INTO `t_recordssum` VALUES (166, 147, '2019-06-05 16:22:37', '微博');
+INSERT INTO `t_recordssum` VALUES (167, 148, '2019-06-05 16:25:23', '微博');
+INSERT INTO `t_recordssum` VALUES (168, 148, '2019-06-05 16:32:50', '微博');
+INSERT INTO `t_recordssum` VALUES (169, 148, '2019-06-05 16:34:47', '微博');
+INSERT INTO `t_recordssum` VALUES (170, 148, '2019-06-05 16:36:43', '微博');
+INSERT INTO `t_recordssum` VALUES (171, 148, '2019-06-05 16:50:15', '微博');
+INSERT INTO `t_recordssum` VALUES (172, 200, '2019-06-05 17:11:07', '百度知道');
+INSERT INTO `t_recordssum` VALUES (173, 148, '2019-06-05 17:13:05', '微博');
+INSERT INTO `t_recordssum` VALUES (174, 581, '2019-06-05 17:38:42', '微博');
+INSERT INTO `t_recordssum` VALUES (175, 343, '2019-06-05 17:48:15', '微博');
+INSERT INTO `t_recordssum` VALUES (176, 343, '2019-06-05 17:54:29', '微博');
+INSERT INTO `t_recordssum` VALUES (177, 343, '2019-06-05 17:57:15', '微博');
+INSERT INTO `t_recordssum` VALUES (178, 343, '2019-06-05 18:03:50', '微博');
+INSERT INTO `t_recordssum` VALUES (179, 699, '2019-06-05 18:15:07', '微博');
+INSERT INTO `t_recordssum` VALUES (180, 1, '2019-06-05 18:16:03', '微博');
+INSERT INTO `t_recordssum` VALUES (181, 1, '2019-06-05 18:16:54', '微博');
+INSERT INTO `t_recordssum` VALUES (182, 1, '2019-06-05 18:21:22', '微博');
+INSERT INTO `t_recordssum` VALUES (183, 16, '2019-06-05 18:35:58', '微博');
+INSERT INTO `t_recordssum` VALUES (184, 167, '2019-06-05 19:03:50', '微博');
+INSERT INTO `t_recordssum` VALUES (185, 230, '2019-06-05 19:05:47', '微博');
+INSERT INTO `t_recordssum` VALUES (186, 230, '2019-06-05 19:11:23', '微博');
+INSERT INTO `t_recordssum` VALUES (187, 394, '2019-06-05 19:13:29', '微博');
+INSERT INTO `t_recordssum` VALUES (188, 43, '2019-06-05 19:26:05', '微博');
+INSERT INTO `t_recordssum` VALUES (189, 43, '2019-06-05 19:26:43', '微博');
+INSERT INTO `t_recordssum` VALUES (190, 43, '2019-06-05 19:27:00', '微博');
+INSERT INTO `t_recordssum` VALUES (191, 43, '2019-06-05 19:29:37', '微博');
+INSERT INTO `t_recordssum` VALUES (192, 43, '2019-06-05 19:35:31', '微博');
+INSERT INTO `t_recordssum` VALUES (193, 167, '2019-06-05 19:36:36', '微博');
+INSERT INTO `t_recordssum` VALUES (194, 43, '2019-06-05 19:51:19', '微博');
+INSERT INTO `t_recordssum` VALUES (195, 4, '2019-06-05 19:51:25', '微博');
+INSERT INTO `t_recordssum` VALUES (196, 4, '2019-06-05 19:51:45', '微博');
+INSERT INTO `t_recordssum` VALUES (197, 4, '2019-06-05 19:53:15', '微博');
+INSERT INTO `t_recordssum` VALUES (198, 4, '2019-06-05 20:02:23', '微博');
+INSERT INTO `t_recordssum` VALUES (199, 4, '2019-06-05 20:03:54', '微博');
 
 -- ----------------------------
 -- Table structure for zhihu
@@ -469,7 +637,7 @@ CREATE TABLE `zhihu`  (
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 930 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for zhihu_oldrecords
@@ -480,13 +648,10 @@ CREATE TABLE `zhihu_oldrecords`  (
   `createtime` datetime(0) DEFAULT NULL COMMENT '创建时间',
   `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '知乎关键词',
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
+  `zhihuid` bigint(20) DEFAULT NULL COMMENT '连表id',
+  `uuid` varchar(0) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '文件名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of zhihu_oldrecords
--- ----------------------------
-INSERT INTO `zhihu_oldrecords` VALUES (1, '2019-06-03 16:15:45', '爱情', 'admin');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for zhihu_records
@@ -499,7 +664,7 @@ CREATE TABLE `zhihu_records`  (
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '用户名',
   `typechoice` int(255) DEFAULT NULL COMMENT '0不抓取答案 1抓取答案',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of zhihu_records
@@ -507,6 +672,7 @@ CREATE TABLE `zhihu_records`  (
 INSERT INTO `zhihu_records` VALUES (10, '2019-05-31 16:12:25', '眼镜', 'admin', 1);
 INSERT INTO `zhihu_records` VALUES (11, '2019-05-31 17:45:52', '饼干', 'admin', 1);
 INSERT INTO `zhihu_records` VALUES (12, '2019-06-03 16:15:41', '爱情', 'admin', 0);
-INSERT INTO `zhihu_records` VALUES (13, '2019-06-03 17:08:53', '本子', 'admin', 1);
+INSERT INTO `zhihu_records` VALUES (14, '2019-06-04 09:46:59', '教师', 'admin', 0);
+INSERT INTO `zhihu_records` VALUES (15, '2019-06-04 20:01:21', '教师', 'admin', 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

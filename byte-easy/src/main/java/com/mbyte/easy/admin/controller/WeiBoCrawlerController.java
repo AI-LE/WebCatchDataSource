@@ -106,7 +106,7 @@ public class WeiBoCrawlerController {
 
 
         List<String> list = new ArrayList<String>();
-        for (int i = 1; i < 25; i++) {
+        for (int i = 1; i < 250000; i++) {
             String url = "https://m.weibo.cn/api/container/getIndex?type=uid&value=" + uid + "&containerid=107603" + uid+ "&page=" + i;
             //这个是JSON爬虫
             Map<String, Object> headerParams = new HashMap<>();
@@ -238,9 +238,6 @@ public class WeiBoCrawlerController {
                                                 tBloggerContent.setCreatetime(createtime);
                                             }
                                         }
-
-
-
                                         tBloggerContent.setBloggerid(bloggerid);
                                         itBloggerContentService.save(tBloggerContent);
 
@@ -309,286 +306,278 @@ public class WeiBoCrawlerController {
                                                 }
                                             }
                                         }
-                                        //这里进行时间的判断
+                                        //这里进行时间范围的判断
+                                        SimpleDateFormat sdfok  = new SimpleDateFormat( "yyyy-MM-dd");
+                                        try{
+                                            Date dateconcontent = sdfok.parse(tBloggerContent.getCreatetime());//获取到的微博时间
+                                            Date dateconstartok = sdfok.parse(timestart);
+                                            Date dateconendok = sdfok.parse(timeend);
+                                            Timetest timetest1 = new Timetest();
+                                            boolean timetest1EffectiveDateok = timetest1.isEffectiveDate(dateconcontent, dateconstartok ,dateconendok );
+                                            if(timetest1EffectiveDateok == false && dateconendok.compareTo(dateconcontent) == 1){
+                                                System.out.println("dateconcontent" + dateconcontent + "dateconstartok" + dateconstartok + "dateconendok" +dateconendok);
+                                                List<String> listContent = new ArrayList();
+                                                QueryWrapper<TBloggerContent> queryWrapper = new QueryWrapper<TBloggerContent>();
+                                                queryWrapper = queryWrapper.eq("bloggerid", bloggerid);
+                                                List<TBloggerContent> list1 = itBloggerContentService.list(queryWrapper);
+                                                String regsdop = "[^\\x00-\\xff]";
+                                                int time_count = 0;//定义输出标题
+                                                long sum_count = 0;
+                                                for(int g = 0;g < list1.size();g++){
+                                                    sum_count++;
+                                                    TBloggerContent bloggerContent = list1.get(g);
+                                                    try{
+                                                        Date datecontent = sdfok.parse(bloggerContent.getCreatetime());//获取到的微博时间
+                                                        Date dateconstart = sdfok.parse(timestart);
+                                                        Date dateconend = sdfok.parse(timeend);
+                                                        Timetest timetesttry = new Timetest();
+                                                        boolean timetest1EffectiveDate = timetesttry.isEffectiveDate(datecontent, dateconstart ,dateconend );
 
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+                                                        //符合时间范围内
+                                                        if(timetest1EffectiveDate == true){
+                                                            Pattern p = Pattern.compile(regsdop);
+                                                            Matcher m = p.matcher(bloggerContent.getContent());
+                                                            StringBuffer sb = new StringBuffer();
+                                                            while (m.find()) {
+                                                                sb.append(m.group());
+                                                            }
 
-            if(i == 23){
-                List<String> listContent = new ArrayList();
-//                List<String> listimg= new ArrayList();
-                QueryWrapper<TBloggerContent> queryWrapper = new QueryWrapper<TBloggerContent>();
-                queryWrapper = queryWrapper.eq("bloggerid", bloggerid);
-                List<TBloggerContent> list1 = itBloggerContentService.list(queryWrapper);
-                String regsdop = "[^\\x00-\\xff]";
-                int time_count = 0;//定义输出标题
-                long sum_count = 0;
-                for(int g = 0;g < list1.size();g++){
-                    sum_count++;
-                    TBloggerContent bloggerContent = list1.get(g);
-                   SimpleDateFormat sdf  = new SimpleDateFormat( "yyyy-MM-dd");
-                    try{
-                        Date datecontent = sdf.parse(bloggerContent.getCreatetime());//获取到的微博时间
-                        Date dateconstart = sdf.parse(timestart);
-                        Date dateconend = sdf.parse(timeend);
-                        Timetest timetest1 = new Timetest();
-                        boolean timetest1EffectiveDate = timetest1.isEffectiveDate(datecontent, dateconstart ,dateconend );
-
-                        //符合时间范围内
-                        if(timetest1EffectiveDate == true){
-                            Pattern p = Pattern.compile(regsdop);
-                            Matcher m = p.matcher(bloggerContent.getContent());
-                            StringBuffer sb = new StringBuffer();
-                            while (m.find()) {
-                                sb.append(m.group());
-                            }
-
-                        /**
-                         * 这个是判断字数的
-                         */
-                            if(imgflag ==0 ){
-                                if(wordmax >= 0){
+                                                            /**
+                                                             * 这个是判断字数的
+                                                             */
+                                                            if(imgflag ==0 ){
+                                                                if(wordmax >= 0){
 //                                StringBuffer resetStringword = new StringBuffer();
-                                    String[] word = sb.toString().split("");
-                                    int length =word.length;
-                                    if(wordmax<length){
-                                        QueryWrapper<TBloggerImg> bloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
-                                        bloggerImgQueryWrapper = bloggerImgQueryWrapper.eq("contentid", bloggerContent.getContentid());
-                                        List<TBloggerImg> tBloggerImgList = itBloggerImgService.list(bloggerImgQueryWrapper);
-                                        if(tBloggerImgList.size()==0 || tBloggerImgList==null){
-                                            listContent.add(time_count + 1+"." + bloggerContent.getCreatetime());
-                                            listContent.add(bloggername+"：" + sb);//内容
-                                            flag = true;
+                                                                    String[] word = sb.toString().split("");
+                                                                    int length =word.length;
+                                                                    if(wordmax<length){
+                                                                        QueryWrapper<TBloggerImg> bloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
+                                                                        bloggerImgQueryWrapper = bloggerImgQueryWrapper.eq("contentid", bloggerContent.getContentid());
+                                                                        List<TBloggerImg> tBloggerImgList = itBloggerImgService.list(bloggerImgQueryWrapper);
+                                                                        if(tBloggerImgList.size()==0 || tBloggerImgList==null){
+                                                                            listContent.add(time_count + 1+"." + bloggerContent.getCreatetime());
+                                                                            listContent.add(bloggername+"：" + sb);//内容
+                                                                            flag = true;
+                                                                            /**
+                                                                             * 评论的
+                                                                             */
+                                                                            if(commitchioce==1 && flag==true ){
+                                                                                //  String commitWord = "评论：";
+                                                                                JTextArea commitWord = new JTextArea();
+                                                                                Font Str=new Font("宋体", Font.BOLD, 50);
+                                                                                commitWord.setText("评论：");
+                                                                                commitWord.setFont(Str);
+                                                                                listContent.add(commitWord.getText());
+                                                                                QueryWrapper<TBloggerPoint> tBloggerPointQueryWrapper = new QueryWrapper<TBloggerPoint>();
+                                                                                tBloggerPointQueryWrapper = tBloggerPointQueryWrapper.eq("contentid", bloggerContent.getContentid());
+                                                                                List<TBloggerPoint> list2 = itBloggerPointService.list(tBloggerPointQueryWrapper);
+                                                                                int countpoint = 1;
+                                                                                for(int l = 0;l<list2.size();l++){
+                                                                                    TBloggerPoint tBloggerPoint = list2.get(l);
+                                                                                    if(tBloggerPoint!=null){
+                                                                                        listContent.add(tBloggerPoint.getCommitername()+"：" + tBloggerPoint.getComment());
+                                                                                        countpoint++;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            time_count++;//加次数
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
 
-                                            /**
-                                             * 评论的
-                                             */
-                                            if(commitchioce==1 && flag==true ){
-                                              //  String commitWord = "评论：";
-                                                JTextArea commitWord = new JTextArea();
-                                                Font Str=new Font("宋体", Font.BOLD, 50);
-                                                commitWord.setText("评论：");
-                                                commitWord.setFont(Str);
-                                                listContent.add(commitWord.getText());
-                                                QueryWrapper<TBloggerPoint> tBloggerPointQueryWrapper = new QueryWrapper<TBloggerPoint>();
-                                                tBloggerPointQueryWrapper = tBloggerPointQueryWrapper.eq("contentid", bloggerContent.getContentid());
-                                                List<TBloggerPoint> list2 = itBloggerPointService.list(tBloggerPointQueryWrapper);
-                                                int countpoint = 1;
-                                                for(int l = 0;l<list2.size();l++){
-                                                    TBloggerPoint tBloggerPoint = list2.get(l);
-                                                    if(tBloggerPoint!=null){
-                                                        listContent.add(tBloggerPoint.getCommitername()+"：" + tBloggerPoint.getComment());
-                                                        countpoint++;
+                                                            else{
+                                                                QueryWrapper<TBloggerImg> bloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
+                                                                bloggerImgQueryWrapper = bloggerImgQueryWrapper.eq("contentid", bloggerContent.getContentid());
+                                                                List<TBloggerImg> tBloggerImgList = itBloggerImgService.list(bloggerImgQueryWrapper);
+                                                                if(tBloggerImgList != null && tBloggerImgList.size() > 0){
+                                                                    if(wordmax >= 0){
+                                                                        String[] word = sb.toString().split("");
+                                                                        int length =word.length;
+                                                                        if(wordmax<length){
+                                                                            listContent.add(time_count + 1+"." + bloggerContent.getCreatetime());
+                                                                            listContent.add(bloggername+"：" + sb + "\n" );//内容
+                                                                            flag = true;
+                                                                            time_count++;//加次数
+                                                                        }
+                                                                    }
+                                                                    /**
+                                                                     * 图片加载
+                                                                     */
+
+                                                                    for(int j = 0; j < tBloggerImgList.size();j++){
+                                                                        //得到它的一个对象数据
+                                                                        TBloggerImg tBloggerImg = tBloggerImgList.get(j);
+                                                                        listContent.add(tBloggerImg.getImglocalurl());
+                                                                    }
+                                                                    if(commitchioce==1 && flag==true ){
+
+                                                                        /**
+                                                                         * 评论的
+                                                                         */
+                                                                        listContent.add("评论：");
+                                                                        QueryWrapper<TBloggerPoint> tBloggerPointQueryWrapper = new QueryWrapper<TBloggerPoint>();
+                                                                        tBloggerPointQueryWrapper = tBloggerPointQueryWrapper.eq("contentid", bloggerContent.getContentid());
+                                                                        List<TBloggerPoint> list2 = itBloggerPointService.list(tBloggerPointQueryWrapper);
+                                                                        int countpoint = 1;
+                                                                        for(int l = 0;l<list2.size();l++){
+                                                                            TBloggerPoint tBloggerPoint = list2.get(l);
+                                                                            if(tBloggerPoint!=null){
+                                                                                listContent.add(tBloggerPoint.getCommitername()+"：" + tBloggerPoint.getComment());
+                                                                                countpoint++;
+                                                                            }
+                                                                        }
+                                                                        //  TBloggerPoint tBloggerPoint = itBloggerPointService.getOne(tBloggerPointQueryWrapper);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        if(g == list1.size()-1){
+                                                            /**
+                                                             *记录总数
+                                                             */
+                                                            LocalDateTime time = LocalDateTime.now();
+                                                            DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+                                                            String localTime = df.format(time);
+                                                            LocalDateTime timenow = LocalDateTime.parse(localTime,df);
+                                                            TRecordssum tRecordssum = new TRecordssum();
+                                                            tRecordssum.setRecords(sum_count);
+                                                            tRecordssum.setCreatetime(timenow);
+                                                            tRecordssum.setType("微博");
+                                                            itRecordssumService.save(tRecordssum);
+                                                        }
+                                                    }
+                                                    catch (ParseException e){
+                                                        e.printStackTrace();
                                                     }
                                                 }
+
+                                                /**
+                                                 * 切割字符串
+                                                 */
+                                                try{
+                                                    /**
+                                                     * 获得当前时间
+                                                     */
+                                                    LocalDateTime time = LocalDateTime.now();
+                                                    DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
+                                                    String localTime = df.format(time);
+                                                    LocalDateTime timechange = LocalDateTime.parse(localTime,df);
+
+                                                    /**
+                                                     * 存入历史记录
+                                                     */
+                                                    TBloggerOld tBloggerOld = new TBloggerOld();
+                                                    tBloggerOld.setUsername(Utility.getCurrentUser().getUsername());
+                                                    tBloggerOld.setCreatetime(timechange);
+                                                    tBloggerOld.setBloggername(bloggername);
+                                                    tBloggerOld.setUid(uid);
+                                                    tBloggerOld.setContainerid(Long.parseLong(id));
+                                                    itBloggerOldService.save(tBloggerOld);
+
+                                                    if(flag == true){
+                                                        try{
+                                                            /**
+                                                             * 文字+图片的生成
+                                                             */
+                                                            //     System.out.println(listContent);
+                                                            ImgUtil.exportDoc(listContent,bloggername);
+                                                            QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
+                                                            queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
+                                                            List<TBloggerContent> tBloggerContents =  itBloggerContentService.list(queryWrapper1);
+
+                                                            /**
+                                                             * 删除图片操作
+                                                             */
+                                                            for(int w = 0 ;w<tBloggerContents.size();w++){
+                                                                TBloggerContent tBloggerContentdelete = tBloggerContents.get(w);
+                                                                QueryWrapper<TBloggerImg> queryWrapperimg = new QueryWrapper();
+                                                                queryWrapperimg = queryWrapperimg.eq("contentid", tBloggerContentdelete.getContentid());
+                                                                itBloggerImgService.remove(queryWrapperimg);
+                                                            }
+                                                            /**
+                                                             * 删除评论操作
+                                                             */
+                                                            if(commitchioce == 1){
+                                                                for(int w = 0 ;w<tBloggerContents.size();w++){
+                                                                    TBloggerContent tBloggerContentdelete = tBloggerContents.get(w);
+                                                                    QueryWrapper<TBloggerPoint> queryWrapperPoint = new QueryWrapper();
+                                                                    queryWrapperPoint = queryWrapperPoint.eq("contentid", tBloggerContentdelete.getContentid());
+                                                                    itBloggerPointService.remove(queryWrapperPoint);
+                                                                }
+                                                            }
+                                                            itBloggerContentService.remove(queryWrapper1);
+                                                            //  System.out.println(bloggername);
+                                                            String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
+                                                            response.getWriter().write(datarepsonse);
+                                                            return;
+                                                        }
+                                                        catch (DocumentException d){
+                                                            d.printStackTrace();
+                                                        }
+                                                    }
+                                                    else{
+                                                        /**
+                                                         * 导出文件，纯文字
+                                                         */
+                                                        Properties properties = new Properties();
+                                                        String datareplace = listContent.toString().replace(",","");
+                                                        datareplace= datareplace.replace("[","");
+                                                        datareplace= datareplace.replace("]","");
+                                                        //     System.out.println(datareplace);
+                                                        if(datareplace.equals("")){
+                                                            QueryWrapper<TBloggerContent> tBloggerContentQueryWrapper = new QueryWrapper<TBloggerContent>();
+                                                            tBloggerContentQueryWrapper = tBloggerContentQueryWrapper.eq("bloggerid", bloggerid);
+                                                            List<TBloggerContent> list2 = itBloggerContentService.list(tBloggerContentQueryWrapper);
+                                                            for(int j = 0; j < list2.size();j++){
+                                                                TBloggerContent tBloggerContentfas = list2.get(j);
+                                                                QueryWrapper<TBloggerImg> tBloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
+                                                                tBloggerImgQueryWrapper = tBloggerImgQueryWrapper.eq("contentid", tBloggerContentfas.getContentid());
+                                                                itBloggerImgService.remove(tBloggerImgQueryWrapper);
+                                                            }
+                                                            itBloggerContentService.remove(tBloggerContentQueryWrapper);
+                                                            String a = "9999";
+                                                            response.getWriter().write(a );
+                                                            return;
+                                                        }
+                                                        ExportWord e = new ExportWord();
+                                                        e.creatDoc(FileUtil.uploadLocalPath + bloggername + Utility.getCurrentUser().getUsername() + "_微博.doc", datareplace.toString());
+                                                        QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
+                                                        queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
+
+                                                        /**
+                                                         * 如果评论存在
+                                                         */
+                                                        if(commitchioce == 1){
+                                                            List<TBloggerContent> tBloggerContents =  itBloggerContentService.list(queryWrapper1);
+                                                            for(int w = 0 ;w<tBloggerContents.size();w++){
+                                                                TBloggerContent tBloggerContentcommit = tBloggerContents.get(w);
+                                                                QueryWrapper<TBloggerPoint> queryWrapperPoint = new QueryWrapper();
+                                                                queryWrapperPoint = queryWrapperPoint.eq("contentid", tBloggerContentcommit.getContentid());
+                                                                itBloggerPointService.remove(queryWrapperPoint);
+                                                            }
+                                                        }
+                                                        itBloggerContentService.remove(queryWrapper1);
+                                                        //  System.out.println(bloggername);
+                                                        String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
+                                                        // System.out.println(datarepsonse);
+                                                        response.getWriter().write(datarepsonse);
+                                                        return;
+                                                    }
+                                                }
+                                                catch (IOException e1){
+                                                    e1.printStackTrace();
+                                                }
                                             }
-                                            time_count++;//加次数
+                                        }
+                                        catch (ParseException e){
+                                            e.printStackTrace();
                                         }
                                     }
-//                                for(int y=0;y<wordmax;y++){
-//                                    if(y == wordmax-1 || length == 0){
-//                                        sb = resetStringword;
-//                                    }
-//                                    else{
-//                                        resetStringword.append(word[y]);
-//                                        length--;
-//                                    }
-//                                }
                                 }
                             }
-
-                            else{
-                                if(wordmax >= 0){
-//                                StringBuffer resetStringword = new StringBuffer();
-                                    String[] word = sb.toString().split("");
-                                    int length =word.length;
-                                    if(wordmax<length){
-                                        listContent.add(time_count + 1+"." + bloggerContent.getCreatetime());
-                                        listContent.add(bloggername+"：" + sb + "\n" );//内容
-                                        flag = true;
-                                        time_count++;//加次数
-                                    }
-                                }
-                                if(imgflag == 1 ){
-
-                                    /**
-                                     * 图片加载
-                                     */
-                                    QueryWrapper<TBloggerImg> bloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
-                                    bloggerImgQueryWrapper = bloggerImgQueryWrapper.eq("contentid", bloggerContent.getContentid());
-                                    List<TBloggerImg> tBloggerImgList = itBloggerImgService.list(bloggerImgQueryWrapper);
-                                    for(int j = 0; j < tBloggerImgList.size();j++){
-                                        //得到它的一个对象数据
-                                        TBloggerImg tBloggerImg = tBloggerImgList.get(j);
-                                        listContent.add(tBloggerImg.getImglocalurl());
-                                    }
-                                }
-                                if(commitchioce==1 && flag==true ){
-
-                                    /**
-                                     * 评论的
-                                     */
-                                    listContent.add("评论：");
-                                    QueryWrapper<TBloggerPoint> tBloggerPointQueryWrapper = new QueryWrapper<TBloggerPoint>();
-                                    tBloggerPointQueryWrapper = tBloggerPointQueryWrapper.eq("contentid", bloggerContent.getContentid());
-                                    List<TBloggerPoint> list2 = itBloggerPointService.list(tBloggerPointQueryWrapper);
-                                    int countpoint = 1;
-                                    for(int l = 0;l<list2.size();l++){
-                                        TBloggerPoint tBloggerPoint = list2.get(l);
-                                        if(tBloggerPoint!=null){
-                                            listContent.add(tBloggerPoint.getCommitername()+"：" + tBloggerPoint.getComment());
-                                            countpoint++;
-                                        }
-//                                    if(l==list2.size()-1){
-//                                        //               System.out.println(listContent);
-//                                        itBloggerPointService.remove(tBloggerPointQueryWrapper);
-//                                    }
-                                    }
-                                    //  TBloggerPoint tBloggerPoint = itBloggerPointService.getOne(tBloggerPointQueryWrapper);
-                                }
-                            }
-
-                        }
-                        if(g == list1.size()-1){
-                            /**
-                             *记录总数
-                             */
-                            LocalDateTime time = LocalDateTime.now();
-                            DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
-                            String localTime = df.format(time);
-                            LocalDateTime timenow = LocalDateTime.parse(localTime,df);
-                            TRecordssum tRecordssum = new TRecordssum();
-                            tRecordssum.setRecords(sum_count);
-                            tRecordssum.setCreatetime(timenow);
-                            tRecordssum.setType("微博");
-                            itRecordssumService.save(tRecordssum);
                         }
                     }
-                    catch (ParseException e){
-                        e.printStackTrace();
-                    }
-                }
-
-                /**
-                 * 切割字符串
-                 */
-                try{
-                    /**
-                     * 获得当前时间
-                     */
-                    LocalDateTime time = LocalDateTime.now();
-                    DateTimeFormatter df= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");//可以方便地修改日期格式
-                    String localTime = df.format(time);
-                    LocalDateTime timechange = LocalDateTime.parse(localTime,df);
-
-                    /**
-                     * 存入历史记录
-                     */
-                    TBloggerOld tBloggerOld = new TBloggerOld();
-                    tBloggerOld.setUsername(Utility.getCurrentUser().getUsername());
-                    tBloggerOld.setCreatetime(timechange);
-                    tBloggerOld.setBloggername(bloggername);
-                    tBloggerOld.setUid(uid);
-                    tBloggerOld.setContainerid(Long.parseLong(id));
-                    itBloggerOldService.save(tBloggerOld);
-
-                    if(flag == true){
-                        try{
-                            /**
-                             * 文字+图片的生成
-                             */
-                       //     System.out.println(listContent);
-                            ImgUtil.exportDoc(listContent,bloggername);
-                            QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
-                            queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
-                            List<TBloggerContent> tBloggerContents =  itBloggerContentService.list(queryWrapper1);
-
-                            /**
-                             * 删除图片操作
-                             */
-                            for(int w = 0 ;w<tBloggerContents.size();w++){
-                                TBloggerContent tBloggerContent = tBloggerContents.get(w);
-                                QueryWrapper<TBloggerImg> queryWrapperimg = new QueryWrapper();
-                                queryWrapperimg = queryWrapperimg.eq("contentid", tBloggerContent.getContentid());
-                                itBloggerImgService.remove(queryWrapperimg);
-                            }
-                            /**
-                             * 删除评论操作
-                             */
-                            if(commitchioce == 1){
-                                for(int w = 0 ;w<tBloggerContents.size();w++){
-                                    TBloggerContent tBloggerContent = tBloggerContents.get(w);
-                                    QueryWrapper<TBloggerPoint> queryWrapperPoint = new QueryWrapper();
-                                    queryWrapperPoint = queryWrapperPoint.eq("contentid", tBloggerContent.getContentid());
-                                    itBloggerPointService.remove(queryWrapperPoint);
-                                }
-                            }
-                            itBloggerContentService.remove(queryWrapper1);
-                          //  System.out.println(bloggername);
-                            String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
-                            response.getWriter().write(datarepsonse);
-                            return;
-                        }
-                        catch (DocumentException d){
-                            d.printStackTrace();
-                        }
-                    }
-                    else{
-                    /**
-                    * 导出文件，纯文字
-                    */
-                        Properties properties = new Properties();
-                        String datareplace = listContent.toString().replace(",","");
-                        datareplace= datareplace.replace("[","");
-                        datareplace= datareplace.replace("]","");
-                   //     System.out.println(datareplace);
-                        if(datareplace.equals("")){
-                            QueryWrapper<TBloggerContent> tBloggerContentQueryWrapper = new QueryWrapper<TBloggerContent>();
-                            tBloggerContentQueryWrapper = tBloggerContentQueryWrapper.eq("bloggerid", bloggerid);
-                            List<TBloggerContent> list2 = itBloggerContentService.list(tBloggerContentQueryWrapper);
-                            for(int j = 0; j < list2.size();j++){
-                                TBloggerContent tBloggerContent = list2.get(j);
-                                QueryWrapper<TBloggerImg> tBloggerImgQueryWrapper = new QueryWrapper<TBloggerImg>();
-                                tBloggerImgQueryWrapper = tBloggerImgQueryWrapper.eq("contentid", tBloggerContent.getContentid());
-                                itBloggerImgService.remove(tBloggerImgQueryWrapper);
-                            }
-                            itBloggerContentService.remove(tBloggerContentQueryWrapper);
-                            String a = "9999";
-                            response.getWriter().write(a );
-                            return;
-                        }
-                        ExportWord e = new ExportWord();
-                        e.creatDoc(FileUtil.uploadLocalPath + bloggername + Utility.getCurrentUser().getUsername() + "_微博.doc", datareplace.toString());
-                        QueryWrapper<TBloggerContent> queryWrapper1 = new QueryWrapper();
-                        queryWrapper1 = queryWrapper1.eq("bloggerid", bloggerid);
-
-                        /**
-                         * 如果评论存在
-                         */
-                        if(commitchioce == 1){
-                            List<TBloggerContent> tBloggerContents =  itBloggerContentService.list(queryWrapper1);
-                            for(int w = 0 ;w<tBloggerContents.size();w++){
-                                TBloggerContent tBloggerContent = tBloggerContents.get(w);
-                                QueryWrapper<TBloggerPoint> queryWrapperPoint = new QueryWrapper();
-                                queryWrapperPoint = queryWrapperPoint.eq("contentid", tBloggerContent.getContentid());
-                                itBloggerPointService.remove(queryWrapperPoint);
-                            }
-                        }
-                        itBloggerContentService.remove(queryWrapper1);
-                      //  System.out.println(bloggername);
-                        String datarepsonse = bloggername + Utility.getCurrentUser().getUsername();
-                       // System.out.println(datarepsonse);
-                        response.getWriter().write(datarepsonse);
-                        return;
-                    }
-                }
-                catch (IOException e1){
-                    e1.printStackTrace();
                 }
             }
         }
