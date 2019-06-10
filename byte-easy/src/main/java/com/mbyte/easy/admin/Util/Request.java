@@ -104,9 +104,11 @@ public class Request {
             logMap.put("请求方法", httpRequestBase.getMethod());
             LogUtil.debug(LogUtil.mapToStr(logMap));
 
+
             // 返回响应body数据
             HttpEntity entity = httpResponse.getEntity();
             String resBody = EntityUtils.toString(entity, "utf-8");
+
             // 响应头
             Header[] headers = httpResponse.getAllHeaders();
 
