@@ -128,7 +128,7 @@
             click = 1;
             var bar = document.getElementById("wrapper");
             bar.style.display = (bar.style.display.match("block")) ? "none" : "block";
-            setInterval(increment,1000);
+            setInterval(increment,6000);
             setTimeout(function(){
                 layer.designMsg('程序正在执行',8 ,"",0.5);
             },1000);
@@ -144,6 +144,10 @@
                     $("#searword").css("disabled",false);
                     if(data == "9999"){
                         layer.designMsg('请输入有效的范围值!', 5);
+                        flag = 1;
+                    }
+                    else if(data == "9998"){
+                        layer.designMsg('网络链接异常，请几分钟后重新尝试！', 2000);
                         flag = 1;
                     }
                     else{
@@ -178,7 +182,6 @@
     }
 
     var div = document.getElementById("load-bar-inner");
-
     function increment(){
         var width = $('#load-bar').css('width');
         if(current < 100 &&  click == 1){

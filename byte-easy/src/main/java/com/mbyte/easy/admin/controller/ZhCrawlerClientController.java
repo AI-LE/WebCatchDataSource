@@ -220,7 +220,6 @@ public class ZhCrawlerClientController {
                                                     iAnswerService.save(answer1);
                                                 }
                                                 String regsdop = "[^\\x00-\\xff]";
-
                                                 // String regsdop = "[^\u4e00-\u9fa5]";
                                                 int indexans =answersum.indexOf("content");//规则
                                                 if(indexans!=-1) {
