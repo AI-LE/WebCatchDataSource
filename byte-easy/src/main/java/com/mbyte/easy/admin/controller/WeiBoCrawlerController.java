@@ -141,11 +141,43 @@ public class WeiBoCrawlerController {
                                         String contentid = firstCardJson1.getJSONObject("mblog").get("id").toString();
                                         String Content = firstCardJson1.getJSONObject("mblog").get("text").toString();
                                         String createtime = firstCardJson1.getJSONObject("mblog").get("created_at").toString();
-                                        String retweeted_status =  "";
+                                        String retweeted_status =  "";//内容的转发文章
+                                        String retweeted_statusid = "";
                                         JSONObject jsonObjectretweeted = (JSONObject)firstmblog.get("retweeted_status");
                                         if(jsonObjectretweeted != null){
-                                            retweeted_status = jsonObjectretweeted.get("text").toString();
+                                            retweeted_statusid = jsonObjectretweeted.get("id").toString();
+                                            try {
+                                                // 添加时间间隔 5s  解决 418问题。
+                                                Thread.sleep(5000);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
+                                            /**
+                                             * 请求转发
+                                             */
+                                            String urlJson = "https://m.weibo.cn/statuses/extend?id=" + retweeted_statusid;
+                                            //这个是JSON爬虫
+                                            Map<String, Object> headerParamsurl = new HashMap<>();
+                                            headerParamsurl.put(P.REQUEST.USER_AGENT, P.USER_AGENT);//将cookie值也放入请求中
+                                            Map<String, Object> resMapurl = Request.get(urlJson, headerParamsurl);
+                                            //  System.out.println("==========" + resMap.get(P.REQUEST.RES_BODY) + "=================================");
+                                            String resulturl = resMapurl.get(P.REQUEST.RES_BODY).toString();
+
+                                            /**
+                                             * json解析
+                                             */
+                                            JSONObject jsonContent = (JSONObject) JSON.parse(resulturl);
+                                            if (jsonContent != null) {
+                                                JSONObject firstCardJsondata = jsonContent.getJSONObject("data");
+                                                if(firstCardJsondata != null){
+                                                    String longTextContent = firstCardJsondata.get("longTextContent").toString();
+                                                    if( longTextContent!=null && longTextContent != ""){
+                                                        retweeted_status = longTextContent;
+                                                    }
+                                                }
+                                            }
                                         }
+
 
                                         if(imgflag==1){
                                             /**
@@ -206,7 +238,12 @@ public class WeiBoCrawlerController {
                                             }
                                         }
                                         if (dataNJson.isEmpty() != true || dataNJson.size() > 1) {
-
+                                            try {
+                                                // 添加时间间隔 5s  解决 418问题。
+                                                Thread.sleep(800);
+                                            } catch (InterruptedException e) {
+                                                e.printStackTrace();
+                                            }
                                             /**
                                              * 请求博主内容
                                              */
@@ -383,6 +420,7 @@ public class WeiBoCrawlerController {
 
                                                             //符合时间范围内
                                                             if(timetest1EffectiveDate == true){
+
                                                                 Pattern p = Pattern.compile(regsdop, Pattern.CASE_INSENSITIVE);
                                                                 Matcher m = p.matcher(bloggerContent.getContent());
                                                                 String sb = m.replaceAll(""); //过滤html标签
@@ -406,10 +444,10 @@ public class WeiBoCrawlerController {
 //                                                                                /**
 //                                                                                 * 转发的
 //                                                                                 */
-//                                                                                if(bloggerContent.getContentrealy()!=null&&bloggerContent.getContentrealy()!=""&&flag == true){
-//                                                                                    listContent.add("转发：");
-//                                                                                    listContent.add(bloggerContent.getContentrealy());//内容
-//                                                                                }
+                                                                                if(bloggerContent.getContentrealy()!=null&&bloggerContent.getContentrealy()!=""&&flag == true){
+                                                                                    listContent.add("转发：");
+                                                                                    listContent.add(bloggerContent.getContentrealy());//内容
+                                                                                }
                                                                                 /**
                                                                                  * 评论的
                                                                                  */
