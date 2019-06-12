@@ -67,19 +67,12 @@ public class BdRecordsController extends BaseController  {
             queryWrapper = queryWrapper.like("keyword",bdRecords.getKeyword());
 
          }
-
+        queryWrapper = queryWrapper.orderByDesc("createtime");
         IPage<BdRecords> pageInfo = bdRecordsService.page(page, queryWrapper);
-        List<Object> list = new ArrayList<Object>();
-        PageInfo pageInfo1 = new PageInfo(pageInfo);
-        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
-            list.add(pageInfo1.getList().get(i));
-        }
-       // System.out.println("list+++"+list);
-        pageInfo1.setList(list);
 
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", bdRecords);
-        model.addAttribute("pageInfo", pageInfo1);
+        model.addAttribute("pageInfo", new PageInfo(pageInfo));
         return prefix+"bdRecords-list";
     }
 

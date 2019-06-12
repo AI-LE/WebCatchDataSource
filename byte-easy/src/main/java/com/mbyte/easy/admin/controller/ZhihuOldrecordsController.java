@@ -66,17 +66,12 @@ public class ZhihuOldrecordsController extends BaseController  {
         if(Utility.getCurrentUser().getUsername() != null) {
             queryWrapper = queryWrapper.like("username",  Utility.getCurrentUser().getUsername());
         }
-
+        queryWrapper = queryWrapper.orderByDesc("createtime");
         IPage<ZhihuOldrecords> pageInfo = zhihuOldrecordsService.page(page, queryWrapper);
-        List<Object> list = new ArrayList<Object>();
-        PageInfo pageInfo1 = new PageInfo(pageInfo);
-        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
-            list.add(pageInfo1.getList().get(i));
-        }
-        pageInfo1.setList(list);
+
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", zhihuOldrecords);
-        model.addAttribute("pageInfo", pageInfo1);
+        model.addAttribute("pageInfo",  new PageInfo(pageInfo));
         return prefix+"zhihuOldrecords-list";
     }
     /**

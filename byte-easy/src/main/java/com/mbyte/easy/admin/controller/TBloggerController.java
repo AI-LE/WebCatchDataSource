@@ -111,20 +111,14 @@ public class TBloggerController extends BaseController  {
         if(tBlogger.getJudge() != null  && !"".equals(tBlogger.getJudge() + "")) {
             queryWrapper = queryWrapper.like("judge",tBlogger.getJudge());
          }
-
+        queryWrapper = queryWrapper.orderByDesc("createtime");
         IPage<TBlogger> pageInfo = tBloggerService.page(page, queryWrapper);
-        List<Object> list = new ArrayList<Object>();
-        PageInfo pageInfo1 = new PageInfo(pageInfo);
-        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
-            list.add(pageInfo1.getList().get(i));
-        }
-        System.out.println("list+++"+list);
-        pageInfo1.setList(list);
+
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("timestartSpace", timestartSpace);
         model.addAttribute("timeendSpace", timeendSpace);
         model.addAttribute("searchInfo", tBlogger);
-        model.addAttribute("pageInfo", pageInfo1);
+        model.addAttribute("pageInfo", new PageInfo(pageInfo));
         return prefix+"tBlogger-list";
     }
 

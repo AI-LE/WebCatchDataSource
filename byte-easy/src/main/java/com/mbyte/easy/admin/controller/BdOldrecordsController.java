@@ -71,17 +71,12 @@ public class BdOldrecordsController extends BaseController  {
         if(bdOldrecords.getBdid() != null  && !"".equals(bdOldrecords.getBdid() + "")) {
             queryWrapper = queryWrapper.like("bdid",bdOldrecords.getBdid());
          }
-
+        queryWrapper = queryWrapper.orderByDesc("createtime");
         IPage<BdOldrecords> pageInfo = bdOldrecordsService.page(page, queryWrapper);
-        List<Object> list = new ArrayList<Object>();
-        PageInfo pageInfo1 = new PageInfo(pageInfo);
-        for(int i = pageInfo1.getList().size()- 1;i>=0;i--){
-            list.add(pageInfo1.getList().get(i));
-        }
-        pageInfo1.setList(list);
+
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", bdOldrecords);
-        model.addAttribute("pageInfo", pageInfo1);
+        model.addAttribute("pageInfo", new PageInfo(pageInfo));
         return prefix+"bdOldrecords-list";
     }
 
