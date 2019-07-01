@@ -5,18 +5,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mbyte.easy.admin.entity.BdOldrecords;
 import com.mbyte.easy.admin.service.IBdOldrecordsService;
-import com.mbyte.easy.admin.service.IBdRecordsService;
 import com.mbyte.easy.common.controller.BaseController;
 import com.mbyte.easy.common.web.AjaxResult;
 import com.mbyte.easy.util.PageInfo;
-import com.mbyte.easy.util.Utility;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,8 +33,6 @@ public class BdOldrecordsController extends BaseController  {
     @Autowired
     private IBdOldrecordsService bdOldrecordsService;
 
-    @Autowired
-    private IBdRecordsService iBdRecordsService;
     /**
     * 查询列表
     *
@@ -71,42 +65,19 @@ public class BdOldrecordsController extends BaseController  {
         if(bdOldrecords.getBdid() != null  && !"".equals(bdOldrecords.getBdid() + "")) {
             queryWrapper = queryWrapper.like("bdid",bdOldrecords.getBdid());
          }
-        queryWrapper = queryWrapper.orderByDesc("createtime");
-        IPage<BdOldrecords> pageInfo = bdOldrecordsService.page(page, queryWrapper);
-
-        model.addAttribute("createtimeSpace", createtimeSpace);
-        model.addAttribute("searchInfo", bdOldrecords);
-        model.addAttribute("pageInfo", new PageInfo(pageInfo));
-        return prefix+"bdOldrecords-list";
-    }
 
 
-    @GetMapping("oldmain/{id}")
-    public String index2(Model model,@RequestParam(value = "pageNo", required = false, defaultValue = "1") Integer pageNo,@RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize, String createtimeSpace, BdOldrecords bdOldrecords
-           , @PathVariable("id")Long id) {
-        Page<BdOldrecords> page = new Page<BdOldrecords>(pageNo, pageSize);
-        QueryWrapper<BdOldrecords> queryWrapper = new QueryWrapper<BdOldrecords>();
-        long idContant = iBdRecordsService.getById(id).getId();
+        if(bdOldrecords.getTimejudge() != null  && !"".equals(bdOldrecords.getTimejudge() + "")) {
+            queryWrapper = queryWrapper.like("timejudge",bdOldrecords.getTimejudge());
+         }
 
-        if(bdOldrecords.getCreatetime() != null  && !"".equals(bdOldrecords.getCreatetime() + "")) {
-            queryWrapper = queryWrapper.like("createtime",bdOldrecords.getCreatetime());
-        }
-        queryWrapper = queryWrapper.like("bdid",idContant);
-        if(Utility.getCurrentUser().getUsername() != null ) {
-            queryWrapper = queryWrapper.like("username",  Utility.getCurrentUser().getUsername());
-        }
-
-        if(bdOldrecords.getKeyword() != null  && !"".equals(bdOldrecords.getKeyword() + "")) {
-            queryWrapper = queryWrapper.like("keyword",bdOldrecords.getKeyword());
-        }
-
-        queryWrapper = queryWrapper.orderByDesc("createtime");
         IPage<BdOldrecords> pageInfo = bdOldrecordsService.page(page, queryWrapper);
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", bdOldrecords);
         model.addAttribute("pageInfo", new PageInfo(pageInfo));
         return prefix+"bdOldrecords-list";
     }
+
     /**
     * 添加跳转页面
     * @return

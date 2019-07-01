@@ -70,6 +70,7 @@ public class BdRecordsController extends BaseController  {
         queryWrapper = queryWrapper.orderByDesc("createtime");
         IPage<BdRecords> pageInfo = bdRecordsService.page(page, queryWrapper);
 
+
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", bdRecords);
         model.addAttribute("pageInfo", new PageInfo(pageInfo));

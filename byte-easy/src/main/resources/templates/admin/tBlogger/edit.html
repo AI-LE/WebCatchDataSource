@@ -50,7 +50,7 @@
                     <label class="form-label col-xs-2 col-sm-2"><span
                                 class="c-red">*</span>最小字数：</label>
                             <div class="formControls col-xs-10 col-sm-10">
-                                <input type="input-text" class="input-text" th:value="${tBlogger.wordmax}" name="wordmax"  placeholder="修改最大字数" id="wordmax"/>
+                                <input type="input-text" class="input-text" th:value="${tBlogger.wordmax}" name="wordmax"  placeholder="请填写最小字数" id="wordmax"/>
                             </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                 <div class="row cl" style="display: none;">
                     <label class="form-label col-xs-2 col-sm-2"><span class="c-red">*</span>0等于no 1等于yes：</label>
                     <div class="formControls col-xs-10 col-sm-10">
-                        <input type="input-text" class="input-text" name="commitchioce" placeholder="请填写0等于no 1等于yes" id="commitchioce"/>
+                        <input type="input-text" class="input-text" th:value="${tBlogger.commitchioce}" name="commitchioce" placeholder="请填写0等于no 1等于yes" id="commitchioce"/>
                     </div>
                 </div>
                 <!--<div class="row cl">-->
@@ -291,8 +291,9 @@
          * 点赞数
          * @type {*|jQuery|*|*|*}
          */
-        var data = $('#pointersum').val();
-        if (data == '' || data == undefined || data == null){
+        // var data = $('#pointersum').val();
+        var data =  $('#commitchioce').val();
+        if (data == 0){
             var box=document.getElementById("commitno");
             box.checked=true;
             if($("#commitno").is(':checked')==true){

@@ -59,9 +59,9 @@
                             <td th:text="${bdOldrecords.keyword}"></td>
                             <td th:text="${#temporals.format(bdOldrecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td class="td-manage">
-                                <a title="编辑" href="javascript:;"
-                                   th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'bdOldrecords'+'/editBefore/'+${bdOldrecords.id}+'\',900,500)'"
-                                   class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+                                <!--<a title="编辑" href="javascript:;"-->
+                                   <!--th:onclick="'javascript:layer_show(\'编辑\',\'/admin/'+'bdOldrecords'+'/editBefore/'+${bdOldrecords.id}+'\',900,500)'"-->
+                                   <!--class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>-->
                                 <a title="导出word" href="javascript:;"
                                    th:onclick="'javascript:ExportWord('+ ${bdOldrecords.id} + ')'"
                                    class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe640;</i></a>

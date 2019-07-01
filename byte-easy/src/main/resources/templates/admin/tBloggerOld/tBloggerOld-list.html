@@ -58,8 +58,11 @@
                             <th width="25">序号</th>
                                 <th width="40">博主名字</th>
                                 <th width="40">uid</th>
+
+                                 <!--<th width="40">结束时间</th>-->
                                 <th width="40">创建时间</th>
-                            <th width="100">操作</th>
+                            <th width="80">抓取时间阶段</th>
+                            <th width="70">操作</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -73,7 +76,10 @@
                             <td th:text="${count.count}"></td>
                                     <td th:text="${tBloggerOld.bloggername}"></td>
                                     <td th:text="${tBloggerOld.uid}"></td>
-                                    <td th:text="${#temporals.format(tBloggerOld.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+
+                                       <!--<td th:text="${tBloggerOld.timeend}"></td>-->
+                                      <td th:text="${#temporals.format(tBloggerOld.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${tBloggerOld.timeduring}"></td>
                             <td class="td-manage">
                                 <a title="导出word" href="javascript:;"
                                    th:onclick="'javascript:ExportWord('+ ${tBloggerOld.id} + ')'"

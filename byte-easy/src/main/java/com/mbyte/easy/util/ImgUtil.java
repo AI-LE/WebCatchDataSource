@@ -47,6 +47,12 @@ public class ImgUtil {
     public static void downloadPicture(String urlList,String path) {
         URL url = null;
         try {
+            // 添加时间间隔 2s  解决下载图片失效问题。
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
             url = new URL(urlList);
             DataInputStream dataInputStream = new DataInputStream(url.openStream());
 
@@ -127,12 +133,18 @@ public class ImgUtil {
             Matcher matcher = pattern.matcher(judgept);
        //     String lay = judgept.replaceAll(reg,"");
             if((matcher.find()) ){
-                Image img = Image.getInstance(judgept);
+                try{
+                    Image img = Image.getInstance(judgept);
+                    img.setAlignment(Image.LEFT);// 设置图片显示位置
+                    System.out.println("img" + img);
+                    document.add(img);
+                    Paragraph contextTransversal = new Paragraph("\n");
+                    document.add(contextTransversal);
+                }
+                catch (DocumentException e){
+                    e.printStackTrace();
+                }
                 //System.out.println(img);
-                img.setAlignment(Image.LEFT);// 设置图片显示位置
-                document.add(img);
-                Paragraph contextTransversal = new Paragraph("\n");
-                document.add(contextTransversal);
             }
             else {
                 Paragraph context = new Paragraph("\n"+judgept);

@@ -71,7 +71,7 @@
                         </thead>
                         <tbody>
                         <tr class="text-c" th:if="${pageInfo.list.size() == 0}">
-                            <td colspan="15"><strong>暂无数据</strong></td>
+                            <td colspan="15"><span class="label label-success radius" ><strong>暂无数据</strong></span></td>
                         </tr>
                         <tr class="text-c" th:each="tBlogger,count:${pageInfo.list}">
                             <td><input type="checkbox" value="1" th:value="${tBlogger.id}"

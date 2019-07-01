@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author 吴天豪
- * @since 2019-05-28
+ * @since 2019-06-25
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -80,6 +80,11 @@ public class TBloggerOld extends BaseEntity {
      * 0等于纯文字 1等于文字加图片
      */
     private Integer judge;
+
+    /**
+     * 时间阶段
+     */
+    private String timeduring;
 
 
 }

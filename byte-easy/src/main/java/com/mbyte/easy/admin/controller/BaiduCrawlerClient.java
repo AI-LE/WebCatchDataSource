@@ -21,9 +21,11 @@ import org.jsoup.select.Elements;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,6 +69,12 @@ public class BaiduCrawlerClient {
         String id = request.getParameter("id");
         QueryWrapper<BdRecords> queryCWrapper = new QueryWrapper<BdRecords>();
         queryCWrapper = queryCWrapper.eq("id", id);
+
+        //时间戳
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date datatime = new Date();
+        long passeDate = datatime.getTime();
+
         /**
          * 获得查到记录的所有数据，存入old中
          */
@@ -86,9 +94,9 @@ public class BaiduCrawlerClient {
                    String ptext = text.html();
                    count ++;
 //                   String reg = "[^\u4e00-\u9fa5]";
-//                   ptext = ptext.replaceAll(reg, "");
-                   ptext = ptext.replaceAll("<em>", "");
-                   ptext = ptext.replaceAll("</em>", "");
+                   String regsok = "<[^>]+>";
+                   ptext = ptext.replaceAll(regsok, "");
+
                    /**
                     * 百度爬取到的标题存入数据库
                     */
@@ -104,7 +112,7 @@ public class BaiduCrawlerClient {
                        baiduService.save(baidu);
                    }
                    //word链表
-                   wordPrit.add(count+":"+ptext.toString()+"\n");
+                   wordPrit.add(count+"、"+ptext.toString()+"\n");
 
                    if(count == 200){
                        /**
@@ -120,6 +128,7 @@ public class BaiduCrawlerClient {
                          bdOldrecords.setBdid(Long.parseLong(id));
                          bdOldrecords.setCreatetime(timechange);
                          bdOldrecords.setUsername(Utility.getCurrentUser().getUsername());
+                         bdOldrecords.setTimejudge(passeDate);
                          iBdOldrecordsService.save(bdOldrecords);
                        /**
                         *记录总数
@@ -138,12 +147,12 @@ public class BaiduCrawlerClient {
                        String datarea = datareplace.replace("[","");
                        String datareb = datarea.replace("]","");
                        ExportWord e = new ExportWord();
-                       e.creatDoc(FileUtil.uploadLocalPath +word+Utility.getCurrentUser().getUsername()+"_百度.doc", datareb.toString());
+                       e.creatDoc(FileUtil.uploadLocalPath +word+passeDate+ Utility.getCurrentUser().getUsername()+"_百度.doc", datareb.toString());
                        //返回给前台
                        QueryWrapper<Baidu> bdRecordsQueryWrapper = new QueryWrapper<Baidu>();
                        bdRecordsQueryWrapper = bdRecordsQueryWrapper.eq("username", Utility.getCurrentUser().getUsername());
                        baiduService.remove(bdRecordsQueryWrapper);
-                       response.getWriter().write(word + Utility.getCurrentUser().getUsername());
+                       response.getWriter().write(word +passeDate+ Utility.getCurrentUser().getUsername());
                        return ;
                    }
                }
@@ -198,8 +207,9 @@ public class BaiduCrawlerClient {
             QueryWrapper<BdOldrecords> queryCWrapper1 = new QueryWrapper<BdOldrecords>();
             queryCWrapper1 = queryCWrapper1.eq("id", id);
             String keyword =iBdOldrecordsService.getOne(queryCWrapper1).getKeyword();
-            System.out.println("keyword" + keyword);
-            response.getWriter().write(keyword+Utility.getCurrentUser().getUsername());
+            long passeDate =iBdOldrecordsService.getOne(queryCWrapper1).getTimejudge();
+
+            response.getWriter().write(keyword+passeDate+Utility.getCurrentUser().getUsername());
         }
         catch (IOException e){
             e.printStackTrace();

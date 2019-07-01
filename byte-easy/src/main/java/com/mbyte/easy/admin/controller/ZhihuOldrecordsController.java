@@ -71,7 +71,7 @@ public class ZhihuOldrecordsController extends BaseController  {
 
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", zhihuOldrecords);
-        model.addAttribute("pageInfo",  new PageInfo(pageInfo));
+        model.addAttribute("pageInfo", new PageInfo(pageInfo));
         return prefix+"zhihuOldrecords-list";
     }
     /**

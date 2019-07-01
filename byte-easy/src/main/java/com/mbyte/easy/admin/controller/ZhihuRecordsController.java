@@ -69,7 +69,7 @@ public class ZhihuRecordsController extends BaseController  {
 
         model.addAttribute("createtimeSpace", createtimeSpace);
         model.addAttribute("searchInfo", zhihuRecords);
-        model.addAttribute("pageInfo", new PageInfo(pageInfo));
+        model.addAttribute("pageInfo",  new PageInfo(pageInfo));
         return prefix+"zhihuRecords-list";
     }
 

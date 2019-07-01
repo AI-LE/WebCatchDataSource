@@ -75,7 +75,7 @@
                             <td><input type="checkbox" value="1" th:value="${bdRecords.id}"
                                        name="id"/></td>
                             <td th:text="${count.count}"></td>
-                            <td   th:onclick="'javascript:layer_show(\'详情\',\'/admin/'+'bdOldrecords'+'/oldmain/'+${bdRecords.id}+'\',1000,500)'"><span style="cursor:pointer;"class="label label-success radius"th:text="${bdRecords.keyword}" ></span></td>
+                            <td  th:onclick="'javascript:layer_show(\'详情\',\'/admin/'+'bdOldrecords'+'/oldmain/'+${bdRecords.id}+'\',1000,500)'"><span style="cursor:pointer;"class="label label-success radius"th:text="${bdRecords.keyword}" ></span></td>
                             <td th:text="${#temporals.format(bdRecords.createtime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td class="td-manage">
                                 <a title="编辑" href="javascript:;"

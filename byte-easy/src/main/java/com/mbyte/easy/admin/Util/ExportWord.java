@@ -32,6 +32,7 @@ public class ExportWord {
     /**
      */
     public static void creatDoc(String path,String text) {
+
 //设置纸张的大小
         Document document = new Document(PageSize.A4);
         try {
